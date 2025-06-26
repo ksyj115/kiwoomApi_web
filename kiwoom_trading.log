@@ -513,3 +513,444 @@
 2025-06-26 09:26:02 - KiwoomTrading - INFO - [trading.py] get_available_cash
 2025-06-26 09:26:06 - KiwoomTrading - INFO - [trading.py] get_balance_summary
 2025-06-26 09:26:06 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 10:17:11 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 10:17:16 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 10:17:23 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 10:17:24 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 10:17:26 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-26 10:24:08 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 10:24:12 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 10:24:24 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 10:24:24 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 10:24:27 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-26 10:24:27 - KiwoomTrading - INFO - [trading.py] get_holdings: A005930, 삼성전자, 2, 60412, 60450
+2025-06-26 10:24:27 - KiwoomTrading - INFO - [trading.py] get_holdings: A034020, 두산에너빌리티, 1, 64400, 65500
+2025-06-26 10:40:27 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 10:40:31 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 10:40:45 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 10:40:45 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 10:40:49 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 10:40:49 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 10:40:53 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-26 10:40:53 - KiwoomTrading - INFO - [trading.py] get_holdings: A005930, 삼성전자, 2, 60412, 60200
+2025-06-26 10:40:53 - KiwoomTrading - INFO - [trading.py] get_holdings: A034020, 두산에너빌리티, 1, 64400, 65000
+2025-06-26 10:41:15 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-26 10:41:15 - KiwoomTrading - INFO - [trading.py] get_holdings: A005930, 삼성전자, 2, 60412, 60250
+2025-06-26 10:41:15 - KiwoomTrading - INFO - [trading.py] get_holdings: A034020, 두산에너빌리티, 1, 64400, 64900
+2025-06-26 10:41:17 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-26 10:41:17 - KiwoomTrading - INFO - [trading.py] get_holdings: A005930, 삼성전자, 2, 60412, 60250
+2025-06-26 10:41:17 - KiwoomTrading - INFO - [trading.py] get_holdings: A034020, 두산에너빌리티, 1, 64400, 65000
+2025-06-26 10:41:19 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-26 10:41:19 - KiwoomTrading - INFO - [trading.py] get_holdings: A005930, 삼성전자, 2, 60412, 60200
+2025-06-26 10:41:19 - KiwoomTrading - INFO - [trading.py] get_holdings: A034020, 두산에너빌리티, 1, 64400, 64900
+2025-06-26 10:41:21 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 10:41:21 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 10:41:26 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 10:41:26 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 10:41:31 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 10:41:32 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 10:41:36 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 10:41:37 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 10:41:45 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 10:41:45 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 10:41:49 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-26 10:41:49 - KiwoomTrading - INFO - [trading.py] get_holdings: A005930, 삼성전자, 2, 60412, 60200
+2025-06-26 10:41:49 - KiwoomTrading - INFO - [trading.py] get_holdings: A034020, 두산에너빌리티, 1, 64400, 64900
+2025-06-26 10:41:51 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-26 10:41:51 - KiwoomTrading - INFO - [trading.py] get_holdings: A005930, 삼성전자, 2, 60412, 60300
+2025-06-26 10:41:51 - KiwoomTrading - INFO - [trading.py] get_holdings: A034020, 두산에너빌리티, 1, 64400, 64800
+2025-06-26 10:51:05 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 10:51:09 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 10:51:25 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 10:51:25 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 10:51:28 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 10:51:29 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 10:51:34 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 10:51:34 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 10:51:47 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 10:51:47 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 10:51:50 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-26 10:51:50 - KiwoomTrading - INFO - [trading.py] get_holdings: A005930, 삼성전자, 2, 60412, 60100
+2025-06-26 10:51:50 - KiwoomTrading - INFO - [trading.py] get_holdings: A034020, 두산에너빌리티, 1, 64400, 64700
+2025-06-26 10:52:15 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-26 10:52:15 - KiwoomTrading - INFO - [trading.py] get_holdings: A005930, 삼성전자, 2, 60412, 60150
+2025-06-26 10:52:15 - KiwoomTrading - INFO - [trading.py] get_holdings: A034020, 두산에너빌리티, 1, 64400, 64500
+2025-06-26 10:52:18 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-26 10:52:18 - KiwoomTrading - INFO - [trading.py] get_holdings: A005930, 삼성전자, 2, 60412, 60150
+2025-06-26 10:52:18 - KiwoomTrading - INFO - [trading.py] get_holdings: A034020, 두산에너빌리티, 1, 64400, 64600
+2025-06-26 10:52:19 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-26 10:52:19 - KiwoomTrading - INFO - [trading.py] get_holdings: A005930, 삼성전자, 2, 60412, 60100
+2025-06-26 10:52:19 - KiwoomTrading - INFO - [trading.py] get_holdings: A034020, 두산에너빌리티, 1, 64400, 64600
+2025-06-26 10:52:21 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-26 10:52:21 - KiwoomTrading - INFO - [trading.py] get_holdings: A005930, 삼성전자, 2, 60412, 60150
+2025-06-26 10:52:21 - KiwoomTrading - INFO - [trading.py] get_holdings: A034020, 두산에너빌리티, 1, 64400, 64500
+2025-06-26 10:53:01 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-26 10:53:01 - KiwoomTrading - INFO - [trading.py] get_holdings: A005930, 삼성전자, 2, 60412, 60150
+2025-06-26 10:53:01 - KiwoomTrading - INFO - [trading.py] get_holdings: A034020, 두산에너빌리티, 1, 64400, 64550
+2025-06-26 10:53:16 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 10:53:20 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 10:53:24 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 10:53:25 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 10:53:30 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 10:53:30 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 10:53:32 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-26 10:53:32 - KiwoomTrading - INFO - [trading.py] get_holdings: A005930, 삼성전자, 2, 60412, 60200
+2025-06-26 10:53:32 - KiwoomTrading - INFO - [trading.py] get_holdings: A034020, 두산에너빌리티, 1, 64400, 64500
+2025-06-26 11:02:40 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 11:02:44 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 11:02:54 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 11:02:54 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 11:02:56 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 11:02:57 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 11:02:58 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-26 11:02:58 - KiwoomTrading - INFO - [trading.py] get_holdings: A005930, 삼성전자, 2, 60412, 60300
+2025-06-26 11:02:58 - KiwoomTrading - INFO - [trading.py] get_holdings: A034020, 두산에너빌리티, 1, 64400, 64600
+2025-06-26 11:10:45 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 11:10:49 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [app.py] get_volume_leaders
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [kiwoom_app.py] volume_leaders
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 252670, KODEX 200선물인버스2X, 221092530, 313262, 1435
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 234100, 폴라리스세원, 55793549, 95749, 1780
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 042040, 케이피엠테크, 39316515, 13374, 331
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 530036, 삼성 인버스 2X WTI원유 선물 ETN, 23291766, 1865, 79
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 114800, KODEX 인버스, 22955313, 83075, 3640
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 251340, KODEX 코스닥150선물인버스, 19837101, 71522, 3635
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 122630, KODEX 레버리지, 17836918, 414223, -22935
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 233740, KODEX 코스닥150레버리지, 17396651, 142059, -8055
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 462330, KODEX 2차전지산업레버리지, 15385459, 12943, -828
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 321370, 센서뷰, 15116216, 24404, 1701
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 008600, 윌비스, 13947607, 7220, 511
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 267320, 나인테크, 13241197, 63892, 4730
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 074430, 아미노로직스, 12466548, 14543, 1214
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 038110, 에코플라스틱, 12044427, 43143, 3380
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 446540, 메가터치, 10802670, 49507, 4765
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 452450, 피아이이, 9672576, 102138, 10220
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 005930, 삼성전자, 9387648, 568967, -60250
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 161000, 애경케미칼, 9012983, 103129, 11600
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 003280, 흥아해운, 7778358, 14164, 1804
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 396300, 세아메카닉스, 7663269, 27836, 3515
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 034020, 두산에너빌리티, 7431762, 487886, -64200
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 032820, 우리기술, 7426050, 31385, -4165
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 201490, 미투온, 7348936, 44980, -6100
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 099440, 스맥, 6679462, 25930, 3895
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 043200, 파루, 6567474, 11002, 1634
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 069500, KODEX 200, 6290304, 262408, -41475
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 035720, 카카오, 6181881, 398495, -63400
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 090710, 휴림로봇, 6115389, 15714, -2515
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 009070, KCTC, 5968531, 31136, 5050
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 068330, 일신바이오, 5602558, 10531, 1872
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 900110, 이스트아시아홀딩스, 5398023, 299, 56
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 102370, 케이옥션, 5265795, 26707, -5050
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 234920, 자이글, 5222817, 28772, 5640
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 004140, 동방, 5170223, 15064, -2820
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 015760, 한국전력, 5075698, 187189, -36950
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 462860, 더즌, 4771407, 21060, -4297
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 001510, SK증권, 4631756, 3172, -681
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 005690, 파미셀, 4402150, 59102, 13500
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 010170, 대한광통신, 4253089, 3991, 927
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 277410, 인산가, 4145623, 5903, 1360
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 010140, 삼성중공업, 4141220, 67404, -16130
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 064260, 다날, 4130686, 23794, -5500
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 033340, 좋은사람들, 4106371, 6338, -1525
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 229200, KODEX 코스닥150, 4093459, 52333, -12665
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 006800, 미래에셋증권, 4087431, 88575, -21250
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 032790, 엠젠솔루션, 3763776, 4629, 1166
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 500027, 신한 인버스 2X WTI원유 선물 ETN(H), 3689296, 255, -68
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 042700, 한미반도체, 3681257, 389895, 103900
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 148780, 비큐AI, 3535044, 9502, -2670
+2025-06-26 11:11:19 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 080220, 제주반도체, 3491976, 61201, -16700
+2025-06-26 11:13:17 - KiwoomTrading - INFO - [app.py] get_volume_leaders
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [kiwoom_app.py] volume_leaders
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 252670, KODEX 200선물인버스2X, 223373537, 316534, 1433
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 234100, 폴라리스세원, 56355067, 96741, 1760
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 042040, 케이피엠테크, 39356296, 13387, 332
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 530036, 삼성 인버스 2X WTI원유 선물 ETN, 23291766, 1865, 79
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 114800, KODEX 인버스, 23127078, 83701, 3640
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 251340, KODEX 코스닥150선물인버스, 19881555, 71684, 3635
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 122630, KODEX 레버리지, 18096853, 420188, -22975
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 233740, KODEX 코스닥150레버리지, 17513850, 143004, -8060
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 462330, KODEX 2차전지산업레버리지, 15556193, 13084, -829
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 321370, 센서뷰, 15442251, 24963, 1739
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 008600, 윌비스, 13967243, 7230, 510
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 267320, 나인테크, 13283884, 64095, 4775
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 074430, 아미노로직스, 12651331, 14769, 1230
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 038110, 에코플라스틱, 12069509, 43228, 3390
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 446540, 메가터치, 11550799, 53057, 4655
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 452450, 피아이이, 9686181, 102277, 10230
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 005930, 삼성전자, 9514810, 576634, -60400
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 161000, 애경케미칼, 9090390, 104029, 11600
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 003280, 흥아해운, 7787888, 14182, 1804
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 396300, 세아메카닉스, 7668411, 27854, 3525
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 034020, 두산에너빌리티, 7472701, 490512, -64200
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 032820, 우리기술, 7454438, 31504, -4160
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 201490, 미투온, 7364786, 45077, -6090
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 099440, 스맥, 6734167, 26142, 3860
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 043200, 파루, 6583046, 11027, 1625
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 069500, KODEX 200, 6355209, 265100, -41500
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 035720, 카카오, 6256152, 403198, -63400
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 090710, 휴림로봇, 6138002, 15771, -2515
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 009070, KCTC, 5971667, 31152, 5080
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 068330, 일신바이오, 5657262, 10633, 1860
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 900110, 이스트아시아홀딩스, 5399103, 299, 56
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 102370, 케이옥션, 5272387, 26741, -5050
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 234920, 자이글, 5225303, 28786, 5640
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 004140, 동방, 5177309, 15084, -2815
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 015760, 한국전력, 5092945, 187827, -37000
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 462860, 더즌, 4791524, 21147, -4295
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 001510, SK증권, 4645465, 3181, -682
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 005690, 파미셀, 4416830, 59300, 13430
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 010170, 대한광통신, 4258802, 3997, 924
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 010140, 삼성중공업, 4163081, 67756, -16120
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 277410, 인산가, 4152672, 5913, 1361
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 064260, 다날, 4144754, 23872, -5500
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 033340, 좋은사람들, 4113199, 6349, -1532
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 006800, 미래에셋증권, 4106148, 88972, -21250
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 229200, KODEX 코스닥150, 4100300, 52419, -12680
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 032790, 엠젠솔루션, 3764117, 4629, 1155
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 042700, 한미반도체, 3690051, 390808, 103700
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 500027, 신한 인버스 2X WTI원유 선물 ETN(H), 3689296, 255, -68
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 148780, 비큐AI, 3578341, 9618, -2680
+2025-06-26 11:13:18 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 080220, 제주반도체, 3498763, 61314, -16730
+2025-06-26 11:14:12 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 11:14:16 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 11:14:23 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 11:14:24 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 11:14:28 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 11:14:28 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 11:14:30 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-26 11:14:30 - KiwoomTrading - INFO - [trading.py] get_holdings: A005930, 삼성전자, 2, 60412, 60400
+2025-06-26 11:14:30 - KiwoomTrading - INFO - [trading.py] get_holdings: A034020, 두산에너빌리티, 1, 64400, 64200
+2025-06-26 11:14:34 - KiwoomTrading - INFO - [app.py] get_volume_leaders
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [kiwoom_app.py] volume_leaders
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 252670, KODEX 200선물인버스2X, 225385784, 319416, 1433
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 234100, 폴라리스세원, 56659737, 97274, 1757
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 042040, 케이피엠테크, 39397135, 13400, 333
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 530036, 삼성 인버스 2X WTI원유 선물 ETN, 23391766, 1873, 79
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 114800, KODEX 인버스, 23288461, 84288, 3640
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 251340, KODEX 코스닥150선물인버스, 20147473, 72650, 3630
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 122630, KODEX 레버리지, 18320946, 425339, -22985
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 233740, KODEX 코스닥150레버리지, 17708968, 144577, -8075
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 321370, 센서뷰, 15742684, 25488, 1742
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 462330, KODEX 2차전지산업레버리지, 15696053, 13200, -831
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 008600, 윌비스, 13972068, 7233, 509
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 267320, 나인테크, 13316659, 64252, 4780
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 074430, 아미노로직스, 12756311, 14899, 1234
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 038110, 에코플라스틱, 12088540, 43293, 3405
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 446540, 메가터치, 11760051, 54037, 4720
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 452450, 피아이이, 9707441, 102495, 10310
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 005930, 삼성전자, 9615608, 582723, -60500
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 161000, 애경케미칼, 9109717, 104253, 11570
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 003280, 흥아해운, 7797175, 14198, 1804
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 396300, 세아메카닉스, 7671872, 27867, 3515
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 034020, 두산에너빌리티, 7504542, 492555, -64200
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 032820, 우리기술, 7474166, 31586, -4170
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 201490, 미투온, 7382100, 45181, -6070
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 099440, 스맥, 6785047, 26337, 3855
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 043200, 파루, 6603273, 11060, 1620
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 069500, KODEX 200, 6410388, 267391, -41515
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 035720, 카카오, 6296074, 405728, -63400
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 090710, 휴림로봇, 6156731, 15819, -2520
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 009070, KCTC, 5973629, 31162, 5060
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 068330, 일신바이오, 5697339, 10707, 1862
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 900110, 이스트아시아홀딩스, 5399303, 299, 56
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 102370, 케이옥션, 5277582, 26767, -5050
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 234920, 자이글, 5225424, 28786, 5640
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 004140, 동방, 5179299, 15090, -2820
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 015760, 한국전력, 5098527, 188033, -36950
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 462860, 더즌, 4801157, 21188, -4315
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 001510, SK증권, 4650435, 3185, -682
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 005690, 파미셀, 4429484, 59470, 13470
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 010170, 대한광통신, 4258966, 3997, 925
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 010140, 삼성중공업, 4177025, 67980, -16110
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 277410, 인산가, 4163066, 5927, 1364
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 064260, 다날, 4149620, 23898, -5520
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 229200, KODEX 코스닥150, 4130091, 52797, -12690
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 006800, 미래에셋증권, 4124005, 89352, -21300
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 033340, 좋은사람들, 4120093, 6359, -1533
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 032790, 엠젠솔루션, 3764530, 4630, 1155
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 042700, 한미반도체, 3698091, 391641, 103700
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 500027, 신한 인버스 2X WTI원유 선물 ETN(H), 3689296, 255, -68
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 148780, 비큐AI, 3635495, 9771, -2682
+2025-06-26 11:14:35 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 080220, 제주반도체, 3502998, 61385, -16750
+2025-06-26 11:24:30 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 11:24:35 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 11:24:47 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 11:24:48 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 11:24:49 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-26 11:24:49 - KiwoomTrading - INFO - [trading.py] get_holdings: A005930, 삼성전자, 2, 60412, 60200
+2025-06-26 11:24:49 - KiwoomTrading - INFO - [trading.py] get_holdings: A034020, 두산에너빌리티, 1, 64400, 63300
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [app.py] get_volume_leaders
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [kiwoom_app.py] volume_leaders
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 252670, KODEX 200선물인버스2X, 235766339, 334357, 1442
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 234100, 폴라리스세원, 58746974, 100915, 1734
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 042040, 케이피엠테크, 39637944, 13480, 331
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 114800, KODEX 인버스, 23877409, 86436, 3650
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 530036, 삼성 인버스 2X WTI원유 선물 ETN, 23393676, 1873, 79
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 251340, KODEX 코스닥150선물인버스, 20645423, 74462, 3642
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 122630, KODEX 레버리지, 19222656, 445956, -22820
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 233740, KODEX 코스닥150레버리지, 18441260, 150470, -8020
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 321370, 센서뷰, 16562092, 26888, 1678
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 462330, KODEX 2차전지산업레버리지, 16116324, 13549, -828
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 008600, 윌비스, 14276924, 7386, 501
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 267320, 나인테크, 13851183, 66836, 4870
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 074430, 아미노로직스, 13795072, 16171, 1211
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 446540, 메가터치, 13678821, 63167, 4750
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 038110, 에코플라스틱, 12611491, 45091, 3435
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 161000, 애경케미칼, 10409376, 119852, 12070
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 005930, 삼성전자, 9929421, 601657, -60200
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 452450, 피아이이, 9866963, 104128, 10180
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 201490, 미투온, 8234351, 50448, -5980
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 034020, 두산에너빌리티, 8120979, 531777, -63300
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 003280, 흥아해운, 7942235, 14459, 1796
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 396300, 세아메카닉스, 7707413, 27991, 3475
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 032820, 우리기술, 7648758, 32311, -4140
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 099440, 스맥, 7039248, 27303, 3755
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 043200, 파루, 6701848, 11220, 1629
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 069500, KODEX 200, 6639427, 276878, -41370
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 035720, 카카오, 6507287, 419038, -62600
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 090710, 휴림로봇, 6346294, 16293, -2505
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 009070, KCTC, 6078618, 31689, -4995
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 068330, 일신바이오, 6056108, 11370, 1828
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 900110, 이스트아시아홀딩스, 5431382, 301, 56
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 102370, 케이옥션, 5359044, 27176, -5000
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 004140, 동방, 5326240, 15501, -2795
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 234920, 자이글, 5227832, 28800, 5640
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 015760, 한국전력, 5196041, 191638, -37000
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 462860, 더즌, 4956064, 21850, -4250
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 001510, SK증권, 4813179, 3295, -681
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 005690, 파미셀, 4497228, 60383, 13450
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 277410, 인산가, 4375728, 6210, 1337
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 229200, KODEX 코스닥150, 4299625, 54945, -12645
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 010170, 대한광통신, 4285558, 4021, 920
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 010140, 삼성중공업, 4285537, 69726, -16080
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 006800, 미래에셋증권, 4272117, 92502, -21100
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 064260, 다날, 4251828, 24459, -5450
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 033340, 좋은사람들, 4181000, 6453, -1525
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 148780, 비큐AI, 3933052, 10570, -2645
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 032790, 엠젠솔루션, 3786139, 4655, 1155
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 042700, 한미반도체, 3756201, 397669, 103700
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 500027, 신한 인버스 2X WTI원유 선물 ETN(H), 3698668, 255, -68
+2025-06-26 11:24:51 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 102970, KODEX 증권, 3605927, 50270, -13820
+2025-06-26 11:24:52 - KiwoomTrading - INFO - [app.py] get_volume_leaders => result : {'stocks': [{'code': '252670', 'name': 'KODEX 200선물인버스2X', 'price': 1442, 'vol': 235766339, 'amount': 334357}, {'code': '234100', 'name': '폴라리스세원', 'price': 1734, 'vol': 58746974, 'amount': 100915}, {'code': '042040', 'name': '케이피엠테크', 'price': 331, 'vol': 39637944, 'amount': 13480}, {'code': '114800', 'name': 'KODEX 인버스', 'price': 3650, 'vol': 23877409, 'amount': 86436}, {'code': '530036', 'name': '삼성 인버스 2X WTI원유 선물 ETN', 'price': 79, 'vol': 23393676, 'amount': 1873}, {'code': '251340', 'name': 'KODEX 코스닥150선물인버스', 'price': 3642, 'vol': 20645423, 'amount': 74462}, {'code': '122630', 'name': 'KODEX 레버리지', 'price': -22820, 'vol': 19222656, 'amount': 445956}, {'code': '233740', 'name': 'KODEX 코스닥150레버리지', 'price': -8020, 'vol': 18441260, 'amount': 150470}, {'code': '321370', 'name': '센서뷰', 'price': 1678, 'vol': 16562092, 'amount': 26888}, {'code': '462330', 'name': 'KODEX 2차전지산업레버리지', 'price': -828, 'vol': 16116324, 'amount': 13549}, {'code': '008600', 'name': '윌비스', 'price': 501, 'vol': 14276924, 'amount': 7386}, {'code': '267320', 'name': '나인테크', 'price': 4870, 'vol': 13851183, 'amount': 66836}, {'code': '074430', 'name': '아미노로직스', 'price': 1211, 'vol': 13795072, 'amount': 16171}, {'code': '446540', 'name': '메가터치', 'price': 4750, 'vol': 13678821, 'amount': 63167}, {'code': '038110', 'name': '에코플라스틱', 'price': 3435, 'vol': 12611491, 'amount': 45091}, {'code': '161000', 'name': '애경케미칼', 'price': 12070, 'vol': 10409376, 'amount': 119852}, {'code': '005930', 'name': '삼성전자', 'price': -60200, 'vol': 9929421, 'amount': 601657}, {'code': '452450', 'name': '피아이이', 'price': 10180, 'vol': 9866963, 'amount': 104128}, {'code': '201490', 'name': '미투온', 'price': -5980, 'vol': 8234351, 'amount': 50448}, {'code': '034020', 'name': '두산에너빌리티', 'price': -63300, 'vol': 8120979, 'amount': 531777}, {'code': '003280', 'name': '흥아해운', 'price': 1796, 'vol': 7942235, 'amount': 14459}, {'code': '396300', 'name': '세아메카닉스', 'price': 3475, 'vol': 7707413, 'amount': 27991}, {'code': '032820', 'name': '우리기술', 'price': -4140, 'vol': 7648758, 'amount': 32311}, {'code': '099440', 'name': '스맥', 'price': 3755, 'vol': 7039248, 'amount': 27303}, {'code': '043200', 'name': '파루', 'price': 1629, 'vol': 6701848, 'amount': 11220}, {'code': '069500', 'name': 'KODEX 200', 'price': -41370, 'vol': 6639427, 'amount': 276878}, {'code': '035720', 'name': '카카오', 'price': -62600, 'vol': 6507287, 'amount': 419038}, {'code': '090710', 'name': '휴림로봇', 'price': -2505, 'vol': 6346294, 'amount': 16293}, {'code': '009070', 'name': 'KCTC', 'price': -4995, 'vol': 6078618, 'amount': 31689}, {'code': '068330', 'name': '일신바이오', 'price': 1828, 'vol': 6056108, 'amount': 11370}, {'code': '900110', 'name': '이스트아시아홀딩스', 'price': 56, 'vol': 5431382, 'amount': 301}, {'code': '102370', 'name': '케이옥션', 'price': -5000, 'vol': 5359044, 'amount': 27176}, {'code': '004140', 'name': '동방', 'price': -2795, 'vol': 5326240, 'amount': 15501}, {'code': '234920', 'name': '자이글', 'price': 5640, 'vol': 5227832, 'amount': 28800}, {'code': '015760', 'name': '한국전력', 'price': -37000, 'vol': 5196041, 'amount': 191638}, {'code': '462860', 'name': '더즌', 'price': -4250, 'vol': 4956064, 'amount': 21850}, {'code': '001510', 'name': 'SK증권', 'price': -681, 'vol': 4813179, 'amount': 3295}, {'code': '005690', 'name': '파미셀', 'price': 13450, 'vol': 4497228, 'amount': 60383}, {'code': '277410', 'name': '인산가', 'price': 1337, 'vol': 4375728, 'amount': 6210}, {'code': '229200', 'name': 'KODEX 코스닥150', 'price': -12645, 'vol': 4299625, 'amount': 54945}, {'code': '010170', 'name': '대한광통신', 'price': 920, 'vol': 4285558, 'amount': 4021}, {'code': '010140', 'name': '삼성중공업', 'price': -16080, 'vol': 4285537, 'amount': 69726}, {'code': '006800', 'name': '미래에셋증권', 'price': -21100, 'vol': 4272117, 'amount': 92502}, {'code': '064260', 'name': '다날', 'price': -5450, 'vol': 4251828, 'amount': 24459}, {'code': '033340', 'name': '좋은사람들', 'price': -1525, 'vol': 4181000, 'amount': 6453}, {'code': '148780', 'name': '비큐AI', 'price': -2645, 'vol': 3933052, 'amount': 10570}, {'code': '032790', 'name': '엠젠솔루션', 'price': 1155, 'vol': 3786139, 'amount': 4655}, {'code': '042700', 'name': '한미반도체', 'price': 103700, 'vol': 3756201, 'amount': 397669}, {'code': '500027', 'name': '신한 인버스 2X WTI원유 선물 ETN(H)', 'price': -68, 'vol': 3698668, 'amount': 255}, {'code': '102970', 'name': 'KODEX 증권', 'price': -13820, 'vol': 3605927, 'amount': 50270}]}
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [app.py] get_volume_leaders
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [kiwoom_app.py] volume_leaders
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 252670, KODEX 200선물인버스2X, 235794477, 334398, 1442
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 234100, 폴라리스세원, 58770737, 100956, 1740
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 042040, 케이피엠테크, 39648756, 13484, 330
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 114800, KODEX 인버스, 23877621, 86437, 3652
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 530036, 삼성 인버스 2X WTI원유 선물 ETN, 23393676, 1873, 79
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 251340, KODEX 코스닥150선물인버스, 20658172, 74509, 3650
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 122630, KODEX 레버리지, 19230870, 446144, -22815
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 233740, KODEX 코스닥150레버리지, 18452604, 150561, -8015
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 321370, 센서뷰, 16583543, 26924, 1684
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 462330, KODEX 2차전지산업레버리지, 16120324, 13552, -829
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 008600, 윌비스, 14285197, 7391, 500
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 267320, 나인테크, 13858790, 66873, 4870
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 074430, 아미노로직스, 13800038, 16177, 1211
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 446540, 메가터치, 13702825, 63281, 4750
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 038110, 에코플라스틱, 12612625, 45095, 3430
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 161000, 애경케미칼, 10426063, 120054, 12120
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 005930, 삼성전자, 9931341, 601772, -60200
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 452450, 피아이이, 9877299, 104233, 10140
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 201490, 미투온, 8238616, 50474, -5980
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 034020, 두산에너빌리티, 8127766, 532207, -63300
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 003280, 흥아해운, 7943779, 14462, 1795
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 396300, 세아메카닉스, 7709014, 27996, 3470
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 032820, 우리기술, 7651908, 32324, -4145
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 099440, 스맥, 7039975, 27306, 3765
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 043200, 파루, 6702390, 11221, 1630
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 069500, KODEX 200, 6640141, 276907, -41375
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 035720, 카카오, 6527221, 420287, -62500
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 090710, 휴림로봇, 6359369, 16326, -2500
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 009070, KCTC, 6078621, 31689, -5020
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 068330, 일신바이오, 6065062, 11387, 1827
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 900110, 이스트아시아홀딩스, 5431382, 301, 56
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 102370, 케이옥션, 5359776, 27179, -5000
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 004140, 동방, 5327681, 15505, -2795
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 234920, 자이글, 5227832, 28800, 5640
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 015760, 한국전력, 5197285, 191684, -37000
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 462860, 더즌, 4960720, 21870, -4260
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 001510, SK증권, 4813355, 3296, -680
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 005690, 파미셀, 4499103, 60409, 13430
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 277410, 인산가, 4376873, 6212, 1329
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 229200, KODEX 코스닥150, 4299950, 54949, -12640
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 010140, 삼성중공업, 4285843, 69731, -16090
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 010170, 대한광통신, 4285558, 4021, 920
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 006800, 미래에셋증권, 4272701, 92514, -21150
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 064260, 다날, 4251828, 24459, -5450
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 033340, 좋은사람들, 4181400, 6453, -1528
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 148780, 비큐AI, 3934654, 10575, -2645
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 032790, 엠젠솔루션, 3786139, 4655, 1155
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 042700, 한미반도체, 3756585, 397709, 103700
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 500027, 신한 인버스 2X WTI원유 선물 ETN(H), 3698668, 255, -68
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [trading.py] get_volume_leaders: 102970, KODEX 증권, 3605931, 50270, -13815
+2025-06-26 11:25:03 - KiwoomTrading - INFO - [app.py] get_volume_leaders => result : {'stocks': [{'code': '252670', 'name': 'KODEX 200선물인버스2X', 'price': 1442, 'vol': 235794477, 'amount': 334398}, {'code': '234100', 'name': '폴라리스세원', 'price': 1740, 'vol': 58770737, 'amount': 100956}, {'code': '042040', 'name': '케이피엠테크', 'price': 330, 'vol': 39648756, 'amount': 13484}, {'code': '114800', 'name': 'KODEX 인버스', 'price': 3652, 'vol': 23877621, 'amount': 86437}, {'code': '530036', 'name': '삼성 인버스 2X WTI원유 선물 ETN', 'price': 79, 'vol': 23393676, 'amount': 1873}, {'code': '251340', 'name': 'KODEX 코스닥150선물인버스', 'price': 3650, 'vol': 20658172, 'amount': 74509}, {'code': '122630', 'name': 'KODEX 레버리지', 'price': -22815, 'vol': 19230870, 'amount': 446144}, {'code': '233740', 'name': 'KODEX 코스닥150레버리지', 'price': -8015, 'vol': 18452604, 'amount': 150561}, {'code': '321370', 'name': '센서뷰', 'price': 1684, 'vol': 16583543, 'amount': 26924}, {'code': '462330', 'name': 'KODEX 2차전지산업레버리지', 'price': -829, 'vol': 16120324, 'amount': 13552}, {'code': '008600', 'name': '윌비스', 'price': 500, 'vol': 14285197, 'amount': 7391}, {'code': '267320', 'name': '나인테크', 'price': 4870, 'vol': 13858790, 'amount': 66873}, {'code': '074430', 'name': '아미노로직스', 'price': 1211, 'vol': 13800038, 'amount': 16177}, {'code': '446540', 'name': '메가터치', 'price': 4750, 'vol': 13702825, 'amount': 63281}, {'code': '038110', 'name': '에코플라스틱', 'price': 3430, 'vol': 12612625, 'amount': 45095}, {'code': '161000', 'name': '애경케미칼', 'price': 12120, 'vol': 10426063, 'amount': 120054}, {'code': '005930', 'name': '삼성전자', 'price': -60200, 'vol': 9931341, 'amount': 601772}, {'code': '452450', 'name': '피아이이', 'price': 10140, 'vol': 9877299, 'amount': 104233}, {'code': '201490', 'name': '미투온', 'price': -5980, 'vol': 8238616, 'amount': 50474}, {'code': '034020', 'name': '두산에너빌리티', 'price': -63300, 'vol': 8127766, 'amount': 532207}, {'code': '003280', 'name': '흥아해운', 'price': 1795, 'vol': 7943779, 'amount': 14462}, {'code': '396300', 'name': '세아메카닉스', 'price': 3470, 'vol': 7709014, 'amount': 27996}, {'code': '032820', 'name': '우리기술', 'price': -4145, 'vol': 7651908, 'amount': 32324}, {'code': '099440', 'name': '스맥', 'price': 3765, 'vol': 7039975, 'amount': 27306}, {'code': '043200', 'name': '파루', 'price': 1630, 'vol': 6702390, 'amount': 11221}, {'code': '069500', 'name': 'KODEX 200', 'price': -41375, 'vol': 6640141, 'amount': 276907}, {'code': '035720', 'name': '카카오', 'price': -62500, 'vol': 6527221, 'amount': 420287}, {'code': '090710', 'name': '휴림로봇', 'price': -2500, 'vol': 6359369, 'amount': 16326}, {'code': '009070', 'name': 'KCTC', 'price': -5020, 'vol': 6078621, 'amount': 31689}, {'code': '068330', 'name': '일신바이오', 'price': 1827, 'vol': 6065062, 'amount': 11387}, {'code': '900110', 'name': '이스트아시아홀딩스', 'price': 56, 'vol': 5431382, 'amount': 301}, {'code': '102370', 'name': '케이옥션', 'price': -5000, 'vol': 5359776, 'amount': 27179}, {'code': '004140', 'name': '동방', 'price': -2795, 'vol': 5327681, 'amount': 15505}, {'code': '234920', 'name': '자이글', 'price': 5640, 'vol': 5227832, 'amount': 28800}, {'code': '015760', 'name': '한국전력', 'price': -37000, 'vol': 5197285, 'amount': 191684}, {'code': '462860', 'name': '더즌', 'price': -4260, 'vol': 4960720, 'amount': 21870}, {'code': '001510', 'name': 'SK증권', 'price': -680, 'vol': 4813355, 'amount': 3296}, {'code': '005690', 'name': '파미셀', 'price': 13430, 'vol': 4499103, 'amount': 60409}, {'code': '277410', 'name': '인산가', 'price': 1329, 'vol': 4376873, 'amount': 6212}, {'code': '229200', 'name': 'KODEX 코스닥150', 'price': -12640, 'vol': 4299950, 'amount': 54949}, {'code': '010140', 'name': '삼성중공업', 'price': -16090, 'vol': 4285843, 'amount': 69731}, {'code': '010170', 'name': '대한광통신', 'price': 920, 'vol': 4285558, 'amount': 4021}, {'code': '006800', 'name': '미래에셋증권', 'price': -21150, 'vol': 4272701, 'amount': 92514}, {'code': '064260', 'name': '다날', 'price': -5450, 'vol': 4251828, 'amount': 24459}, {'code': '033340', 'name': '좋은사람들', 'price': -1528, 'vol': 4181400, 'amount': 6453}, {'code': '148780', 'name': '비큐AI', 'price': -2645, 'vol': 3934654, 'amount': 10575}, {'code': '032790', 'name': '엠젠솔루션', 'price': 1155, 'vol': 3786139, 'amount': 4655}, {'code': '042700', 'name': '한미반도체', 'price': 103700, 'vol': 3756585, 'amount': 397709}, {'code': '500027', 'name': '신한 인버스 2X WTI원유 선물 ETN(H)', 'price': -68, 'vol': 3698668, 'amount': 255}, {'code': '102970', 'name': 'KODEX 증권', 'price': -13815, 'vol': 3605931, 'amount': 50270}]}
+2025-06-26 11:30:40 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 11:30:44 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 11:30:57 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 11:30:58 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 11:30:59 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-26 11:35:57 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 11:36:01 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 11:36:07 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 11:36:07 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 11:36:09 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-26 12:46:54 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 12:46:59 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 12:47:16 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 12:47:17 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 12:47:18 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-26 12:52:41 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 12:53:41 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 12:53:45 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 13:10:59 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 13:11:04 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 13:15:14 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 13:15:18 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 13:15:23 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 13:15:24 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 13:15:27 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 13:15:27 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 13:15:28 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-26 13:16:32 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 13:16:36 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 13:18:46 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 13:18:50 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 13:33:42 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 13:33:46 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 13:39:46 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 13:39:50 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 13:42:01 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 13:42:05 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 13:42:28 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 13:42:29 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 13:59:44 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 13:59:48 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 14:00:01 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 14:00:02 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 14:00:03 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 14:00:04 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 14:00:09 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 14:00:09 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 14:00:11 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-26 14:00:14 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-26 14:03:17 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 14:03:21 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 14:03:30 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 14:03:31 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 14:03:35 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 14:03:35 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 14:03:36 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-26 14:04:37 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 14:04:41 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 14:04:53 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 14:04:53 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 14:04:58 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 14:04:59 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 14:05:00 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-26 14:05:22 - KiwoomTrading - INFO - [매수 요청] 277410 | 1441원 | 1주

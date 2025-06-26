@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>키움증권 잔고조회</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <!-- Bootstrap JS (필수: 모달 기능 포함) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body class="p-5 bg-light">
     <div class="container">
@@ -12,6 +14,49 @@
         <div id="output" class="card p-3 mt-3 shadow-sm" style="display: none;"></div>
         <div id="output-available-cash" class="card p-3 mt-3 shadow-sm" style="display: none;"></div>
     </div>
+    <br/><br/>
+    <div class="container">
+        <h2 class="mb-4">내 보유 종목</h2>
+        <button class="btn btn-primary" onclick="fetchHoldings()">보유 종목 조회</button>
+        <div id="output" class="card p-3 mt-3 shadow-sm" style="display: none;"></div>
+        <div id="output-holdings" class="card p-3 mt-3 shadow-sm" style="display: none;"></div>
+    </div>
+
+    <br/><br/><br/><br/><br/><br/>
+    <div class="container mt-5">
+        <h2 class="mb-4">📈 거래량 상위 50종목</h2>
+        <button class="btn btn-success" onclick="fetchVolumeLeaders()">조회하기</button>
+        <div id="output-volume" class="card p-3 mt-3 shadow-sm" style="display: none;"></div>
+    </div>
+
+    <!-- 매수 모달 -->
+    <div class="modal fade" id="buyModal" tabindex="-1">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title">📥 종목 매수</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+            <p id="buyStockInfo"></p>
+            <input type="hidden" id="buyCode">
+            <div class="mb-3">
+                <label>매수 가격</label>
+                <input type="number" id="buyPrice" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label>매수 수량</label>
+                <input type="number" id="buyQty" class="form-control">
+            </div>
+            </div>
+            <div class="modal-footer">
+            <button class="btn btn-primary" onclick="submitBuyOrder()">매수</button>
+            <button class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+            </div>
+        </div>
+        </div>
+    </div>
+      
 
     <script>
         function fetchAccount() {
@@ -66,6 +111,127 @@
                 });
         }
 
+        function fetchHoldings() {
+            fetch("/api/holdings")
+                .then(res => res.json())
+                .then(data => {
+                    const el = document.getElementById("output-holdings");
+                    if (data.error) {
+                        el.innerHTML = `<p class="text-danger">❌ ${data.error}</p>`;
+                    } else if (Array.isArray(data) && data.length > 0) {
+                        let list = data.map(h => {
+                            const current = Number(h.current_price);
+                            const purchase = Number(h.purchase_price);
+                            const quantity = Number(h.quantity);
+                            const profit = (current - purchase) * quantity;
+                            const rate = purchase ? ((current - purchase) / purchase) * 100 : 0;
+
+                            const profitClass = profit >= 0 ? "text-danger" : "text-primary";
+                            return `<li class="list-group-item">
+                                <div class="d-flex justify-content-between">
+                                    <span><strong>${h.name}</strong> (${h.code})</span>
+                                    <span>${current.toLocaleString()} 원</span>
+                                </div>
+                                <div class="d-flex justify-content-between ms-3 mt-1">
+                                    <small>- ${purchase.toLocaleString()} 원</small>
+                                    <small>${quantity} 주</small>
+                                    <small>${(purchase * quantity).toLocaleString()} 원</small>
+                                    <small class="${profitClass}">${profit.toLocaleString()} 원 (${rate.toFixed(2)}%)</small>
+                                </div>
+                            </li>`;
+                        }).join('');
+                        el.innerHTML = `<ul class="list-group">${list}</ul>`;
+                    } else {
+                        el.innerHTML = "<p>보유 종목이 없습니다.</p>";
+                    }
+                    el.style.display = "block";
+                });
+        }
+
+        function fetchVolumeLeaders() {
+            fetch("/api/volume-leaders")
+                .then(res => res.json())
+                .then(data => {
+                    const el = document.getElementById("output-volume");
+                    if (data.error) {
+                        el.innerHTML = `<p class="text-danger">❌ ${data.error}</p>`;
+                    } else {
+                        let html = `
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>종목코드</th>
+                                        <th>종목명</th>
+                                        <th>현재가</th>
+                                        <th>거래량</th>
+                                        <th>거래금액</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>`;
+                        data.stocks.forEach(stock => {
+                            html += `
+                                <tr>
+                                    <td>${stock.code}</td>
+                                    <td>${stock.name}</td>
+                                    <td>${Math.abs(Number(stock.price)).toLocaleString()} 원</td>
+                                    <td>${Number(stock.vol).toLocaleString()} 주</td>
+                                    <td>${Number(stock.amount).toLocaleString()} (백만)원</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary buy-btn"
+                                                data-code="${stock.code}"
+                                                data-name="${stock.name}"
+                                                data-price="${stock.price}">
+                                            구매
+                                        </button>
+                                    </td>
+                                </tr>`;
+                        });
+
+                        html += `</tbody></table>`;
+                        el.innerHTML = html;
+                    }
+                    el.style.display = "block";
+                });
+        }
+
+        function openBuyModal(code, name, price) {
+            document.getElementById("buyStockInfo").innerText = `${code} (${name}) 현재가: ${Number(price).toLocaleString()} 원`;
+            document.getElementById("buyCode").value = code;
+            document.getElementById("buyPrice").value = price;
+            document.getElementById("buyQty").value = "";
+            new bootstrap.Modal(document.getElementById("buyModal")).show();
+        }
+
+
+        function submitBuyOrder() {
+            const code = document.getElementById("buyCode").value;
+            const price = parseInt(document.getElementById("buyPrice").value);
+            const qty = parseInt(document.getElementById("buyQty").value);
+
+            fetch("/api/buy", {
+                method: "POST",
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ code, price, qty })
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message || JSON.stringify(data));
+                bootstrap.Modal.getInstance(document.getElementById("buyModal")).hide();
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.addEventListener("click", function (e) {
+                const btn = e.target.closest(".buy-btn");
+                if (btn) {
+                    const code = btn.dataset.code;
+                    const name = btn.dataset.name;
+                    const price = btn.dataset.price;
+                    openBuyModal(code, name, price);
+                }
+            });
+        });
     </script>
 </body>
 </html>
