@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>키움증권 잔고조회</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <!-- Bootstrap JS (필수: 모달 기능 포함) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body class="p-5 bg-light">
@@ -57,8 +56,37 @@
         </div>
     </div>
       
+    <!-- 매도 모달 -->
+    <div class="modal fade" id="sellModal" tabindex="-1">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title">📤 종목 매도</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+            <p id="sellStockInfo"></p>
+            <input type="hidden" id="sellCode">
+            <div class="mb-3">
+                <label>매도 가격</label>
+                <input type="number" id="sellPrice" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label>매도 수량</label>
+                <input type="number" id="sellQty" class="form-control">
+            </div>
+            </div>
+            <div class="modal-footer">
+            <button class="btn btn-danger" onclick="submitSellOrder()">매도</button>
+            <button class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+            </div>
+        </div>
+        </div>
+    </div>
 
     <script>
+        let myHoldings = [];
+
         function fetchAccount() {
             fetch("/api/account")
                 .then(res => res.json())
@@ -110,90 +138,128 @@
                     el.style.display = "block";
                 });
         }
-
+        
         function fetchHoldings() {
-            fetch("/api/holdings")
-                .then(res => res.json())
-                .then(data => {
-                    const el = document.getElementById("output-holdings");
-                    if (data.error) {
-                        el.innerHTML = `<p class="text-danger">❌ ${data.error}</p>`;
-                    } else if (Array.isArray(data) && data.length > 0) {
-                        let list = data.map(h => {
-                            const current = Number(h.current_price);
-                            const purchase = Number(h.purchase_price);
-                            const quantity = Number(h.quantity);
-                            const profit = (current - purchase) * quantity;
-                            const rate = purchase ? ((current - purchase) / purchase) * 100 : 0;
+            return new Promise((resolve, reject) => {
+                fetch("/api/holdings")
+                    .then(res => res.json())
+                    .then(data => {
+                        const el = document.getElementById("output-holdings");
+                        myHoldings = []; // 초기화
 
-                            const profitClass = profit >= 0 ? "text-danger" : "text-primary";
-                            return `<li class="list-group-item">
-                                <div class="d-flex justify-content-between">
-                                    <span><strong>${h.name}</strong> (${h.code})</span>
-                                    <span>${current.toLocaleString()} 원</span>
-                                </div>
-                                <div class="d-flex justify-content-between ms-3 mt-1">
-                                    <small>- ${purchase.toLocaleString()} 원</small>
-                                    <small>${quantity} 주</small>
-                                    <small>${(purchase * quantity).toLocaleString()} 원</small>
-                                    <small class="${profitClass}">${profit.toLocaleString()} 원 (${rate.toFixed(2)}%)</small>
-                                </div>
-                            </li>`;
-                        }).join('');
-                        el.innerHTML = `<ul class="list-group">${list}</ul>`;
-                    } else {
-                        el.innerHTML = "<p>보유 종목이 없습니다.</p>";
+                        if (data.error) {
+                            el.innerHTML = `<p class="text-danger">❌ ${data.error}</p>`;
+                            el.style.display = "block";
+                            reject(data.error); // 실패 처리
+                        } else if (Array.isArray(data) && data.length > 0) {
+                            let list = data.map(h => {
+                                let tmpCode = (h.code).replace('A', '');
+                                myHoldings.push(tmpCode); // 📌 전역변수에 보유 종목 추가
+
+                                const current = Number(h.current_price);
+                                const purchase = Number(h.purchase_price);
+                                const quantity = Number(h.quantity);
+                                const profit = (current - purchase) * quantity;
+                                const rate = purchase ? ((current - purchase) / purchase) * 100 : 0;
+
+                                const profitClass = profit >= 0 ? "text-danger" : "text-primary";
+                                return `<li class="list-group-item" data-code="${h.code}">
+                                    <div class="d-flex justify-content-between">
+                                        <span><strong>${h.name}</strong> (${h.code})</span>
+                                        <span>${current.toLocaleString()} 원</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between ms-3 mt-1">
+                                        <small>- ${purchase.toLocaleString()} 원</small>
+                                        <small>${quantity} 주</small>
+                                        <small>${(purchase * quantity).toLocaleString()} 원</small>
+                                        <small class="${profitClass}">${profit.toLocaleString()} 원 (${rate.toFixed(2)}%)</small>
+                                    </div>
+                                </li>`;
+                            }).join('');
+                            el.innerHTML = `<ul class="list-group">${list}</ul>`;
+                            el.style.display = "block";
+                            resolve(); // ✅ 성공 시 resolve
+                        } else {
+                            el.innerHTML = "<p>보유 종목이 없습니다.</p>";
+                            el.style.display = "block";
+                            resolve(); // ✅ 이 경우도 성공으로 간주
+                        }
+                    })
+                    .catch(err => reject(err)); // 예외 처리
+            });
+        }
+    
+        async function fetchVolumeLeaders() {
+            const el = document.getElementById("output-volume");
+            el.innerHTML = "<p>📡 조회 중입니다...</p>";
+            el.style.display = "block";
+
+            try {
+                // ✅ 먼저 holdings 로딩 완료까지 기다림
+                await fetchHoldings();
+
+                // ✅ 그 다음 volume 데이터 fetch
+                const res = await fetch("/api/volume-leaders");
+                const data = await res.json();
+
+                if (data.error) {
+                    el.innerHTML = `<p class="text-danger">❌ ${data.error}</p>`;
+                    return;
+                }
+
+                let html = `
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>종목코드</th>
+                                <th>종목명</th>
+                                <th>현재가</th>
+                                <th>거래량</th>
+                                <th>거래금액</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+
+                data.stocks.forEach(stock => {
+                    const isOwned = myHoldings.includes(stock.code);
+                    if (isOwned) {
+                        console.log("✅ 보유 종목 매칭:", stock.code, stock.name);
                     }
-                    el.style.display = "block";
+
+                    html += `
+                        <tr>
+                            <td>${stock.code}</td>
+                            <td>${stock.name}</td>
+                            <td>${Math.abs(Number(stock.price)).toLocaleString()} 원</td>
+                            <td>${Number(stock.vol).toLocaleString()} 주</td>
+                            <td>${Number(stock.amount).toLocaleString()} (백만)원</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary buy-btn"
+                                        data-code="${stock.code}"
+                                        data-name="${stock.name}"
+                                        data-price="${stock.price}">
+                                    구매
+                                </button>
+                                ${isOwned ? `
+                                <button class="btn btn-sm btn-outline-danger ms-2 sell-btn"
+                                        data-code="${stock.code}"
+                                        data-name="${stock.name}"
+                                        data-price="${stock.price}">
+                                    매도
+                                </button>` : ""}
+                            </td>
+                        </tr>`;
                 });
+
+                html += `</tbody></table>`;
+                el.innerHTML = html;
+            } catch (err) {
+                console.error("📛 fetchVolumeLeaders 에러:", err);
+                el.innerHTML = `<p class="text-danger">❌ 오류 발생: ${err}</p>`;
+            }
         }
 
-        function fetchVolumeLeaders() {
-            fetch("/api/volume-leaders")
-                .then(res => res.json())
-                .then(data => {
-                    const el = document.getElementById("output-volume");
-                    if (data.error) {
-                        el.innerHTML = `<p class="text-danger">❌ ${data.error}</p>`;
-                    } else {
-                        let html = `
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>종목코드</th>
-                                        <th>종목명</th>
-                                        <th>현재가</th>
-                                        <th>거래량</th>
-                                        <th>거래금액</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>`;
-                        data.stocks.forEach(stock => {
-                            html += `
-                                <tr>
-                                    <td>${stock.code}</td>
-                                    <td>${stock.name}</td>
-                                    <td>${Math.abs(Number(stock.price)).toLocaleString()} 원</td>
-                                    <td>${Number(stock.vol).toLocaleString()} 주</td>
-                                    <td>${Number(stock.amount).toLocaleString()} (백만)원</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-outline-primary buy-btn"
-                                                data-code="${stock.code}"
-                                                data-name="${stock.name}"
-                                                data-price="${stock.price}">
-                                            구매
-                                        </button>
-                                    </td>
-                                </tr>`;
-                        });
-
-                        html += `</tbody></table>`;
-                        el.innerHTML = html;
-                    }
-                    el.style.display = "block";
-                });
-        }
 
         function openBuyModal(code, name, price) {
             document.getElementById("buyStockInfo").innerText = `${code} (${name}) 현재가: ${Number(price).toLocaleString()} 원`;
@@ -203,6 +269,13 @@
             new bootstrap.Modal(document.getElementById("buyModal")).show();
         }
 
+        function openSellModal(code, name, price) {
+            document.getElementById("sellStockInfo").innerText = `${code} (${name}) 현재가: ${Number(price).toLocaleString()} 원`;
+            document.getElementById("sellCode").value = code;
+            document.getElementById("sellPrice").value = price;
+            document.getElementById("sellQty").value = "";
+            new bootstrap.Modal(document.getElementById("sellModal")).show();
+        }
 
         function submitBuyOrder() {
             const code = document.getElementById("buyCode").value;
@@ -221,14 +294,37 @@
             });
         }
 
+        function submitSellOrder() {
+            const code = document.getElementById("sellCode").value;
+            const price = parseInt(document.getElementById("sellPrice").value);
+            const qty = parseInt(document.getElementById("sellQty").value);
+
+            fetch("/api/sell", {
+                method: "POST",
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ code, price, qty })
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message || JSON.stringify(data));
+                bootstrap.Modal.getInstance(document.getElementById("sellModal")).hide();
+            });
+        }
+
         document.addEventListener("DOMContentLoaded", function () {
             document.addEventListener("click", function (e) {
-                const btn = e.target.closest(".buy-btn");
-                if (btn) {
-                    const code = btn.dataset.code;
-                    const name = btn.dataset.name;
-                    const price = btn.dataset.price;
+                const buyBtn = e.target.closest(".buy-btn");
+                const sellBtn = e.target.closest(".sell-btn");
+                if (buyBtn) {
+                    const code = buyBtn.dataset.code;
+                    const name = buyBtn.dataset.name;
+                    const price = buyBtn.dataset.price;
                     openBuyModal(code, name, price);
+                } else if (sellBtn) {
+                    const code = sellBtn.dataset.code;
+                    const name = sellBtn.dataset.name;
+                    const price = sellBtn.dataset.price;
+                    openSellModal(code, name, price);
                 }
             });
         });

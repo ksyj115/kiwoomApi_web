@@ -85,21 +85,39 @@ class Trading:
         try:
             logger.info(f"[매수 요청] {code} | {price}원 | {qty}주")
             self.api.ocx.SendOrder(
-                "매수주문" # 주문종류
-                ,"0101" # 화면번호
-                ,Config.ACCNO   # 계좌번호
-                ,1  # 주문타입 (1:신규매수)
-                ,code
-                ,qty
-                ,price
-                ,"00" # "00": 지정가, "03": 시장가
-                ,"" 
+                "매수주문",  # 주문종류
+                "0101",      # 화면번호
+                Config.ACCNO,  # 계좌번호
+                1,  # 주문타입 (1:신규매수)
+                code,
+                qty,
+                price,
+                "00",  # "00": 지정가, "03": 시장가
+                ""
             )
             return {"message": "✅ 매수 주문 요청 완료"}
         except Exception as e:
             logger.log_error("BUY_ORDER", str(e))
             return {"error": str(e)}
 
+    def place_sell_order(self, code, price, qty):
+        try:
+            logger.info(f"[매도 요청] {code} | {price}원 | {qty}주")
+            self.api.ocx.SendOrder(
+                "매도주문",  # 주문종류
+                "0102",      # 화면번호
+                Config.ACCNO,  # 계좌번호
+                2,  # 주문타입 (2:신규매도)
+                code,
+                qty,
+                price,
+                "00",  # "00": 지정가, "03": 시장가
+                ""
+            )
+            return {"message": "✅ 매도 주문 요청 완료"}
+        except Exception as e:
+            logger.log_error("SELL_ORDER", str(e))
+            return {"error": str(e)}
 
     def _on_receive_tr_data(self, screen_no, rqname, trcode, recordname, prev_next, data_len, error_code, message, splm_msg):
         try:

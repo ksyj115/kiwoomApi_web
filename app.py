@@ -94,6 +94,31 @@ def place_buy_order():
 
     return jsonify({"error": "timeout"})
 
+@app.route("/api/sell", methods=["POST"])
+def place_sell_order():
+    data = request.json
+    code = data.get("code")
+    price = data.get("price")
+    qty = data.get("qty")
+
+    request_queue.put({
+        "type": "sell",
+        "code": code,
+        "price": price,
+        "qty": qty
+    })
+
+    timeout = 10
+    waited = 0
+    while waited < timeout:
+        if not response_queue.empty():
+            result = response_queue.get()
+            return jsonify(result)
+        time.sleep(0.1)
+        waited += 0.1
+
+    return jsonify({"error": "timeout"})
+
 def run_flask():
     app.run(debug=False, use_reloader=False)
 

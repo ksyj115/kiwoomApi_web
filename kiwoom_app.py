@@ -34,5 +34,7 @@ class KiwoomAppWrapper:
                 result = self.trading.get_volume_leaders()
             elif isinstance(cmd, dict) and cmd.get("type") == "buy":
                 result = self.trading.place_order(cmd["code"], cmd["price"], cmd["qty"])
+            elif isinstance(cmd, dict) and cmd.get("type") == "sell":
+                result = self.trading.place_sell_order(cmd["code"], cmd["price"], cmd["qty"])
 
             response_queue.put(result)
