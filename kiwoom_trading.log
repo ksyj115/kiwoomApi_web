@@ -1,0 +1,515 @@
+2025-06-25 18:51:21 - KiwoomTrading - INFO - ============= 키움증권 자동매매 프로그램 =============
+2025-06-25 18:51:21 - KiwoomTrading - INFO - 거래 모드: SIMULATION
+2025-06-25 18:51:21 - KiwoomTrading - INFO - ======================================================
+2025-06-25 18:51:21 - KiwoomTrading - INFO - 
+2025-06-25 18:51:21 - KiwoomTrading - INFO - 
+2025-06-25 18:51:21 - KiwoomTrading - INFO - 
+2025-06-25 18:51:39 - KiwoomTrading - INFO - 로그인 성공
+2025-06-25 18:51:39 - KiwoomTrading - INFO - ==================== 계좌 정보 ====================
+2025-06-25 18:51:39 - KiwoomTrading - INFO - 사용자ID: ksyj115
+2025-06-25 18:51:39 - KiwoomTrading - INFO - 사용자명: 신윤재
+2025-06-25 18:51:39 - KiwoomTrading - INFO - 서버구분: 1 (1 : 모의투자, 나머지 : 실서버)
+2025-06-25 18:51:39 - KiwoomTrading - INFO - 계좌번호: 8105608311
+2025-06-25 18:53:47 - KiwoomTrading - INFO - ============= 키움증권 자동매매 프로그램 =============
+2025-06-25 18:53:47 - KiwoomTrading - INFO - 거래 모드: SIMULATION
+2025-06-25 18:53:47 - KiwoomTrading - INFO - ======================================================
+2025-06-25 18:53:47 - KiwoomTrading - INFO - 
+2025-06-25 18:53:47 - KiwoomTrading - INFO - 
+2025-06-25 18:53:47 - KiwoomTrading - INFO - 
+2025-06-25 18:53:54 - KiwoomTrading - INFO - 로그인 성공
+2025-06-25 18:53:54 - KiwoomTrading - INFO - ==================== 계좌 정보 ====================
+2025-06-25 18:53:54 - KiwoomTrading - INFO - 사용자ID: ksyj115
+2025-06-25 18:53:54 - KiwoomTrading - INFO - 사용자명: 신윤재
+2025-06-25 18:53:54 - KiwoomTrading - INFO - 서버구분: 1 (1 : 모의투자, 나머지 : 실서버)
+2025-06-25 18:53:54 - KiwoomTrading - INFO - 계좌번호: 8105608311
+2025-06-25 18:53:54 - KiwoomTrading - INFO - 
+2025-06-25 18:53:54 - KiwoomTrading - INFO - 총 투자금액: 185,225원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - 주문 가능 금액: 9,813,550원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - ===================================================
+2025-06-25 18:53:54 - KiwoomTrading - INFO - 
+2025-06-25 18:53:54 - KiwoomTrading - INFO - 
+2025-06-25 18:53:54 - KiwoomTrading - INFO - 
+2025-06-25 18:53:54 - KiwoomTrading - INFO - ************************************** 보유 종목 **************************************
+2025-06-25 18:53:54 - KiwoomTrading - INFO - 삼성전자 (종목코드 : A005930) [ 현재가 : 61,300원 ]
+2025-06-25 18:53:54 - KiwoomTrading - INFO - [ 내평균 : 60,412원 ] [ 보유수량 : 2주 ]
+2025-06-25 18:53:54 - KiwoomTrading - INFO - 평가금 : 122,600원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - 손익상태 : 1,776원 (1.47%)
+2025-06-25 18:53:54 - KiwoomTrading - INFO - 
+2025-06-25 18:53:54 - KiwoomTrading - INFO - 두산에너빌리티 (종목코드 : A034020) [ 현재가 : 65,800원 ]
+2025-06-25 18:53:54 - KiwoomTrading - INFO - [ 내평균 : 64,400원 ] [ 보유수량 : 1주 ]
+2025-06-25 18:53:54 - KiwoomTrading - INFO - 평가금 : 65,800원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - 손익상태 : 1,400원 (2.17%)
+2025-06-25 18:53:54 - KiwoomTrading - INFO - 
+2025-06-25 18:53:54 - KiwoomTrading - INFO - ***************************************************************************************
+2025-06-25 18:53:54 - KiwoomTrading - INFO - 
+2025-06-25 18:53:54 - KiwoomTrading - INFO - 
+2025-06-25 18:53:54 - KiwoomTrading - INFO - 
+2025-06-25 18:53:54 - KiwoomTrading - INFO - ************************************** 거래량 상위 종목 **************************************
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (252670) KODEX 200선물인버스2X | 거래량: 340,247,733주 | 거래금액: 4,758억원 | 현재가: 1,393원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (042040) 케이피엠테크 | 거래량: 88,307,629주 | 거래금액: 316억원 | 현재가: 320원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (234100) 폴라리스세원 | 거래량: 72,067,109주 | 거래금액: 1,119억원 | 현재가: 1,494원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (033340) 좋은사람들 | 거래량: 67,251,489주 | 거래금액: 1,082억원 | 현재가: 1,569원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (004140) 동방 | 거래량: 62,244,131주 | 거래금액: 1,928억원 | 현재가: 2,985원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (530036) 삼성 인버스 2X WTI원유 선물 ETN | 거래량: 53,985,101주 | 거래금액: 43억원 | 현재가: 79원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (114800) KODEX 인버스 | 거래량: 51,150,529주 | 거래금액: 1,839억원 | 현재가: 3,590원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (096350) 대창솔루션 | 거래량: 44,386,625주 | 거래금액: 271억원 | 현재가: 589원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (003280) 흥아해운 | 거래량: 39,446,205주 | 거래금액: 735억원 | 현재가: 1,795원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (288330) 브릿지바이오테라퓨틱스 | 거래량: 36,596,366주 | 거래금액: 723억원 | 현재가: 2,065원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (122630) KODEX 레버리지 | 거래량: 29,845,530주 | 거래금액: 7,032억원 | 현재가: 23,630원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (090710) 휴림로봇 | 거래량: 26,772,953주 | 거래금액: 697억원 | 현재가: 2,650원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (102370) 케이옥션 | 거래량: 26,399,685주 | 거래금액: 1,326억원 | 현재가: 5,380원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (251340) KODEX 코스닥150선물인버스 | 거래량: 25,809,375주 | 거래금액: 922억원 | 현재가: 3,575원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (233740) KODEX 코스닥150레버리지 | 거래량: 25,647,317주 | 거래금액: 2,140억원 | 현재가: 8,335원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (207760) 미스터블루 | 거래량: 24,437,237주 | 거래금액: 484억원 | 현재가: 1,860원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (215100) 로보로보 | 거래량: 24,187,424주 | 거래금액: 1,402억원 | 현재가: 5,630원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (005930) 삼성전자 | 거래량: 23,933,612주 | 거래금액: 14,574억원 | 현재가: 61,300원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (000400) 롯데손해보험 | 거래량: 23,362,875주 | 거래금액: 464억원 | 현재가: 1,934원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (001510) SK증권 | 거래량: 20,307,952주 | 거래금액: 143억원 | 현재가: 703원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - *********************************************************************************************
+2025-06-25 18:53:54 - KiwoomTrading - INFO - 
+2025-06-25 18:53:54 - KiwoomTrading - INFO - 
+2025-06-25 18:53:54 - KiwoomTrading - INFO - 
+2025-06-25 18:53:54 - KiwoomTrading - INFO - ************************************** 거래량 급증 상위 종목 **************************************
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (004140) 동방 | 이전거래량: 1,169,603주 | 현재거래량: 62,244,131주 | 등락률: +11.38 | 현재가: 2,985원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (234100) 폴라리스세원 | 이전거래량: 15,057,048주 | 현재거래량: 72,067,109주 | 등락률: +12.08 | 현재가: 1,494원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (042040) 케이피엠테크 | 이전거래량: 34,430,134주 | 현재거래량: 88,307,629주 | 등락률: -8.83 | 현재가: 320원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (096350) 대창솔루션 | 이전거래량: 10,783,851주 | 현재거래량: 44,386,625주 | 등락률: +9.48 | 현재가: 589원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (288330) 브릿지바이오테라퓨틱스 | 이전거래량: 4,370,209주 | 현재거래량: 36,596,366주 | 등락률: +29.71 | 현재가: 2,065원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (102370) 케이옥션 | 이전거래량: 145,389주 | 현재거래량: 26,399,685주 | 등락률: +29.79 | 현재가: 5,380원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (000400) 롯데손해보험 | 이전거래량: 198,061주 | 현재거래량: 23,362,875주 | 등락률: +11.15 | 현재가: 1,934원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (033340) 좋은사람들 | 이전거래량: 44,148,663주 | 현재거래량: 67,251,489주 | 등락률: +7.54 | 현재가: 1,569원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (215100) 로보로보 | 이전거래량: 1,212,698주 | 현재거래량: 24,187,424주 | 등락률: +12.94 | 현재가: 5,630원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (207760) 미스터블루 | 이전거래량: 4,231,643주 | 현재거래량: 24,437,237주 | 등락률: +0.49 | 현재가: 1,860원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (009070) KCTC | 이전거래량: 243,597주 | 현재거래량: 19,054,538주 | 등락률: +20.53 | 현재가: 5,050원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (043200) 파루 | 이전거래량: 2,221,525주 | 현재거래량: 20,186,157주 | 등락률: +13.12 | 현재가: 1,578원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (032940) 원익 | 이전거래량: 1,596,003주 | 현재거래량: 16,995,137주 | 등락률: +14.73 | 현재가: 7,710원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (377300) 카카오페이 | 이전거래량: 0주 | 현재거래량: 12,214,811주 | 등락률: +1.96 | 현재가: 93,800원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (250930) 예선테크 | 이전거래량: 50,121주 | 현재거래량: 11,345,549주 | 등락률: +5.25 | 현재가: 561원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (055550) 신한지주 | 이전거래량: 1,615,168주 | 현재거래량: 12,851,355주 | 등락률: -0.66 | 현재가: 60,600원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (090710) 휴림로봇 | 이전거래량: 15,800,230주 | 현재거래량: 26,772,953주 | 등락률: +6.85 | 현재가: 2,650원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (063170) 서울옥션 | 이전거래량: 235,511주 | 현재거래량: 10,824,152주 | 등락률: +22.33 | 현재가: 11,450원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (321370) 센서뷰 | 이전거래량: 138,571주 | 현재거래량: 9,971,786주 | 등락률: +11.84 | 현재가: 1,407원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - (030530) 원익홀딩스 | 이전거래량: 3,370,690주 | 현재거래량: 12,557,844주 | 등락률: -1.07 | 현재가: 5,560원
+2025-06-25 18:53:54 - KiwoomTrading - INFO - *************************************************************************************************
+2025-06-25 18:53:54 - KiwoomTrading - INFO - 
+2025-06-25 18:53:54 - KiwoomTrading - INFO - 
+2025-06-25 18:53:54 - KiwoomTrading - INFO - 
+2025-06-25 19:06:28 - KiwoomTrading - ERROR - API가 연결되지 않았습니다.
+2025-06-25 19:13:40 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 19:17:24 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 19:20:37 - KiwoomTrading - INFO - ============= 키움증권 자동매매 프로그램 =============
+2025-06-25 19:20:37 - KiwoomTrading - INFO - 거래 모드: SIMULATION
+2025-06-25 19:20:37 - KiwoomTrading - INFO - ======================================================
+2025-06-25 19:20:37 - KiwoomTrading - INFO - 
+2025-06-25 19:20:37 - KiwoomTrading - INFO - 
+2025-06-25 19:20:37 - KiwoomTrading - INFO - 
+2025-06-25 19:20:44 - KiwoomTrading - INFO - 로그인 성공
+2025-06-25 19:20:44 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 19:20:44 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 19:20:44 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 19:20:44 - KiwoomTrading - INFO - ==================== 계좌 정보 ====================
+2025-06-25 19:20:44 - KiwoomTrading - INFO - 사용자ID: ksyj115
+2025-06-25 19:20:44 - KiwoomTrading - INFO - 사용자명: 신윤재
+2025-06-25 19:20:44 - KiwoomTrading - INFO - 서버구분: 1 (1 : 모의투자, 나머지 : 실서버)
+2025-06-25 19:20:44 - KiwoomTrading - INFO - 계좌번호: 8105608311
+2025-06-25 19:20:44 - KiwoomTrading - INFO - 
+2025-06-25 19:20:44 - KiwoomTrading - INFO - 총 투자금액: 185,225원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - 주문 가능 금액: 9,813,550원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - ===================================================
+2025-06-25 19:20:44 - KiwoomTrading - INFO - 
+2025-06-25 19:20:44 - KiwoomTrading - INFO - 
+2025-06-25 19:20:44 - KiwoomTrading - INFO - 
+2025-06-25 19:20:44 - KiwoomTrading - INFO - ************************************** 보유 종목 **************************************
+2025-06-25 19:20:44 - KiwoomTrading - INFO - 삼성전자 (종목코드 : A005930) [ 현재가 : 61,300원 ]
+2025-06-25 19:20:44 - KiwoomTrading - INFO - [ 내평균 : 60,412원 ] [ 보유수량 : 2주 ]
+2025-06-25 19:20:44 - KiwoomTrading - INFO - 평가금 : 122,600원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - 손익상태 : 1,776원 (1.47%)
+2025-06-25 19:20:44 - KiwoomTrading - INFO - 
+2025-06-25 19:20:44 - KiwoomTrading - INFO - 두산에너빌리티 (종목코드 : A034020) [ 현재가 : 65,800원 ]
+2025-06-25 19:20:44 - KiwoomTrading - INFO - [ 내평균 : 64,400원 ] [ 보유수량 : 1주 ]
+2025-06-25 19:20:44 - KiwoomTrading - INFO - 평가금 : 65,800원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - 손익상태 : 1,400원 (2.17%)
+2025-06-25 19:20:44 - KiwoomTrading - INFO - 
+2025-06-25 19:20:44 - KiwoomTrading - INFO - ***************************************************************************************
+2025-06-25 19:20:44 - KiwoomTrading - INFO - 
+2025-06-25 19:20:44 - KiwoomTrading - INFO - 
+2025-06-25 19:20:44 - KiwoomTrading - INFO - 
+2025-06-25 19:20:44 - KiwoomTrading - INFO - ************************************** 거래량 상위 종목 **************************************
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (252670) KODEX 200선물인버스2X | 거래량: 340,247,733주 | 거래금액: 4,758억원 | 현재가: 1,393원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (042040) 케이피엠테크 | 거래량: 88,307,629주 | 거래금액: 316억원 | 현재가: 320원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (234100) 폴라리스세원 | 거래량: 72,067,109주 | 거래금액: 1,119억원 | 현재가: 1,494원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (033340) 좋은사람들 | 거래량: 67,251,489주 | 거래금액: 1,082억원 | 현재가: 1,569원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (004140) 동방 | 거래량: 62,244,131주 | 거래금액: 1,928억원 | 현재가: 2,985원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (530036) 삼성 인버스 2X WTI원유 선물 ETN | 거래량: 53,985,101주 | 거래금액: 43억원 | 현재가: 79원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (114800) KODEX 인버스 | 거래량: 51,150,529주 | 거래금액: 1,839억원 | 현재가: 3,590원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (096350) 대창솔루션 | 거래량: 44,386,625주 | 거래금액: 271억원 | 현재가: 589원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (003280) 흥아해운 | 거래량: 39,446,205주 | 거래금액: 735억원 | 현재가: 1,795원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (288330) 브릿지바이오테라퓨틱스 | 거래량: 36,596,366주 | 거래금액: 723억원 | 현재가: 2,065원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (122630) KODEX 레버리지 | 거래량: 29,845,530주 | 거래금액: 7,032억원 | 현재가: 23,630원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (090710) 휴림로봇 | 거래량: 26,772,953주 | 거래금액: 697억원 | 현재가: 2,650원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (102370) 케이옥션 | 거래량: 26,399,685주 | 거래금액: 1,326억원 | 현재가: 5,380원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (251340) KODEX 코스닥150선물인버스 | 거래량: 25,809,375주 | 거래금액: 922억원 | 현재가: 3,575원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (233740) KODEX 코스닥150레버리지 | 거래량: 25,647,317주 | 거래금액: 2,140억원 | 현재가: 8,335원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (207760) 미스터블루 | 거래량: 24,437,237주 | 거래금액: 484억원 | 현재가: 1,860원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (215100) 로보로보 | 거래량: 24,187,424주 | 거래금액: 1,402억원 | 현재가: 5,630원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (005930) 삼성전자 | 거래량: 23,933,612주 | 거래금액: 14,574억원 | 현재가: 61,300원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (000400) 롯데손해보험 | 거래량: 23,362,875주 | 거래금액: 464억원 | 현재가: 1,934원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (001510) SK증권 | 거래량: 20,307,952주 | 거래금액: 143억원 | 현재가: 703원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - *********************************************************************************************
+2025-06-25 19:20:44 - KiwoomTrading - INFO - 
+2025-06-25 19:20:44 - KiwoomTrading - INFO - 
+2025-06-25 19:20:44 - KiwoomTrading - INFO - 
+2025-06-25 19:20:44 - KiwoomTrading - INFO - ************************************** 거래량 급증 상위 종목 **************************************
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (004140) 동방 | 이전거래량: 1,169,603주 | 현재거래량: 62,244,131주 | 등락률: +11.38 | 현재가: 2,985원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (234100) 폴라리스세원 | 이전거래량: 15,057,048주 | 현재거래량: 72,067,109주 | 등락률: +12.08 | 현재가: 1,494원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (042040) 케이피엠테크 | 이전거래량: 34,430,134주 | 현재거래량: 88,307,629주 | 등락률: -8.83 | 현재가: 320원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (096350) 대창솔루션 | 이전거래량: 10,783,851주 | 현재거래량: 44,386,625주 | 등락률: +9.48 | 현재가: 589원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (288330) 브릿지바이오테라퓨틱스 | 이전거래량: 4,370,209주 | 현재거래량: 36,596,366주 | 등락률: +29.71 | 현재가: 2,065원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (102370) 케이옥션 | 이전거래량: 145,389주 | 현재거래량: 26,399,685주 | 등락률: +29.79 | 현재가: 5,380원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (000400) 롯데손해보험 | 이전거래량: 198,061주 | 현재거래량: 23,362,875주 | 등락률: +11.15 | 현재가: 1,934원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (033340) 좋은사람들 | 이전거래량: 44,148,663주 | 현재거래량: 67,251,489주 | 등락률: +7.54 | 현재가: 1,569원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (215100) 로보로보 | 이전거래량: 1,212,698주 | 현재거래량: 24,187,424주 | 등락률: +12.94 | 현재가: 5,630원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (207760) 미스터블루 | 이전거래량: 4,231,643주 | 현재거래량: 24,437,237주 | 등락률: +0.49 | 현재가: 1,860원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (009070) KCTC | 이전거래량: 243,597주 | 현재거래량: 19,054,538주 | 등락률: +20.53 | 현재가: 5,050원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (043200) 파루 | 이전거래량: 2,221,525주 | 현재거래량: 20,186,157주 | 등락률: +13.12 | 현재가: 1,578원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (032940) 원익 | 이전거래량: 1,596,003주 | 현재거래량: 16,995,137주 | 등락률: +14.73 | 현재가: 7,710원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (377300) 카카오페이 | 이전거래량: 0주 | 현재거래량: 12,214,811주 | 등락률: +1.96 | 현재가: 93,800원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (250930) 예선테크 | 이전거래량: 50,121주 | 현재거래량: 11,345,549주 | 등락률: +5.25 | 현재가: 561원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (055550) 신한지주 | 이전거래량: 1,615,168주 | 현재거래량: 12,851,355주 | 등락률: -0.66 | 현재가: 60,600원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (090710) 휴림로봇 | 이전거래량: 15,800,230주 | 현재거래량: 26,772,953주 | 등락률: +6.85 | 현재가: 2,650원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (063170) 서울옥션 | 이전거래량: 235,511주 | 현재거래량: 10,824,152주 | 등락률: +22.33 | 현재가: 11,450원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (321370) 센서뷰 | 이전거래량: 138,571주 | 현재거래량: 9,971,786주 | 등락률: +11.84 | 현재가: 1,407원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - (030530) 원익홀딩스 | 이전거래량: 3,370,690주 | 현재거래량: 12,557,844주 | 등락률: -1.07 | 현재가: 5,560원
+2025-06-25 19:20:44 - KiwoomTrading - INFO - *************************************************************************************************
+2025-06-25 19:20:44 - KiwoomTrading - INFO - 
+2025-06-25 19:20:44 - KiwoomTrading - INFO - 
+2025-06-25 19:20:44 - KiwoomTrading - INFO - 
+2025-06-25 19:21:04 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 19:25:29 - KiwoomTrading - ERROR - 사용자 ID 또는 비밀번호가 설정되지 않았습니다.
+2025-06-25 19:25:30 - KiwoomTrading - ERROR - 사용자 ID 또는 비밀번호가 설정되지 않았습니다.
+2025-06-25 19:37:05 - KiwoomTrading - ERROR - 사용자 ID 또는 비밀번호가 설정되지 않았습니다.
+2025-06-25 19:37:05 - KiwoomTrading - INFO - ✅ 키움 API 로그인 완료 및 연결됨
+2025-06-25 19:42:50 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-25 19:43:02 - KiwoomTrading - INFO - 로그인 성공
+2025-06-25 19:43:02 - KiwoomTrading - INFO - ✅ 키움 API 로그인 완료 및 연결됨
+2025-06-25 19:43:39 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-25 19:43:45 - KiwoomTrading - INFO - 로그인 성공
+2025-06-25 19:43:46 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-25 19:43:52 - KiwoomTrading - INFO - 로그인 성공
+2025-06-25 19:44:05 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 19:44:05 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 19:44:05 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 19:44:05 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 19:51:49 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-25 19:51:55 - KiwoomTrading - INFO - 로그인 성공
+2025-06-25 19:52:06 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 19:52:06 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 19:52:06 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 19:52:06 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 19:54:45 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 19:54:45 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 19:54:45 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 19:54:45 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 19:55:12 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 19:55:12 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 19:55:12 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 19:55:12 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:27:10 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:27:10 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:27:10 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:27:10 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:27:20 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:27:20 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:27:20 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:27:20 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:35:33 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-25 20:35:45 - KiwoomTrading - INFO - 로그인 성공
+2025-06-25 20:35:52 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:35:52 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:35:52 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:35:52 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:35:52 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:39:32 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:39:32 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:39:32 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:39:32 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:39:32 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:40:16 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:40:16 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:40:16 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:40:16 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:40:16 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:40:17 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:40:17 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:40:17 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:40:17 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:40:17 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:40:34 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:40:34 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:40:34 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:40:34 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:40:34 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:40:34 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:40:34 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:40:34 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:40:34 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:40:34 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:40:54 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:40:54 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:40:54 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:40:54 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:40:54 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:41:01 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:41:01 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:41:01 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:41:01 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:41:01 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:41:40 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:41:40 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:41:40 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:41:40 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:41:40 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:41:48 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:41:48 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:41:48 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:41:48 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:41:48 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:42:00 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:42:00 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:42:00 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:42:00 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:42:00 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:42:07 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:42:07 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:42:07 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:42:07 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:42:07 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:42:52 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:42:52 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:42:52 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:42:52 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:42:52 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:43:33 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:43:33 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:43:33 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:43:33 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:43:33 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:43:54 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:43:54 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:43:54 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:43:54 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:43:54 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:45:52 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:45:52 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:45:53 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:45:53 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:45:53 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:45:57 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:45:57 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:45:57 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:45:57 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:45:57 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:46:13 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:46:13 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:46:13 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:46:13 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:46:13 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:46:16 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:46:16 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:46:16 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:46:16 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:46:16 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:46:20 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:46:20 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:46:20 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:46:20 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:46:20 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:46:34 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:46:34 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:46:34 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:46:34 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:46:34 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:47:50 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:47:50 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:47:50 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:47:50 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:47:50 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:48:08 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:48:08 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:48:08 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:48:08 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:48:08 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:48:14 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:48:14 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:48:14 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:48:14 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:48:14 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:48:18 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:48:18 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:48:18 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:48:18 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:48:18 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:48:21 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:48:21 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:48:21 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:48:21 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:48:21 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:56:06 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:56:06 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:56:06 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:56:06 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 20:56:06 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 21:03:49 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-25 21:04:00 - KiwoomTrading - INFO - 로그인 성공
+2025-06-25 21:04:25 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 21:04:25 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 21:04:25 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 21:04:25 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 21:04:25 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 21:06:50 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 21:06:50 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 21:06:50 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 21:06:50 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 21:06:50 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 21:08:50 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-25 21:08:58 - KiwoomTrading - INFO - 로그인 성공
+2025-06-25 21:10:17 - KiwoomTrading - INFO - 0
+2025-06-25 21:10:25 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-25 21:10:31 - KiwoomTrading - INFO - 로그인 성공
+2025-06-25 21:35:03 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-25 21:35:14 - KiwoomTrading - INFO - 로그인 성공
+2025-06-25 21:45:20 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-25 21:45:32 - KiwoomTrading - INFO - 로그인 성공
+2025-06-25 21:49:55 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-25 21:50:01 - KiwoomTrading - INFO - 로그인 성공
+2025-06-25 21:50:25 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 21:50:25 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 21:50:25 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 21:50:25 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 21:50:25 - KiwoomTrading - INFO - 로그인 정보 조회
+2025-06-25 21:53:48 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-25 21:53:54 - KiwoomTrading - INFO - 로그인 성공
+2025-06-25 22:04:13 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-25 22:04:20 - KiwoomTrading - INFO - 로그인 성공
+2025-06-25 22:05:41 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-25 22:05:47 - KiwoomTrading - INFO - 로그인 성공
+2025-06-25 22:08:07 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-25 22:08:13 - KiwoomTrading - INFO - 로그인 성공
+2025-06-25 22:08:28 - KiwoomTrading - INFO - /api/account => get_account()
+2025-06-25 22:08:28 - KiwoomTrading - INFO - /api/account => get_account() => get_account(self)
+2025-06-25 22:08:28 - KiwoomTrading - INFO - /api/account => get_total_investment() => get_total_investment(self) => get_total_investment(self)
+2025-06-25 22:09:09 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-25 22:09:14 - KiwoomTrading - INFO - 로그인 성공
+2025-06-25 22:09:19 - KiwoomTrading - INFO - /api/account => get_account()
+2025-06-25 22:09:19 - KiwoomTrading - INFO - /api/account => get_account() => get_account(self)
+2025-06-25 22:09:19 - KiwoomTrading - INFO - /api/account => get_total_investment() => get_total_investment(self) => get_total_investment(self)
+2025-06-25 22:10:10 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-25 22:10:16 - KiwoomTrading - INFO - 로그인 성공
+2025-06-25 22:10:23 - KiwoomTrading - INFO - /api/account => get_account()
+2025-06-25 22:10:23 - KiwoomTrading - INFO - /api/account => get_account() => get_account(self)
+2025-06-25 22:10:23 - KiwoomTrading - INFO - /api/account => get_total_investment() => get_total_investment(self) => get_total_investment(self)
+2025-06-25 22:10:23 - KiwoomTrading - INFO - self.tr_event_loop.exec_()
+2025-06-25 22:14:48 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-25 22:14:53 - KiwoomTrading - INFO - 로그인 성공
+2025-06-25 22:15:05 - KiwoomTrading - INFO - /api/account => get_account()
+2025-06-25 22:15:05 - KiwoomTrading - INFO - /api/account => get_account() => get_account(self)
+2025-06-25 22:15:05 - KiwoomTrading - INFO - /api/account => get_total_investment() => get_total_investment(self) => get_total_investment(self)
+2025-06-25 22:15:05 - KiwoomTrading - INFO - self.tr_event_loop.exec_()
+2025-06-25 22:19:41 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-25 22:19:47 - KiwoomTrading - INFO - 로그인 성공
+2025-06-25 22:19:56 - KiwoomTrading - INFO - /api/account => get_account()
+2025-06-25 22:19:56 - KiwoomTrading - INFO - /api/account => get_account() => get_account(self)
+2025-06-25 22:19:56 - KiwoomTrading - INFO - /api/account => get_total_investment() => get_total_investment(self) => get_total_investment(self)
+2025-06-25 22:19:56 - KiwoomTrading - INFO - self.tr_event_loop.exec_()
+2025-06-25 22:26:32 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-25 22:26:39 - KiwoomTrading - INFO - 로그인 성공
+2025-06-25 22:26:45 - KiwoomTrading - INFO - /api/account => get_account()
+2025-06-25 22:26:45 - KiwoomTrading - INFO - /api/account => get_account() => get_account(self)
+2025-06-25 22:26:45 - KiwoomTrading - INFO - /api/account => get_total_investment() => get_total_investment(self) => get_total_investment(self)
+2025-06-25 22:26:45 - KiwoomTrading - INFO - self.tr_event_loop.exec_()
+2025-06-25 22:32:40 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-25 22:32:46 - KiwoomTrading - INFO - 로그인 성공
+2025-06-25 22:32:57 - KiwoomTrading - INFO - /api/account => get_account()
+2025-06-25 22:32:57 - KiwoomTrading - INFO - /api/account => get_account() => get_account(self)
+2025-06-25 22:32:57 - KiwoomTrading - INFO - /api/account => get_total_investment() => get_total_investment(self) => get_total_investment(self)
+2025-06-25 22:32:57 - KiwoomTrading - INFO - self.tr_event_loop.exec_()
+2025-06-25 22:32:57 - KiwoomTrading - INFO - ✅ opw00018_req 응답 수신됨
+2025-06-25 22:32:57 - KiwoomTrading - INFO - ✅ finally: 이벤트 루프 종료 시도
+2025-06-25 23:33:06 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-25 23:33:12 - KiwoomTrading - INFO - 로그인 성공
+2025-06-25 23:33:18 - KiwoomTrading - INFO - /api/account => get_account()
+2025-06-25 23:33:18 - KiwoomTrading - INFO - /api/account => get_account() => get_account(self)
+2025-06-25 23:33:18 - KiwoomTrading - INFO - /api/account => get_total_investment() => get_total_investment(self) => get_total_investment(self)
+2025-06-25 23:33:18 - KiwoomTrading - INFO - self.tr_event_loop.exec_()
+2025-06-25 23:33:18 - KiwoomTrading - INFO - ✅ opw00018_req 응답 수신됨
+2025-06-25 23:33:18 - KiwoomTrading - INFO - ✅ finally: 이벤트 루프 종료 시도
+2025-06-25 23:39:10 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-25 23:39:16 - KiwoomTrading - INFO - 로그인 성공
+2025-06-25 23:39:22 - KiwoomTrading - INFO - /api/account => get_account()
+2025-06-25 23:39:22 - KiwoomTrading - INFO - /api/account => get_account() => get_account(self)
+2025-06-25 23:39:22 - KiwoomTrading - INFO - /api/account => get_total_investment() => get_total_investment(self) => get_total_investment(self)
+2025-06-25 23:39:22 - KiwoomTrading - INFO - self.tr_event_loop.exec_()
+2025-06-25 23:39:22 - KiwoomTrading - INFO - ✅ opw00018_req 응답 수신됨
+2025-06-25 23:39:22 - KiwoomTrading - INFO - ✅ finally: 이벤트 루프 종료 시도
+2025-06-25 23:58:58 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-25 23:59:10 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 00:08:30 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 00:08:36 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 00:08:47 - KiwoomTrading - INFO - total : 0
+2025-06-26 00:08:47 - KiwoomTrading - INFO - valuation : 0
+2025-06-26 00:08:47 - KiwoomTrading - INFO - available : 0
+2025-06-26 00:12:19 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 00:12:25 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 00:12:36 - KiwoomTrading - INFO - total : 000000000185225
+2025-06-26 00:12:36 - KiwoomTrading - INFO - valuation : 000000000188400
+2025-06-26 00:12:36 - KiwoomTrading - INFO - available : 
+2025-06-26 00:33:57 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 00:34:03 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 00:38:53 - KiwoomTrading - INFO - total : 000000000185225
+2025-06-26 00:38:53 - KiwoomTrading - INFO - valuation : 000000000188400
+2025-06-26 00:38:53 - KiwoomTrading - INFO - available : 
+2025-06-26 00:40:13 - KiwoomTrading - INFO - total : 000000000185225
+2025-06-26 00:40:13 - KiwoomTrading - INFO - valuation : 000000000188400
+2025-06-26 00:40:13 - KiwoomTrading - INFO - available : 
+2025-06-26 00:41:00 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 00:41:06 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 00:43:03 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 00:43:09 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 00:47:03 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 00:47:10 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 00:58:48 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 00:58:59 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 01:02:24 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 01:02:30 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 09:07:32 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 09:07:41 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 09:10:17 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 09:10:21 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 09:10:35 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 09:10:35 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 09:12:21 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 09:12:22 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 09:12:26 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 09:12:26 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 09:12:48 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 09:12:49 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 09:13:12 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 09:13:16 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 09:13:21 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 09:13:22 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 09:18:46 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 09:18:50 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 09:19:04 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 09:19:05 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 09:21:23 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 09:21:23 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 09:21:35 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 09:21:39 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 09:21:44 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 09:21:45 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 09:25:49 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-26 09:25:53 - KiwoomTrading - INFO - 로그인 성공
+2025-06-26 09:26:01 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 09:26:02 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-26 09:26:06 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-26 09:26:06 - KiwoomTrading - INFO - [trading.py] get_available_cash
