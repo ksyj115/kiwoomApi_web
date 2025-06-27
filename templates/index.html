@@ -20,6 +20,13 @@
         <div id="output" class="card p-3 mt-3 shadow-sm" style="display: none;"></div>
         <div id="output-holdings" class="card p-3 mt-3 shadow-sm" style="display: none;"></div>
     </div>
+    <br/><br/>
+    <div class="container">
+        <h2 class="mb-4">내 주문 상태</h2>
+        <button class="btn btn-primary" onclick="fetchUnfilledOrders()">미체결 주문 종목 조회</button>
+        <div id="output" class="card p-3 mt-3 shadow-sm" style="display: none;"></div>
+        <div id="output-unfilledOrders" class="card p-3 mt-3 shadow-sm" style="display: none;"></div>
+    </div>
 
     <br/><br/><br/><br/><br/><br/>
     <div class="container mt-5">
@@ -87,106 +94,167 @@
     <script>
         let myHoldings = [];
 
-        function fetchAccount() {
-            fetch("/api/account")
-                .then(res => res.json())
-                .then(data => {
-                    const el = document.getElementById("output");
-                    if (data.error) {
-                        el.innerHTML = `<p class="text-danger">❌ ${data.error}</p>`;
-                    } else {
-                        const totalInvestment = Number(data.total_investment.replace(/,/g, ""));
-                        const totalValuation = Number(data.total_valuation.replace(/,/g, ""));
-                        const profit = totalValuation - totalInvestment;
+        async function fetchAccount() {
+            const el = document.getElementById("output");
+            const el2 = document.getElementById("output-available-cash");
 
-                        // 수익/손실 스타일 분기
-                        const profitClass = profit >= 0 ? "text-danger" : "text-primary";
-                        const profitText = profit >= 0 ? `${profit.toLocaleString()} 원` : `${profit.toLocaleString()} 원`;
+            el.innerHTML = `<p class="text-muted">⌛ 계좌 잔고 불러오는 중...</p>`;
+            el2.innerHTML = `<p class="text-muted">⌛ 주문가능금액 불러오는 중...</p>`;
+            el.style.display = "block";
+            el2.style.display = "block";
 
-                        // 수익률 계산
-                        let profitRate = 0;
-                        if (totalInvestment !== 0) {
-                            profitRate = (profit / totalInvestment) * 100;
-                        }
-                        const profitRateText = `${profitRate.toFixed(2)}%`;
+            try {
+                // 1. 계좌 잔고 조회
+                const res1 = await fetch("/api/account");
+                const data1 = await res1.json();
 
-                        el.innerHTML = `
+                if (data1.error) {
+                    el.innerHTML = `<p class="text-danger">❌ ${data1.error}</p>`;
+                } else {
+                    const totalInvestment = Number(data1.total_investment.replace(/,/g, ""));
+                    const totalValuation = Number(data1.total_valuation.replace(/,/g, ""));
+                    const profit = totalValuation - totalInvestment;
+
+                    const profitClass = profit >= 0 ? "text-danger" : "text-primary";
+                    const profitRate = totalInvestment !== 0 ? (profit / totalInvestment) * 100 : 0;
+
+                    el.innerHTML = `
                         <ul class="list-group">
                             <li class="list-group-item"><strong>총 투자금액:</strong> ${totalInvestment.toLocaleString()} 원</li>
                             <li class="list-group-item"><strong>총 평가금액:</strong> ${totalValuation.toLocaleString()} 원</li>
                             <li class="list-group-item ${profitClass}">
-                                <strong>📈 손익:</strong> <span>${profitText}</span>
-                                <small class="ms-2">(${profitRateText})</small>
+                                <strong>📈 손익:</strong> ${profit.toLocaleString()} 원
+                                <small class="ms-2">(${profitRate.toFixed(2)}%)</small>
                             </li>
                         </ul>`;
-                    }
-                    el.style.display = "block";
-                });
+                }
 
-            fetch("/api/available_cash")
-                .then(res => res.json())
-                .then(data => {
-                    const el = document.getElementById("output-available-cash");
-                    if (data.error) {
-                        el.innerHTML = `<p class="text-danger">❌ ${data.error}</p>`;
-                    } else {
-                        el.innerHTML = `
-                            <ul class="list-group">
-                                <li class="list-group-item"><strong>주문가능금액:</strong> ${data.available_cash} 원</li>
-                            </ul>`;
-                    }
-                    el.style.display = "block";
-                });
+                // 2. 주문 가능 금액 조회 (순차적)
+                const res2 = await fetch("/api/available_cash");
+                const data2 = await res2.json();
+
+                if (data2.error) {
+                    el2.innerHTML = `<p class="text-danger">❌ ${data2.error}</p>`;
+                } else {
+                    const cash = Number(data2.available_cash.replace(/,/g, ""));
+                    el2.innerHTML = `
+                        <ul class="list-group">
+                            <li class="list-group-item"><strong>💰 주문가능금액:</strong> ${cash.toLocaleString()} 원</li>
+                        </ul>`;
+                }
+
+            } catch (err) {
+                el.innerHTML = `<p class="text-danger">❌ ${err}</p>`;
+            }
         }
         
-        function fetchHoldings() {
-            return new Promise((resolve, reject) => {
-                fetch("/api/holdings")
-                    .then(res => res.json())
-                    .then(data => {
-                        const el = document.getElementById("output-holdings");
-                        myHoldings = []; // 초기화
+        async function fetchHoldings() {
+            const el = document.getElementById("output-holdings");
+            el.innerHTML = `<p class="text-muted">⌛ 보유 종목 불러오는 중...</p>`;
+            el.style.display = "block";
 
-                        if (data.error) {
-                            el.innerHTML = `<p class="text-danger">❌ ${data.error}</p>`;
-                            el.style.display = "block";
-                            reject(data.error); // 실패 처리
-                        } else if (Array.isArray(data) && data.length > 0) {
-                            let list = data.map(h => {
-                                let tmpCode = (h.code).replace('A', '');
-                                myHoldings.push(tmpCode); // 📌 전역변수에 보유 종목 추가
+            try {
+                const res = await fetch("/api/holdings");
+                const data = await res.json();
 
-                                const current = Number(h.current_price);
-                                const purchase = Number(h.purchase_price);
-                                const quantity = Number(h.quantity);
-                                const profit = (current - purchase) * quantity;
-                                const rate = purchase ? ((current - purchase) / purchase) * 100 : 0;
+                myHoldings = []; // 전역 배열 초기화
 
-                                const profitClass = profit >= 0 ? "text-danger" : "text-primary";
-                                return `<li class="list-group-item" data-code="${h.code}">
-                                    <div class="d-flex justify-content-between">
-                                        <span><strong>${h.name}</strong> (${h.code})</span>
-                                        <span>${current.toLocaleString()} 원</span>
-                                    </div>
-                                    <div class="d-flex justify-content-between ms-3 mt-1">
-                                        <small>- ${purchase.toLocaleString()} 원</small>
-                                        <small>${quantity} 주</small>
-                                        <small>${(purchase * quantity).toLocaleString()} 원</small>
-                                        <small class="${profitClass}">${profit.toLocaleString()} 원 (${rate.toFixed(2)}%)</small>
-                                    </div>
-                                </li>`;
-                            }).join('');
-                            el.innerHTML = `<ul class="list-group">${list}</ul>`;
-                            el.style.display = "block";
-                            resolve(); // ✅ 성공 시 resolve
-                        } else {
-                            el.innerHTML = "<p>보유 종목이 없습니다.</p>";
-                            el.style.display = "block";
-                            resolve(); // ✅ 이 경우도 성공으로 간주
-                        }
-                    })
-                    .catch(err => reject(err)); // 예외 처리
-            });
+                if (data.error) {
+                    el.innerHTML = `<p class="text-danger">❌ ${data.error}</p>`;
+                    return;
+                }
+
+                if (Array.isArray(data) && data.length > 0) {
+                    let list = data.map(h => {
+                        const tmpCode = h.code.replace("A", "");
+                        myHoldings.push(tmpCode); // 보유 종목 저장
+
+                        const current = Number(h.current_price);
+                        const purchase = Number(h.purchase_price);
+                        const quantity = Number(h.quantity);
+                        const profit = (current - purchase) * quantity;
+                        const rate = purchase ? ((current - purchase) / purchase) * 100 : 0;
+                        const profitClass = profit >= 0 ? "text-danger" : "text-primary";
+
+                        return `
+                            <li class="list-group-item" data-code="${h.code}">
+                                <div class="d-flex justify-content-between">
+                                    <span><strong>${h.name}</strong> (${h.code})</span>
+                                    <span>${current.toLocaleString()} 원</span>
+                                </div>
+                                <div class="d-flex justify-content-between ms-3 mt-1">
+                                    <small>- ${purchase.toLocaleString()} 원</small>
+                                    <small>${quantity} 주</small>
+                                    <small>${(purchase * quantity).toLocaleString()} 원</small>
+                                    <small class="${profitClass}">${profit.toLocaleString()} 원 (${rate.toFixed(2)}%)</small>
+                                </div>
+                            </li>`;
+                    }).join('');
+
+                    el.innerHTML = `<ul class="list-group">${list}</ul>`;
+                } else {
+                    el.innerHTML = "<p class='text-muted'>📭 보유 종목이 없습니다.</p>";
+                }
+
+            } catch (err) {
+                el.innerHTML = `<p class="text-danger">❌ 오류 발생: ${err}</p>`;
+            }
+        }
+
+        async function fetchUnfilledOrders() {
+            const el = document.getElementById("output-unfilledOrders");
+            el.innerHTML = `<p class="text-muted">⌛ 미체결 주문을 불러오는 중...</p>`;
+            el.style.display = "block";
+
+            try {
+                const res = await fetch("/api/unfilled_orders");
+                const data = await res.json();
+
+                if (data.error) {
+                    el.innerHTML = `<p class="text-danger">❌ ${data.error}</p>`;
+                    return;
+                }
+
+                const orders = data.orders || [];
+
+                if (orders.length === 0) {
+                    el.innerHTML = "<p class='text-muted'>📭 현재 미체결된 주문이 없습니다.</p>";
+                    return;
+                }
+
+                let html = `
+                    <table class="table table-sm table-bordered align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>종목코드</th>
+                                <th>종목명</th>
+                                <th>주문수량</th>
+                                <th>체결수량</th>
+                                <th>주문가격</th>
+                                <th>남은수량</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+
+                orders.forEach(order => {
+                    const remaining = order.qty - order.filled;
+                    html += `
+                        <tr>
+                            <td>${order.code}</td>
+                            <td>${order.name}</td>
+                            <td>${order.qty.toLocaleString()} 주</td>
+                            <td>${order.filled.toLocaleString()} 주</td>
+                            <td>${order.price.toLocaleString()} 원</td>
+                            <td>${remaining.toLocaleString()} 주</td>
+                        </tr>`;
+                });
+
+                html += `</tbody></table>`;
+                el.innerHTML = html;
+
+            } catch (err) {
+                el.innerHTML = `<p class="text-danger">❌ 오류 발생: ${err}</p>`;
+            }
         }
     
         async function fetchVolumeLeaders() {

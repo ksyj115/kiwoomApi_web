@@ -119,6 +119,17 @@ def place_sell_order():
 
     return jsonify({"error": "timeout"})
 
+@app.route("/api/unfilled_orders")
+def get_unfilled_orders():
+    request_queue.put("get_unfilled_orders")
+    waited = 0
+    while waited < 10:
+        if not response_queue.empty():
+            return jsonify(response_queue.get())
+        time.sleep(0.1)
+        waited += 0.1
+    return jsonify({"error": "timeout"})
+
 def run_flask():
     app.run(debug=False, use_reloader=False)
 

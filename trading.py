@@ -119,6 +119,21 @@ class Trading:
             logger.log_error("SELL_ORDER", str(e))
             return {"error": str(e)}
 
+    def get_unfilled_orders(self):
+        """미체결 주문 조회"""
+        if not self.api.connected:
+            return {"error": "API 미연결"}
+
+        logger.info("[trading.py] get_unfilled_orders")
+        self.tr_data.pop("opt10075", None)
+        self.api.ocx.SetInputValue("계좌번호", Config.ACCNO)
+        self.api.ocx.SetInputValue("전체", "0") # 전체 계좌
+        self.api.ocx.SetInputValue("매매구분", "0") # 전체
+        self.api.ocx.SetInputValue("체결구분", "1") # 미체결만
+        self.api.ocx.CommRqData("unfilled_orders_req", "opt10075", 0, "9000")
+        self.tr_event_loop.exec_()
+        return self.tr_data.get("opt10075", {"orders": []})            
+
     def _on_receive_tr_data(self, screen_no, rqname, trcode, recordname, prev_next, data_len, error_code, message, splm_msg):
         try:
             if rqname == "opw00018_req":
@@ -218,7 +233,29 @@ class Trading:
                     })
 
                 self.tr_data["OPT10030"] = {"stocks": stocks}
-                QTimer.singleShot(0, self.tr_event_loop.quit)
+                # QTimer.singleShot(0, self.tr_event_loop.quit)
+
+            elif rqname == "unfilled_orders_req":
+                orders = []
+                count = int(self.api.ocx.GetRepeatCnt(trcode, rqname))
+                for i in range(count):
+                    code = self.api.ocx.GetCommData(trcode, rqname, i, "종목코드").strip()
+                    name = self.api.ocx.GetCommData(trcode, rqname, i, "종목명").strip()
+                    qty = self.api.ocx.GetCommData(trcode, rqname, i, "주문수량").strip()
+                    filled = self.api.ocx.GetCommData(trcode, rqname, i, "체결수량").strip()
+                    price = self.api.ocx.GetCommData(trcode, rqname, i, "주문가격").strip()
+
+                    logger.info(f"[trading.py] unfilled_orders_req => {code} | {name} | {qty} | {filled} | {price}")
+
+                    orders.append({
+                        "code": code,
+                        "name": name,
+                        "qty": int(qty.replace(",", "") or 0),
+                        "filled": int(filled.replace(",", "") or 0),
+                        "price": int(price.replace(",", "") or 0),
+                    })
+
+                self.tr_data["opt10075"] = {"orders": orders}
 
         finally:
             QTimer.singleShot(0, self.tr_event_loop.quit)

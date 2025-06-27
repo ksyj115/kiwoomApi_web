@@ -36,5 +36,7 @@ class KiwoomAppWrapper:
                 result = self.trading.place_order(cmd["code"], cmd["price"], cmd["qty"])
             elif isinstance(cmd, dict) and cmd.get("type") == "sell":
                 result = self.trading.place_sell_order(cmd["code"], cmd["price"], cmd["qty"])
+            elif cmd == "get_unfilled_orders":
+                result = self.trading.get_unfilled_orders()
 
             response_queue.put(result)
