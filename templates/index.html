@@ -34,6 +34,18 @@
         <button class="btn btn-success" onclick="fetchVolumeLeaders()">조회하기</button>
         <div id="output-volume" class="card p-3 mt-3 shadow-sm" style="display: none;"></div>
     </div>
+    <br/><br/>
+    <div class="container mt-5">
+        <h2 class="mb-4">RSI 테스트 조회</h2>
+        <button class="btn btn-success" onclick="getRsiData()">실시간 RSI 조회하기</button>
+        <div id="output-rsi" class="card p-3 mt-3 shadow-sm" style="display: none;"></div>
+    </div>
+    <br/><br/>
+    <div class="container mt-5">
+        <h2 class="mb-4">이동평균선 테스트 조회</h2>
+        <button class="btn btn-success" onclick="getMovingAverage()">이동평균선 조회하기</button>
+        <div id="output-moving-average" class="card p-3 mt-3 shadow-sm" style="display: none;"></div>
+    </div>
 
     <!-- 매수 모달 -->
     <div class="modal fade" id="buyModal" tabindex="-1">
@@ -328,6 +340,52 @@
             }
         }
 
+        function getRsiData() {
+            fetch('/get-rsi-data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ key: 'value' })  // 필요 없으면 이 부분 생략 가능
+            })
+            .then(response => {
+                if (response.status === 204) {
+                    console.log("API 호출 성공 (204 No Content)");
+                    return null;  // 더 이상 처리할 게 없음
+                } else if (response.ok) {
+                    return response.json();  // JSON 본문 파싱
+                } else {
+                    console.warn("응답 실패 상태코드:", response.status);
+                    return null;
+                }
+            })
+            .then(data => {
+                if (data) {
+                    console.log("📊 RSI API 결과:", data);
+                }
+            })
+            .catch(err => {
+                console.error("에러 발생:", err);
+            });
+        }
+
+        function getMovingAverage() {
+            fetch('/get-moving-average', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ key: 'value' })
+            }).then(response => {
+                if (response.status === 204) {
+                console.log("API 호출 성공 (204 No Content)");
+                } else {
+                    console.log("응답 코드:", response.status);
+                }
+            }).catch(err => {
+                console.error("에러 발생:", err);
+            });
+        }
 
         function openBuyModal(code, name, price) {
             document.getElementById("buyStockInfo").innerText = `${code} (${name}) 현재가: ${Number(price).toLocaleString()} 원`;

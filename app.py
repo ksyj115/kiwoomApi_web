@@ -130,6 +130,30 @@ def get_unfilled_orders():
         waited += 0.1
     return jsonify({"error": "timeout"})
 
+@app.route('/get-rsi-data', methods=['POST'])
+def do_something():
+    request_queue.put("get_rsi_data")
+    waited = 0
+    while waited < 10:
+        if not response_queue.empty():
+            return jsonify(response_queue.get())
+        time.sleep(0.1)
+        waited += 0.1
+    return jsonify({"error": "timeout"})
+
+@app.route('/get-moving-average', methods=['POST'])
+def getMovingAverage():
+    request_queue.put("get_moving_average")
+    waited = 0
+    while waited < 10:
+        if not response_queue.empty():
+            return jsonify(response_queue.get())
+        time.sleep(0.1)
+        waited += 0.1
+
+    # 아무 응답도 보내지 않고 종료 (void처럼)
+    return '', 204  # 또는 return '', 200
+
 def run_flask():
     app.run(debug=False, use_reloader=False)
 

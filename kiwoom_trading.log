@@ -1239,3 +1239,221 @@
 2025-06-27 14:47:15 - KiwoomTrading - INFO - [trading.py] get_unfilled_orders
 2025-06-27 14:47:17 - KiwoomTrading - INFO - [trading.py] get_holdings
 2025-06-27 14:48:04 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-27 15:00:54 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-27 15:00:58 - KiwoomTrading - INFO - 로그인 성공
+2025-06-27 15:01:09 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-27 15:01:10 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-27 15:01:10 - KiwoomTrading - INFO - [trading.py] get_unfilled_orders
+2025-06-27 15:01:11 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-27 15:01:12 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-27 15:01:12 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-27 15:01:13 - KiwoomTrading - INFO - [trading.py] get_unfilled_orders
+2025-06-27 15:01:13 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-27 15:01:14 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-27 15:01:15 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-27 15:01:16 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-27 15:01:16 - KiwoomTrading - INFO - [trading.py] get_unfilled_orders
+2025-06-27 15:01:17 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-27 15:01:17 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-27 15:01:18 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-27 15:01:19 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-27 15:01:19 - KiwoomTrading - INFO - [trading.py] get_unfilled_orders
+2025-06-27 15:01:20 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-27 15:01:21 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-27 15:01:22 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-27 15:01:22 - KiwoomTrading - INFO - [trading.py] get_unfilled_orders
+2025-06-27 15:01:23 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-27 15:01:24 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-27 15:01:24 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-27 15:01:25 - KiwoomTrading - INFO - [trading.py] get_unfilled_orders
+2025-06-27 15:01:25 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-27 15:01:26 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-27 15:01:27 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-27 15:01:28 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-27 15:01:28 - KiwoomTrading - INFO - [trading.py] get_unfilled_orders
+2025-06-27 15:01:29 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-27 15:01:29 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-27 15:01:30 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-27 15:01:31 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-27 15:01:31 - KiwoomTrading - INFO - [trading.py] get_unfilled_orders
+2025-06-27 15:01:32 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-27 15:01:33 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-27 15:01:34 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-27 15:01:34 - KiwoomTrading - INFO - [trading.py] get_unfilled_orders
+2025-06-27 15:01:35 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-27 15:01:36 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-27 15:18:52 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-27 15:18:56 - KiwoomTrading - INFO - 로그인 성공
+2025-06-27 15:19:17 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-27 15:19:17 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-27 15:19:18 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-27 15:19:23 - KiwoomTrading - INFO - [trading.py] get_unfilled_orders
+2025-06-27 15:31:11 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-27 15:31:15 - KiwoomTrading - INFO - 로그인 성공
+2025-06-27 15:46:17 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-27 15:46:21 - KiwoomTrading - INFO - 로그인 성공
+2025-06-27 15:49:31 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-27 15:49:35 - KiwoomTrading - INFO - 로그인 성공
+2025-06-27 15:49:46 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-27 15:49:46 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-27 15:49:48 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-27 15:49:52 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-27 15:49:56 - KiwoomTrading - INFO - [trading.py] get_unfilled_orders
+2025-06-27 15:50:00 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-27 15:52:21 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-27 15:52:25 - KiwoomTrading - INFO - 로그인 성공
+2025-06-27 15:54:22 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-27 15:54:26 - KiwoomTrading - INFO - 로그인 성공
+2025-06-27 15:54:34 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-27 15:54:34 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-27 16:15:35 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-27 16:15:40 - KiwoomTrading - INFO - 로그인 성공
+2025-06-27 16:21:47 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-27 16:21:51 - KiwoomTrading - INFO - 로그인 성공
+2025-06-27 16:36:10 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-27 16:36:14 - KiwoomTrading - INFO - 로그인 성공
+2025-06-27 16:39:49 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-27 16:39:53 - KiwoomTrading - INFO - 로그인 성공
+2025-06-27 16:46:11 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-27 16:46:15 - KiwoomTrading - INFO - 로그인 성공
+2025-06-27 16:49:18 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-27 16:49:22 - KiwoomTrading - INFO - 로그인 성공
+2025-06-27 16:49:29 - KiwoomTrading - INFO - [trading.py] rqname.startswith => rsi_
+2025-06-27 16:49:29 - KiwoomTrading - INFO - [trading.py] rqname.startswith => rsi_
+2025-06-27 16:49:29 - KiwoomTrading - INFO - [trading.py] rqname.startswith => rsi_
+2025-06-27 16:49:29 - KiwoomTrading - INFO - [trading.py] rqname.startswith => rsi_
+2025-06-27 16:49:30 - KiwoomTrading - INFO - [trading.py] rqname.startswith => rsi_
+2025-06-27 16:51:25 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-27 16:51:30 - KiwoomTrading - INFO - 로그인 성공
+2025-06-27 16:51:35 - KiwoomTrading - INFO - [trading.py] rqname.startswith => rsi_
+2025-06-27 16:51:35 - KiwoomTrading - INFO - [trading.py] get_rsi_candidates => 005930 | []
+2025-06-27 16:51:35 - KiwoomTrading - INFO - [trading.py] rqname.startswith => rsi_
+2025-06-27 16:51:35 - KiwoomTrading - INFO - [trading.py] get_rsi_candidates => 000660 | []
+2025-06-27 16:51:35 - KiwoomTrading - INFO - [trading.py] rqname.startswith => rsi_
+2025-06-27 16:51:35 - KiwoomTrading - INFO - [trading.py] get_rsi_candidates => 373220 | []
+2025-06-27 16:51:35 - KiwoomTrading - INFO - [trading.py] rqname.startswith => rsi_
+2025-06-27 16:51:35 - KiwoomTrading - INFO - [trading.py] get_rsi_candidates => 051910 | []
+2025-06-27 16:51:35 - KiwoomTrading - INFO - [trading.py] rqname.startswith => rsi_
+2025-06-27 16:51:35 - KiwoomTrading - INFO - [trading.py] get_rsi_candidates => 207940 | []
+2025-06-27 16:56:50 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-27 16:56:54 - KiwoomTrading - INFO - 로그인 성공
+2025-06-27 16:58:29 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-27 16:58:33 - KiwoomTrading - INFO - 로그인 성공
+2025-06-27 17:03:38 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-27 17:03:42 - KiwoomTrading - INFO - 로그인 성공
+2025-06-27 17:04:52 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-27 17:04:56 - KiwoomTrading - INFO - 로그인 성공
+2025-06-27 17:20:17 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-27 17:20:21 - KiwoomTrading - INFO - 로그인 성공
+2025-06-27 17:25:15 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-27 17:25:19 - KiwoomTrading - INFO - 로그인 성공
+2025-06-27 17:25:29 - KiwoomTrading - INFO - [trading.py] get_balance_summary
+2025-06-27 17:25:29 - KiwoomTrading - INFO - [trading.py] get_available_cash
+2025-06-27 17:25:30 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-27 17:25:40 - KiwoomTrading - INFO - [trading.py] get_holdings
+2025-06-30 10:12:52 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-30 10:13:02 - KiwoomTrading - INFO - 로그인 성공
+2025-06-30 10:22:38 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-30 10:22:43 - KiwoomTrading - INFO - 로그인 성공
+2025-06-30 10:46:12 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-30 10:46:17 - KiwoomTrading - INFO - 로그인 성공
+2025-06-30 11:13:07 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-30 11:13:12 - KiwoomTrading - INFO - 로그인 성공
+2025-06-30 11:17:05 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-30 11:17:09 - KiwoomTrading - INFO - 로그인 성공
+2025-06-30 11:31:32 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-30 11:31:36 - KiwoomTrading - INFO - 로그인 성공
+2025-06-30 12:24:45 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-30 12:24:49 - KiwoomTrading - INFO - 로그인 성공
+2025-06-30 12:32:07 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-30 12:32:12 - KiwoomTrading - INFO - 로그인 성공
+2025-06-30 12:41:34 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-30 12:41:39 - KiwoomTrading - INFO - 로그인 성공
+2025-06-30 12:42:21 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-30 12:42:25 - KiwoomTrading - INFO - 로그인 성공
+2025-06-30 13:29:50 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-30 13:29:54 - KiwoomTrading - INFO - 로그인 성공
+2025-06-30 13:32:22 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-30 13:32:26 - KiwoomTrading - INFO - 로그인 성공
+2025-06-30 13:34:11 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-30 13:34:15 - KiwoomTrading - INFO - 로그인 성공
+2025-06-30 13:36:43 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-30 13:36:47 - KiwoomTrading - INFO - 로그인 성공
+2025-06-30 13:37:14 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-30 13:37:18 - KiwoomTrading - INFO - 로그인 성공
+2025-06-30 13:37:26 - KiwoomTrading - INFO - RSI(EMA)_today : 41.93
+2025-06-30 13:37:26 - KiwoomTrading - INFO - RSI(EMA)_yesterday : 41.93
+2025-06-30 13:37:26 - KiwoomTrading - INFO - RSI(SMA)_today : 15.45
+2025-06-30 13:37:26 - KiwoomTrading - INFO - RSI(SMA)_yesterday : 15.45
+2025-06-30 13:38:51 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-30 13:38:55 - KiwoomTrading - INFO - 로그인 성공
+2025-06-30 13:39:03 - KiwoomTrading - INFO - RSI(EMA)_today : 81.28
+2025-06-30 13:39:03 - KiwoomTrading - INFO - RSI(EMA)_yesterday : 81.28
+2025-06-30 13:39:03 - KiwoomTrading - INFO - RSI(SMA)_today : 89.41
+2025-06-30 13:39:03 - KiwoomTrading - INFO - RSI(SMA)_yesterday : 89.41
+2025-06-30 13:39:20 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-30 13:39:24 - KiwoomTrading - INFO - 로그인 성공
+2025-06-30 13:39:32 - KiwoomTrading - INFO - RSI(EMA)_today : 33.88
+2025-06-30 13:39:32 - KiwoomTrading - INFO - RSI(EMA)_yesterday : 33.88
+2025-06-30 13:39:32 - KiwoomTrading - INFO - RSI(SMA)_today : 40.7
+2025-06-30 13:39:32 - KiwoomTrading - INFO - RSI(SMA)_yesterday : 40.7
+2025-06-30 13:40:06 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-30 13:40:11 - KiwoomTrading - INFO - 로그인 성공
+2025-06-30 13:40:19 - KiwoomTrading - INFO - RSI(EMA)_today : 53.05
+2025-06-30 13:40:19 - KiwoomTrading - INFO - RSI(EMA)_yesterday : 53.05
+2025-06-30 13:40:19 - KiwoomTrading - INFO - RSI(SMA)_today : 59.76
+2025-06-30 13:40:19 - KiwoomTrading - INFO - RSI(SMA)_yesterday : 59.76
+2025-06-30 13:45:02 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-30 13:45:06 - KiwoomTrading - INFO - 로그인 성공
+2025-06-30 13:45:18 - KiwoomTrading - INFO - RSI(EMA)_today : 50.73
+2025-06-30 13:45:18 - KiwoomTrading - INFO - RSI(EMA)_yesterday : 50.73
+2025-06-30 13:45:18 - KiwoomTrading - INFO - RSI(SMA)_today : 52.35
+2025-06-30 13:45:18 - KiwoomTrading - INFO - RSI(SMA)_yesterday : 52.35
+2025-06-30 13:46:30 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-30 13:46:34 - KiwoomTrading - INFO - 로그인 성공
+2025-06-30 13:46:43 - KiwoomTrading - INFO - RSI(EMA)_today : 37.61
+2025-06-30 13:46:43 - KiwoomTrading - INFO - RSI(EMA)_yesterday : 37.61
+2025-06-30 13:46:43 - KiwoomTrading - INFO - RSI(SMA)_today : 34.97
+2025-06-30 13:46:43 - KiwoomTrading - INFO - RSI(SMA)_yesterday : 34.97
+2025-06-30 13:47:01 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-30 13:47:06 - KiwoomTrading - INFO - 로그인 성공
+2025-06-30 13:47:14 - KiwoomTrading - INFO - RSI(EMA)_today : 54.29
+2025-06-30 13:47:14 - KiwoomTrading - INFO - RSI(EMA)_yesterday : 54.29
+2025-06-30 13:47:14 - KiwoomTrading - INFO - RSI(SMA)_today : 71.43
+2025-06-30 13:47:14 - KiwoomTrading - INFO - RSI(SMA)_yesterday : 71.43
+2025-06-30 13:47:34 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-30 13:47:39 - KiwoomTrading - INFO - 로그인 성공
+2025-06-30 13:47:50 - KiwoomTrading - INFO - RSI(EMA)_today : 48.05
+2025-06-30 13:47:50 - KiwoomTrading - INFO - RSI(EMA)_yesterday : 48.05
+2025-06-30 13:47:50 - KiwoomTrading - INFO - RSI(SMA)_today : 57.66
+2025-06-30 13:47:50 - KiwoomTrading - INFO - RSI(SMA)_yesterday : 57.66
+2025-06-30 13:59:30 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-30 13:59:34 - KiwoomTrading - INFO - 로그인 성공
+2025-06-30 13:59:50 - KiwoomTrading - INFO - RSI(EMA)_today : 42.46
+2025-06-30 13:59:50 - KiwoomTrading - INFO - RSI(EMA)_yesterday : 42.46
+2025-06-30 13:59:50 - KiwoomTrading - INFO - RSI(SMA)_today : 37.07
+2025-06-30 13:59:50 - KiwoomTrading - INFO - RSI(SMA)_yesterday : 37.07
+2025-06-30 14:00:57 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-30 14:01:01 - KiwoomTrading - INFO - 로그인 성공
+2025-06-30 14:01:11 - KiwoomTrading - INFO - RSI(EMA)_today : 41.99
+2025-06-30 14:01:11 - KiwoomTrading - INFO - RSI(EMA)_yesterday : 41.99
+2025-06-30 14:01:11 - KiwoomTrading - INFO - RSI(SMA)_today : 43.0
+2025-06-30 14:01:11 - KiwoomTrading - INFO - RSI(SMA)_yesterday : 43.0
+2025-06-30 14:01:43 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-30 14:01:47 - KiwoomTrading - INFO - 로그인 성공
+2025-06-30 14:01:59 - KiwoomTrading - INFO - RSI(EMA)_today : 41.99
+2025-06-30 14:01:59 - KiwoomTrading - INFO - RSI(EMA)_yesterday : 41.99
+2025-06-30 14:01:59 - KiwoomTrading - INFO - RSI(SMA)_today : 43.0
+2025-06-30 14:01:59 - KiwoomTrading - INFO - RSI(SMA)_yesterday : 43.0
+2025-06-30 15:59:12 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-30 15:59:21 - KiwoomTrading - INFO - 로그인 성공
+2025-06-30 16:01:38 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-30 16:01:42 - KiwoomTrading - INFO - 로그인 성공
+2025-06-30 16:02:25 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-30 16:02:29 - KiwoomTrading - INFO - 로그인 성공
+2025-06-30 16:06:09 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-30 16:06:13 - KiwoomTrading - INFO - 로그인 성공
+2025-06-30 16:14:05 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-30 16:14:09 - KiwoomTrading - INFO - 로그인 성공
+2025-06-30 16:41:14 - KiwoomTrading - INFO - 로그인 시도...
+2025-06-30 16:41:18 - KiwoomTrading - INFO - 로그인 성공

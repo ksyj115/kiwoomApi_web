@@ -2,6 +2,11 @@ from PyQt5.QtCore import QEventLoop, QTimer
 from config import Config
 import logging
 from logger import logger
+import pandas as pd
+import matplotlib.pyplot as plt
+from pykiwoom.kiwoom import Kiwoom
+import time
+from datetime import datetime
 
 logger = logging.getLogger("KiwoomTrading")
 
@@ -132,7 +137,99 @@ class Trading:
         self.api.ocx.SetInputValue("체결구분", "1") # 미체결만
         self.api.ocx.CommRqData("unfilled_orders_req", "opt10075", 0, "9000")
         self.tr_event_loop.exec_()
-        return self.tr_data.get("opt10075", {"orders": []})            
+        return self.tr_data.get("opt10075", {"orders": []})
+
+    def get_close_prices(self, code="005930", count=250):
+        today = datetime.today().strftime('%Y%m%d')
+        df = self.kiwoom.block_request("opt10081",
+                                    종목코드=code,
+                                    기준일자=today,
+                                    수정주가구분=1,
+                                    output="주식일봉차트조회",
+                                    next=0)
+        close_prices = df['현재가'].astype(int).tolist()
+        return close_prices[:count]
+
+    def calculate_rsi(self, prices, period=14, method='ema'):
+        close = pd.Series(prices)
+        delta = close.diff()
+        gain = delta.clip(lower=0)
+        loss = -delta.clip(upper=0)
+
+        if method == 'sma':
+            avg_gain = gain.rolling(window=period).mean()
+            avg_loss = loss.rolling(window=period).mean()
+        elif method == 'ema':
+            avg_gain = gain.ewm(alpha=1/period, min_periods=period, adjust=False).mean()
+            avg_loss = loss.ewm(alpha=1/period, min_periods=period, adjust=False).mean()
+        else:
+            raise ValueError("method must be 'sma' or 'ema'")
+
+        rs = avg_gain / avg_loss
+        rsi = 100 - (100 / (1 + rs))
+        return rsi
+
+    def analyze_rsi(self):
+        self.kiwoom = Kiwoom()
+        self.kiwoom.CommConnect()
+
+        prices = self.get_close_prices()
+
+        rsi_ema_today = self.calculate_rsi(prices, method='ema').dropna().iloc[-1]
+        rsi_ema_yesterday = self.calculate_rsi(prices[1:], method='ema').dropna().iloc[-1]
+
+        rsi_sma_today = self.calculate_rsi(prices, method='sma').dropna().iloc[-1]
+        rsi_sma_yesterday = self.calculate_rsi(prices[1:], method='sma').dropna().iloc[-1]
+
+        return {
+            "RSI(EMA)_today": round(rsi_ema_today, 2),
+            "RSI(EMA)_yesterday": round(rsi_ema_yesterday, 2),
+            "RSI(SMA)_today": round(rsi_sma_today, 2),
+            "RSI(SMA)_yesterday": round(rsi_sma_yesterday, 2)
+        }
+
+    def get_moving_average(self):
+        kiwoom = Kiwoom()
+        kiwoom.CommConnect()
+
+        # 조회할 종목코드
+        code = "005930"  # 삼성전자
+
+        # 일봉 데이터 요청
+        df = kiwoom.block_request(
+            "opt10081",
+            종목코드=code,
+            기준일자="20250628",
+            수정주가구분=1,
+            output="주식일봉차트조회",
+            next=0
+        )
+
+        # 데이터 가공
+        df['현재가'] = df['현재가'].astype(int)
+        df['일자'] = pd.to_datetime(df['일자'])
+        df.sort_values('일자', inplace=True)
+        df.set_index('일자', inplace=True)
+
+        # 이동평균 계산
+        df['MA5'] = df['현재가'].rolling(window=5).mean()
+        df['MA20'] = df['현재가'].rolling(window=20).mean()
+        df['MA60'] = df['현재가'].rolling(window=60).mean()
+        df['MA120'] = df['현재가'].rolling(window=120).mean()
+
+        # 그래프 그리기 (이동평균선만)
+        plt.figure(figsize=(12, 6))
+        plt.plot(df.index, df['MA5'], label='5일선', color='blue')
+        plt.plot(df.index, df['MA20'], label='20일선', color='orange')
+        plt.plot(df.index, df['MA60'], label='60일선', color='green')
+        plt.plot(df.index, df['MA120'], label='120일선', color='red')
+
+        plt.xlabel('날짜')
+        plt.ylabel('가격')
+        plt.title('이동평균선 (5/20/60/120일)')
+        plt.legend()
+        plt.grid(True)
+        plt.show()
 
     def _on_receive_tr_data(self, screen_no, rqname, trcode, recordname, prev_next, data_len, error_code, message, splm_msg):
         try:
