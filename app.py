@@ -11,6 +11,10 @@ kiwoom = KiwoomAppWrapper()
 def index():
     return render_template("index.html")
 
+@app.route("/index2")
+def index2():
+    return render_template("index2.html")
+
 @app.route("/api/account")
 def get_account():
     request_queue.put("get_account")  # 요청 큐에 명령 전달
@@ -153,6 +157,61 @@ def getMovingAverage():
 
     # 아무 응답도 보내지 않고 종료 (void처럼)
     return '', 204  # 또는 return '', 200
+
+@app.route('/api/chart-data')
+def chart_data():
+    request_queue.put('get_stock_data')
+    waited = 0
+    while waited < 10:
+        if not response_queue.empty():
+            return jsonify(response_queue.get())
+        time.sleep(0.1)
+        waited += 0.1
+    return jsonify({'error': 'timeout'})
+
+@app.route('/detect-golden-cross', methods=['POST'])
+def detect_golden_cross():
+    data = request.json
+    code = data.get("code")
+
+    request_queue.put({
+        "type": "detect_golden_cross",
+        "code": code
+    })
+
+    timeout = 10
+    waited = 0
+    while waited < timeout:
+        if not response_queue.empty():
+            result = response_queue.get()
+            return jsonify(result)
+        time.sleep(0.1)
+        waited += 0.1
+
+    return jsonify({"error": "timeout"})
+
+@app.route('/api/search-stock', methods=["POST"])
+def api_search_stock():
+    data = request.json
+    keyword = data.get("keyword", "").strip()
+
+    if not keyword:
+        return jsonify([])
+
+    request_queue.put({
+        "type": "search_stock_by_name",
+        "keyword": keyword
+    })
+
+    timeout = 10
+    waited = 0
+    while waited < timeout:
+        if not response_queue.empty():
+            return jsonify(response_queue.get())
+        time.sleep(0.1)
+        waited += 0.1
+
+    return jsonify({"error": "timeout"})
 
 def run_flask():
     app.run(debug=False, use_reloader=False)

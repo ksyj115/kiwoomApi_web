@@ -24,31 +24,30 @@ class KiwoomAppWrapper:
     def process_requests(self):
         if not request_queue.empty():
             cmd = request_queue.get()
+            result = None
             if cmd == "get_account":
                 result = self.trading.get_balance_summary()
-                response_queue.put(result)
             elif cmd == "get_available_cash":
                 result = self.trading.get_available_cash()
-                response_queue.put(result)
             elif cmd == "get_holdings":
                 result = self.trading.get_holdings()
-                response_queue.put(result)
             elif cmd == "volume_leaders":
                 result = self.trading.get_volume_leaders()
-                response_queue.put(result)
             elif isinstance(cmd, dict) and cmd.get("type") == "buy":
                 result = self.trading.place_order(cmd["code"], cmd["price"], cmd["qty"])
-                response_queue.put(result)
             elif isinstance(cmd, dict) and cmd.get("type") == "sell":
                 result = self.trading.place_sell_order(cmd["code"], cmd["price"], cmd["qty"])
-                response_queue.put(result)
             elif cmd == "get_unfilled_orders":
                 result = self.trading.get_unfilled_orders()
-                response_queue.put(result)
             elif cmd == "get_rsi_data":
                 result = self.trading.analyze_rsi()
-                response_queue.put(result)
             elif cmd == "get_moving_average":
                 result = self.trading.get_moving_average()
+            elif cmd == "get_stock_data":
+                result = self.trading.get_stock_data()
+            elif isinstance(cmd, dict) and cmd.get("type") == "detect_golden_cross":
+                result = self.trading.detect_golden_cross(cmd["code"])
+            elif isinstance(cmd, dict) and cmd.get("type") == "search_stock_by_name":
+                result = self.trading.search_stock_by_name(cmd["keyword"])      
 
-            # response_queue.put(result)
+            response_queue.put(result)

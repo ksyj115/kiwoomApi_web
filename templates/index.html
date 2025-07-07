@@ -2,11 +2,25 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>키움증권 잔고조회</title>
+    <title>계좌, 보유 종목 현황</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
+    <style>
+      #maChart {
+        width: 100%;
+        max-width: 600px;
+        height: 300px;
+        margin: auto;
+      }
+    </style>
 </head>
 <body class="p-5 bg-light">
+    <button class="btn btn-primary" onclick="location.href='/'">내 현황 홈</button>
+    <button class="btn btn-primary" onclick="location.href='/index2'">종목 발굴</button>
+    <br/><br/>
+
     <div class="container">
         <h2 class="mb-4">📊 내 계좌 정보</h2>
         <button class="btn btn-primary" onclick="fetchAccount()">계좌 잔고 조회</button>
@@ -45,6 +59,14 @@
         <h2 class="mb-4">이동평균선 테스트 조회</h2>
         <button class="btn btn-success" onclick="getMovingAverage()">이동평균선 조회하기</button>
         <div id="output-moving-average" class="card p-3 mt-3 shadow-sm" style="display: none;"></div>
+    </div>
+
+    <button onclick="checkGoldenCross()">골든크로스 탐색</button>
+
+    <div class="container mt-5">
+        <h2 class="mb-4">차트</h2>
+        <button class="btn btn-success mb-3" onclick="loadChart()">차트 로드</button>
+        <canvas id="stockChart" height="200"></canvas>
     </div>
 
     <!-- 매수 모달 -->
@@ -371,19 +393,138 @@
 
         function getMovingAverage() {
             fetch('/get-moving-average', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
+        method: 'POST'
+      })
+        .then(res => res.json())
+        .then(data => {
+          const labels = data.map(row => row.date);
+          const close = data.map(row => row.close);
+          const ma5 = data.map(row => row.ma_5);
+          const ma20 = data.map(row => row.ma_20);
+
+          const ctx = document.getElementById('maChart').getContext('2d');
+          const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: labels,
+              datasets: [
+                {
+                  label: '종가',
+                  data: close,
+                  borderColor: 'blue',
+                  tension: 0.1,
+                  fill: false
                 },
-                body: JSON.stringify({ key: 'value' })
-            }).then(response => {
-                if (response.status === 204) {
-                console.log("API 호출 성공 (204 No Content)");
-                } else {
-                    console.log("응답 코드:", response.status);
+                {
+                  label: 'MA(5)',
+                  data: ma5,
+                  borderColor: 'orange',
+                  tension: 0.1,
+                  fill: false
+                },
+                {
+                  label: 'MA(20)',
+                  data: ma20,
+                  borderColor: 'green',
+                  tension: 0.1,
+                  fill: false
                 }
-            }).catch(err => {
+              ]
+            },
+            options: {
+              responsive: true,
+              scales: {
+                x: {
+                  title: {
+                    display: true,
+                    text: '날짜'
+                  }
+                },
+                y: {
+                  title: {
+                    display: true,
+                    text: '가격 (₩)'
+                  }
+                }
+              },
+              plugins: {
+                legend: {
+                  position: 'top'
+                },
+                title: {
+                  display: true,
+                  text: '삼성전자 주가 및 이동평균선'
+                },
+                zoom: {
+                  pan: {
+                    enabled: true,
+                    mode: 'x',
+                    modifierKey: null // ✅ 마우스만으로 드래그 이동 가능
+                  },
+                  zoom: {
+                    wheel: {
+                      enabled: true
+                    },
+                    pinch: {
+                      enabled: true
+                    },
+                    mode: 'x'
+                  }
+                }
+              }
+            }
+          });
+        });
+        }
+
+        function checkGoldenCross() {
+            // const codes = ["005930", "000660", "036830", "064760", "052690", "025770"];  // 예시: 삼성전자, SK하이닉스
+            // const codes = ["005930", "000660"];  // 예시: 삼성전자, SK하이닉스
+
+            fetch('/detect-golden-cross', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code: "005490" })
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log("🔍 골든크로스 탐색 결과:", data);
+                alert(JSON.stringify(data, null, 2));
+            })
+            .catch(err => {
                 console.error("에러 발생:", err);
+            });
+        }
+
+        let chartInstance;
+        async function loadChart() {
+            const res = await fetch('/api/chart-data');
+            const data = await res.json();
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+            const ctx = document.getElementById('stockChart').getContext('2d');
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.dates,
+                    datasets: [
+                        { label: '종가', data: data.close, borderColor: 'blue', fill: false },
+                        { label: '5일선', data: data.MA5, borderColor: 'orange', fill: false },
+                        { label: '20일선', data: data.MA20, borderColor: 'green', fill: false },
+                        { label: '60일선', data: data.MA60, borderColor: 'red', fill: false },
+                        { label: '120일선', data: data.MA120, borderColor: 'purple', fill: false }
+                    ]
+                },
+                options: {
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        zoom: {
+                            pan: { enabled: true, mode: 'x' },
+                            zoom: { wheel: { enabled: true }, pinch: { enabled: true }, mode: 'x' }
+                        }
+                    }
+                }
             });
         }
 

@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>종목 발굴</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+  <style>
+    /* 오른쪽 숨겨진 사이드바 */
+    #watchlist-bar {
+      position: fixed;
+      top: 50px;
+      right: -220px; /* 처음엔 숨어 있음 */
+      width: 250px;
+      background-color: #f8f9fa;
+      border: 1px solid #ccc;
+      border-right: none;
+      padding: 15px;
+      transition: right 0.3s ease;
+      z-index: 1000;
+    }
+
+    #watchlist-bar:hover {
+      right: 0; /* hover 시 나타남 */
+    }
+
+    #basketlist-bar {
+      position: fixed;
+      top: 500px;
+      right: -220px; /* 처음엔 숨김 상태 */
+      width: 250px;
+      background-color: #f8f9fa;
+      border: 1px solid #ccc;
+      border-right: none;
+      padding: 15px;
+      transition: right 0.3s ease;
+      z-index: 999;
+    }
+
+    #basketlist-bar:hover {
+      right: 0; /* hover 시 나타남 */
+    }
+
+    .compact-wrapper {
+      position: relative;
+    }
+
+    .compact-wrapper:hover .full-hover-list {
+      display: block;
+    }
+
+    .full-hover-list:not(:hover) {
+      display: none;
+    }
+
+    .full-hover-list {
+      position: absolute;
+      left: -505px;
+      top: 0;
+      /* width: 250px; */
+      width: 500px;
+      max-height: 400px;
+      overflow-y: auto;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 10px;
+      z-index: 9999;
+      white-space: normal;
+      word-wrap: break-word;
+      word-break: break-all;
+    }
+
+    .stock-code {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+
+    .stock-code span {
+      cursor: pointer;
+      color: red;
+    }
+
+    .mt-5 {
+      margin-left: 0;
+    }
+  </style>
+</head>
+<body class="p-5 bg-light">
+  <button class="btn btn-primary" onclick="location.href='/'">내 현황 홈</button>
+  <button class="btn btn-primary" onclick="location.href='/index2'">종목 발굴</button>
+
+  <div class="container">
+    <div id="output-holdings" class="card p-3 mt-3 shadow-sm" style="display: none;"></div>
+  </div>
+
+  <div style="margin-top: 30px;">
+    <label for="stockSearch">종목명 검색: </label>
+    <input type="text" id="stockSearch" placeholder="예: 삼성전자" onkeyup="searchStock()" />
+    <div id="searchResults" style="border: 1px solid #ccc; max-height: 200px; overflow-y: auto; display: none;"></div>
+  </div>
+
+
+  <br/><br/><br/><br/><br/><br/>
+  <div class="container mt-5">
+      <h2 class="mb-4">📈 거래량 상위 50종목</h2>
+      <button class="btn btn-success" onclick="fetchVolumeLeaders()">조회하기</button>
+      <div id="output-volume" class="card p-3 mt-3 shadow-sm" style="display: none;"></div>
+  </div>
+
+  <!-- 오른쪽 사이드바 -->
+  <div id="watchlist-bar">
+    <h6>📌 관심종목 등록</h6>
+    <input type="text" class="form-control" id="stock-input" placeholder="예: A005930">
+    <button class="btn btn-sm btn-warning w-100 mt-2" onclick="addStock()">등록</button>
+    <div id="watchlist-display" class="mt-3"></div>
+    <button class="btn btn-sm btn-outline-primary w-100 mt-2" onclick="downloadWatchlist()">CSV 다운로드</button>
+    <br><br>
+    CSV 파일 업로드
+    <br>
+    <input type="file" id="csv-upload" class="form-control form-control-sm mt-2" accept=".csv" onchange="uploadWatchlist(event)">
+  </div>
+
+  <!-- 오른쪽 사이드바: BASKET -->
+  <div id="basketlist-bar">
+    <h6>📦 BASKET 종목 등록</h6>
+    <input type="text" class="form-control" id="basket-input" placeholder="예: A005930">
+    <button class="btn btn-sm btn-warning w-100 mt-2" onclick="addStock2()">등록</button>
+    <div id="basketlist-display" class="mt-3"></div>
+    <button class="btn btn-sm btn-outline-primary w-100 mt-2" onclick="downloadBasket()">CSV 다운로드</button>
+    <br><br>
+    CSV 파일 업로드
+    <br>
+    <input type="file" id="csv-basket-upload" class="form-control form-control-sm mt-2" accept=".csv" onchange="uploadBasket(event)">
+  </div>
+
+  <script>
+    let myHoldings = [];
+    const STORAGE_KEY = "watchlist";
+
+    // 관심종목 불러오기
+    function loadWatchlist() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      return saved ? JSON.parse(saved) : [];
+    }
+
+    // 관심종목 저장
+    function saveWatchlist(list) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+    }
+
+    // 관심종목 UI 출력
+    function renderWatchlist() {
+      const list = loadWatchlist();
+      const display = document.getElementById("watchlist-display");
+      display.innerHTML = "";
+
+      const wrapper = document.createElement("div");
+      wrapper.className = "compact-wrapper";
+      const visible = document.createElement("div");
+      visible.className = "compact-list" + (list.length > 3 ? " hovered" : "");
+
+      list.slice(0, 3).forEach(code => {
+        const row = document.createElement("div");
+        row.className = "d-flex justify-content-between";
+
+        const label = document.createElement("span");
+        label.textContent = code;
+
+        row.appendChild(label);
+        visible.appendChild(row);
+      });
+
+      if (list.length > 3) {
+        const dots = document.createElement("div");
+        dots.textContent = "...";
+        visible.appendChild(dots);
+      }
+
+      const full = document.createElement("div");
+      full.className = "full-hover-list";
+
+      list.forEach(code => {
+        const row = document.createElement("div");
+        row.className = "d-flex justify-content-between";
+
+        const label = document.createElement("span");
+        label.textContent = code;
+
+        const btn = document.createElement("button");
+        btn.textContent = "삭제";
+        btn.className = "btn btn-sm btn-outline-danger ms-2";
+        btn.onclick = () => removeStock(code);
+
+        row.appendChild(label);
+        row.appendChild(btn);
+        full.appendChild(row);
+      });
+
+      wrapper.appendChild(visible);
+      wrapper.appendChild(full);
+      display.appendChild(wrapper);
+    }
+
+    // 종목 추가
+    function addStock() {
+      const input = document.getElementById("stock-input");
+      const code = "A" + input.value.trim().toUpperCase();
+      if (!code) return;
+      let list = loadWatchlist();
+      if (!list.includes(code)) {
+        list.push(code);
+        saveWatchlist(list);
+        renderWatchlist();
+        input.value = "";
+      }
+    }
+
+    // 종목 삭제
+    function removeStock(code) {
+      let list = loadWatchlist();
+      list = list.filter(c => c !== code);
+      saveWatchlist(list);
+      renderWatchlist();
+    }
+
+    function downloadWatchlist() {
+        const list = loadWatchlist();
+        if (!list.length) {
+            alert("관심종목이 비어 있습니다.");
+            return;
+        }
+
+        const csv = list.join(",");  // 예: A005930,A035420
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "watchlist.csv";
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    function uploadWatchlist(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const content = e.target.result;
+            const codes = content.split(",").map(c => c.trim().toUpperCase()).filter(Boolean);
+
+            if (codes.length === 0) {
+            alert("파일에 종목 코드가 없습니다.");
+            return;
+            }
+
+            const uniqueCodes = Array.from(new Set(codes));
+            saveWatchlist(uniqueCodes);
+            renderWatchlist();
+            alert("관심 종목이 성공적으로 복원되었습니다!");
+        };
+        reader.readAsText(file);
+    }
+
+    function searchStock() {
+        const keyword = document.getElementById("stockSearch").value;
+        if (!keyword.trim()) {
+            document.getElementById("searchResults").style.display = "none";
+            document.getElementById("searchResults").innerHTML = "";
+            return;
+        }
+
+        fetch("/api/search-stock", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ keyword })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const resultDiv = document.getElementById("searchResults");
+            resultDiv.innerHTML = "";
+
+            if (data.length === 0) {
+                resultDiv.style.display = "none";
+                return;
+            }
+
+            data.forEach(item => {
+              const div = document.createElement("div");
+              div.className = "d-flex justify-content-between align-items-center";
+              div.style.padding = "5px";
+
+              const label = document.createElement("span");
+              label.textContent = `${item.name} (${item.code})`;
+
+              const btnGroup = document.createElement("div");
+              btnGroup.className = "d-flex gap-1";
+
+              const btn = document.createElement("button");
+              btn.className = "btn btn-sm btn-outline-success";
+              btn.textContent = "관심 등록";
+              btn.onclick = () => {
+                document.getElementById("stock-input").value = item.name + "[" + item.code + "]";
+                addStock();
+              };
+
+              const btn2 = document.createElement("button");
+              btn2.className = "btn btn-sm btn-outline-success";
+              btn2.textContent = "BASKET 등록";
+              btn2.onclick = () => {
+                document.getElementById("basket-input").value = item.name + "[" + item.code + "]";
+                addStock2();
+              };
+
+              btnGroup.appendChild(btn);
+              btnGroup.appendChild(btn2);
+
+              div.appendChild(label);
+              div.appendChild(btnGroup);
+              resultDiv.appendChild(div);
+            });
+
+            resultDiv.style.display = "block";
+        });
+    }
+
+    const STORAGE_KEY_2 = "basketlist";
+
+    function loadBasket() {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY_2) || "[]");
+    }
+    
+    function saveBasket(list) {
+      localStorage.setItem(STORAGE_KEY_2, JSON.stringify(list));
+    }
+
+    function renderBasket() {
+      const list = loadBasket();
+      const display = document.getElementById("basketlist-display");
+      display.innerHTML = "";
+
+      const wrapper = document.createElement("div");
+      wrapper.className = "compact-wrapper";
+      const visible = document.createElement("div");
+      visible.className = "compact-list" + (list.length > 3 ? " hovered" : "");
+
+      list.slice(0, 3).forEach(code => {
+        const row = document.createElement("div");
+        row.className = "d-flex justify-content-between";
+
+        const label = document.createElement("span");
+        label.textContent = code;
+
+        row.appendChild(label);
+        visible.appendChild(row);
+      });
+
+      if (list.length > 3) {
+        const dots = document.createElement("div");
+        dots.textContent = "...";
+        visible.appendChild(dots);
+      }
+
+      const full = document.createElement("div");
+      full.className = "full-hover-list";
+
+      list.forEach(code => {
+        const row = document.createElement("div");
+        row.className = "d-flex justify-content-between";
+
+        const label = document.createElement("span");
+        label.textContent = code;
+
+        const btn = document.createElement("button");
+        btn.textContent = "삭제";
+        btn.className = "btn btn-sm btn-outline-danger ms-2";
+        btn.onclick = () => removeBasket(code);
+
+        row.appendChild(label);
+        row.appendChild(btn);
+        full.appendChild(row);
+      });
+
+      wrapper.appendChild(visible);
+      wrapper.appendChild(full);
+      display.appendChild(wrapper);
+    }
+
+    function addStock2() {
+      const input = document.getElementById("basket-input");
+      const code = "A" + input.value.trim().toUpperCase();
+      if (!code) return;
+      let list = loadBasket();
+      if (!list.includes(code)) {
+        list.push(code);
+        saveBasket(list);
+        renderBasket();
+        input.value = "";
+      }
+    }
+
+    function removeBasket(code) {
+      let list = loadBasket();
+      list = list.filter(item => item !== code);
+      saveBasket(list);
+      renderBasket();
+    }
+
+    function downloadBasket() {
+      const list = loadBasket();
+      if (!list.length) {
+            alert("BASKET 종목이 비어 있습니다.");
+            return;
+        }
+      const csv = list.join(",");  // 예: A005930,A035420
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "basketlist.csv";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function uploadBasket(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const content = e.target.result.trim();
+        const codes = content.split(",").map(c => c.trim().toUpperCase()).filter(Boolean);
+
+        if (codes.length === 0) {
+            alert("파일에 종목 코드가 없습니다.");
+            return;
+        }
+
+        const uniqueCodes = Array.from(new Set(codes));
+        saveBasket(uniqueCodes);
+        renderBasket();
+        alert("BASKET 종목이 성공적으로 복원되었습니다!");
+      };
+      reader.readAsText(file);
+    }
+
+    async function fetchHoldings() {
+      const el = document.getElementById("output-holdings");
+
+      try {
+          const res = await fetch("/api/holdings");
+          const data = await res.json();
+
+          myHoldings = []; // 전역 배열 초기화
+
+          if (data.error) {
+              return;
+          }
+
+          if (Array.isArray(data) && data.length > 0) {
+              let list = data.map(h => {
+                  const tmpCode = h.code.replace("A", "");
+                  myHoldings.push(tmpCode); // 보유 종목 저장
+              });
+          }
+      } catch (err) {
+          return;
+      }
+    }
+
+    async function fetchVolumeLeaders() {
+      const el = document.getElementById("output-volume");
+      el.innerHTML = "<p>📡 조회 중입니다...</p>";
+      el.style.display = "block";
+
+      try {
+          // ✅ 먼저 holdings 로딩 완료까지 기다림
+          await fetchHoldings();
+
+          // ✅ 그 다음 volume 데이터 fetch
+          const res = await fetch("/api/volume-leaders");
+          const data = await res.json();
+
+          if (data.error) {
+              el.innerHTML = `<p class="text-danger">❌ ${data.error}</p>`;
+              return;
+          }
+
+          let html = `
+              <table class="table table-striped">
+                  <thead>
+                      <tr>
+                          <th>종목코드</th>
+                          <th>종목명</th>
+                          <th>현재가</th>
+                          <th>거래량</th>
+                          <th>거래금액</th>
+                          <th></th>
+                          <th></th>
+                      </tr>
+                  </thead>
+                  <tbody>`;
+
+          data.stocks.forEach(stock => {
+              const isOwned = myHoldings.includes(stock.code);
+              if (isOwned) {
+                  console.log("✅ 보유 종목 매칭:", stock.code, stock.name);
+              }
+
+              html += `
+                  <tr>
+                      <td>${stock.code}</td>
+                      <td>${stock.name}</td>
+                      <td>${Math.abs(Number(stock.price)).toLocaleString()} 원</td>
+                      <td>${Number(stock.vol).toLocaleString()} 주</td>
+                      <td>${Number(stock.amount).toLocaleString()} (백만)원</td>
+                      <td>
+                          <button class="btn btn-sm btn-outline-primary buy-btn"
+                                  data-code="${stock.code}"
+                                  data-name="${stock.name}"
+                                  data-price="${stock.price}">
+                              구매
+                          </button>
+                          ${isOwned ? `
+                          <button class="btn btn-sm btn-outline-danger ms-2 sell-btn"
+                                  data-code="${stock.code}"
+                                  data-name="${stock.name}"
+                                  data-price="${stock.price}">
+                              매도
+                          </button>` : ""}
+                      </td>
+                      <td>
+                          <button class="btn btn-sm btn-outline-success"
+                                  onclick='do_for_addStock("${stock.name}", "${stock.code}")'>
+                              관심 등록
+                          </button>
+                          <button class="btn btn-sm btn-outline-success"
+                                  onclick='do_for_addBasket("${stock.name}", "${stock.code}")'>
+                              BASKET 등록
+                          </button>
+                      </td>
+                  </tr>`;
+          });
+
+          html += `</tbody></table>`;
+          el.innerHTML = html;
+        } catch (err) {
+            console.error("📛 fetchVolumeLeaders 에러:", err);
+            el.innerHTML = `<p class="text-danger">❌ 오류 발생: ${err}</p>`;
+        }
+    }
+
+    function do_for_addStock(name, code){
+      document.getElementById("stock-input").value = name + "[" + code + "]";
+      addStock();
+    }
+
+    function do_for_addBasket(name, code){
+      document.getElementById("basket-input").value = name + "[" + code + "]";
+      addStock2();
+    }
+
+    // Enter 키 이벤트
+    document.getElementById("stock-input").addEventListener("keypress", function (e) {
+      if (e.key === "Enter") {
+        addStock();
+      }
+    });
+
+    // 최초 렌더링
+    renderWatchlist();
+
+    // 초기 로딩 시 렌더링
+    window.addEventListener("load", function () {
+      renderWatchlist();
+      renderBasket();
+    });
+  </script>
+</body>
+</html>

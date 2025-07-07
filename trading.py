@@ -4,8 +4,6 @@ import logging
 from logger import logger
 import pandas as pd
 import matplotlib.pyplot as plt
-from pykiwoom.kiwoom import Kiwoom
-import time
 from datetime import datetime
 
 logger = logging.getLogger("KiwoomTrading")
@@ -23,7 +21,6 @@ class Trading:
             if not self.api.connected:
                 return {}
 
-            logger.info("[trading.py] get_balance_summary")
             self.tr_data.pop('opw00018', None)
             self.api.ocx.SetInputValue("계좌번호", Config.ACCNO)
             self.api.ocx.SetInputValue("비밀번호", Config.ACCNO_PASSWORD)
@@ -41,7 +38,6 @@ class Trading:
             if not self.api.connected:
                 return {}
 
-            logger.info("[trading.py] get_available_cash")
             self.tr_data.pop('opw00001', None)
             self.api.ocx.SetInputValue("계좌번호", Config.ACCNO)
             self.api.ocx.SetInputValue("비밀번호", Config.ACCNO_PASSWORD)
@@ -60,7 +56,6 @@ class Trading:
             if not self.api.connected:
                 return []
 
-            logger.info("[trading.py] get_holdings")
             self.tr_data.pop('opw00018', None)
             self.api.ocx.SetInputValue("계좌번호", Config.ACCNO)
             self.api.ocx.SetInputValue("비밀번호", Config.ACCNO_PASSWORD)
@@ -107,7 +102,6 @@ class Trading:
 
     def place_sell_order(self, code, price, qty):
         try:
-            logger.info(f"[매도 요청] {code} | {price}원 | {qty}주")
             self.api.ocx.SendOrder(
                 "매도주문",  # 주문종류
                 "0102",      # 화면번호
@@ -129,7 +123,6 @@ class Trading:
         if not self.api.connected:
             return {"error": "API 미연결"}
 
-        logger.info("[trading.py] get_unfilled_orders")
         self.tr_data.pop("opt10075", None)
         self.api.ocx.SetInputValue("계좌번호", Config.ACCNO)
         self.api.ocx.SetInputValue("전체", "0") # 전체 계좌
@@ -141,7 +134,7 @@ class Trading:
 
     def get_close_prices(self, code="005930", count=250):
         today = datetime.today().strftime('%Y%m%d')
-        df = self.kiwoom.block_request("opt10081",
+        df = self.api.ocx.block_request("opt10081",
                                     종목코드=code,
                                     기준일자=today,
                                     수정주가구분=1,
@@ -170,9 +163,7 @@ class Trading:
         return rsi
 
     def analyze_rsi(self):
-        self.kiwoom = Kiwoom()
-        self.kiwoom.CommConnect()
-
+        
         prices = self.get_close_prices()
 
         rsi_ema_today = self.calculate_rsi(prices, method='ema').dropna().iloc[-1]
@@ -189,14 +180,12 @@ class Trading:
         }
 
     def get_moving_average(self):
-        kiwoom = Kiwoom()
-        kiwoom.CommConnect()
 
         # 조회할 종목코드
         code = "005930"  # 삼성전자
 
         # 일봉 데이터 요청
-        df = kiwoom.block_request(
+        df = self.api.ocx.block_request(
             "opt10081",
             종목코드=code,
             기준일자="20250628",
@@ -205,31 +194,132 @@ class Trading:
             next=0
         )
 
-        # 데이터 가공
+        df = df.sort_values(by='일자')  # 날짜 오름차순
+        df['일자'] = pd.to_datetime(df['일자'], format='%Y%m%d').dt.strftime('%Y-%m-%d')
+
+        df['MA_5'] = df['현재가'].rolling(window=5).mean()
+        df['MA_20'] = df['현재가'].rolling(window=20).mean()
+
+        result = []
+        for _, row in df.iterrows():
+            result.append({
+                'date': row['일자'],
+                'close': row['현재가'],
+                'ma_5': round(row['MA_5'], 2) if not pd.isna(row['MA_5']) else None,
+                'ma_20': round(row['MA_20'], 2) if not pd.isna(row['MA_20']) else None
+            })
+
+        return result
+
+    def get_stock_data(self, code="005930", end_date="20250628"):
+
+        df = self.api.ocx.block_request(
+            "opt10081",
+            종목코드=code,
+            기준일자=end_date,
+            수정주가구분=1,
+            output="주식일봉차트조회",
+            next=0
+        )
+
         df['현재가'] = df['현재가'].astype(int)
         df['일자'] = pd.to_datetime(df['일자'])
         df.sort_values('일자', inplace=True)
-        df.set_index('일자', inplace=True)
 
-        # 이동평균 계산
         df['MA5'] = df['현재가'].rolling(window=5).mean()
         df['MA20'] = df['현재가'].rolling(window=20).mean()
         df['MA60'] = df['현재가'].rolling(window=60).mean()
         df['MA120'] = df['현재가'].rolling(window=120).mean()
 
-        # 그래프 그리기 (이동평균선만)
-        plt.figure(figsize=(12, 6))
-        plt.plot(df.index, df['MA5'], label='5일선', color='blue')
-        plt.plot(df.index, df['MA20'], label='20일선', color='orange')
-        plt.plot(df.index, df['MA60'], label='60일선', color='green')
-        plt.plot(df.index, df['MA120'], label='120일선', color='red')
+        return {
+            "dates": df['일자'].dt.strftime('%Y-%m-%d').tolist(),
+            "close": df['현재가'].tolist(),
+            "MA5": df['MA5'].fillna('').tolist(),
+            "MA20": df['MA20'].fillna('').tolist(),
+            "MA60": df['MA60'].fillna('').tolist(),
+            "MA120": df['MA120'].fillna('').tolist()
+        }
 
-        plt.xlabel('날짜')
-        plt.ylabel('가격')
-        plt.title('이동평균선 (5/20/60/120일)')
-        plt.legend()
-        plt.grid(True)
-        plt.show()
+    def detect_golden_cross(self, code):
+        from datetime import datetime
+        import pandas as pd
+
+        end_date = datetime.today().strftime('%Y%m%d')
+
+        # TR 데이터 초기화
+        self.tr_data.pop("opt10081", None)
+
+        # 요청 세팅
+        self.api.ocx.SetInputValue("종목코드", code)
+        self.api.ocx.SetInputValue("기준일자", end_date)
+        self.api.ocx.SetInputValue("수정주가구분", "1")
+        self.api.ocx.CommRqData("opt10081_req", "opt10081", 0, "5001")
+
+        # 이벤트 루프 대기
+        self.tr_event_loop.exec_()
+
+        # 결과 가져오기
+        data = self.tr_data.get("opt10081", [])
+        if not data or len(data) < 120:
+            return {'code': code, 'golden_cross': 'N', 'reason': 'not enough data'}
+
+        df = pd.DataFrame(data)
+        df = df[['일자', '현재가']].copy()
+        df['현재가'] = df['현재가'].astype(int)
+        df.sort_values(by='일자', inplace=True)
+
+        # 이동 평균선 계산
+        df['MA5'] = df['현재가'].rolling(window=5).mean()
+        df['MA20'] = df['현재가'].rolling(window=20).mean()
+        df['MA60'] = df['현재가'].rolling(window=60).mean()
+        df['MA120'] = df['현재가'].rolling(window=120).mean()
+
+        df = df.dropna().reset_index(drop=True)
+        if len(df) < 3:
+            return {'code': code, 'golden_cross': 'N', 'reason': 'not enough data'}
+
+        # 최근 5일 기준 분석
+        recent = df.iloc[-3:].copy()
+        logger.info(f"[trading.py] recent: {recent}")
+
+        ma5s = recent['MA5'].tolist()
+        logger.info(f"[trading.py] ma5s: {ma5s}")
+
+        last_ma5 = recent['MA5'].iloc[-1]
+        last_ma20 = recent['MA20'].iloc[-1]
+        last_ma60 = recent['MA60'].iloc[-1]
+        last_ma120 = recent['MA120'].iloc[-1]
+
+        logger.info(f"[trading.py] last_ma5: {last_ma5}, last_ma20: {last_ma20}, last_ma60: {last_ma60}, last_ma120: {last_ma120}")
+
+        long_ma_candidates = [last_ma20, last_ma60, last_ma120]
+        diffs = [abs(last_ma5 - x) for x in long_ma_candidates]
+        min_idx = diffs.index(min(diffs))
+        closest_ma = long_ma_candidates[min_idx]
+
+        # 조건 체크
+        cond1 = last_ma5 <= closest_ma or ((last_ma5 - closest_ma) / closest_ma <= 0.01)
+        cond2 = recent['MA5'].iloc[0] == min(ma5s)
+        cond3 = recent['MA5'].iloc[1] < recent['MA5'].iloc[2]
+        cond4 = recent['MA5'].iloc[2] == max(ma5s)
+
+        all_conditions = all([cond1, cond2, cond3, cond4]) 
+        return {'code': code, 'golden_cross': 'Y' if all_conditions else 'N'}
+
+    def search_stock_by_name(self, keyword):
+        kospi_codes = self.api.ocx.dynamicCall("GetCodeListByMarket(QString)", ["0"]).split(';')
+        kosdaq_codes = self.api.ocx.dynamicCall("GetCodeListByMarket(QString)", ["10"]).split(';')
+        all_codes = kospi_codes + kosdaq_codes
+
+        result = []
+        for code in all_codes:
+            if code == '':
+                continue
+            name = self.api.ocx.dynamicCall("GetMasterCodeName(QString)", [code])
+            if keyword in name:
+                result.append({"name": name, "code": code})
+
+        return result[:20]
 
     def _on_receive_tr_data(self, screen_no, rqname, trcode, recordname, prev_next, data_len, error_code, message, splm_msg):
         try:
@@ -330,7 +420,6 @@ class Trading:
                     })
 
                 self.tr_data["OPT10030"] = {"stocks": stocks}
-                # QTimer.singleShot(0, self.tr_event_loop.quit)
 
             elif rqname == "unfilled_orders_req":
                 orders = []
@@ -353,6 +442,19 @@ class Trading:
                     })
 
                 self.tr_data["opt10075"] = {"orders": orders}
+
+            elif rqname == "opt10081_req":
+                count = self.api.ocx.GetRepeatCnt(trcode, rqname)
+                rows = []
+                for i in range(count):
+                    date = self.api.ocx.GetCommData(trcode, rqname, i, "일자").strip()
+                    close = self.api.ocx.GetCommData(trcode, rqname, i, "현재가").strip()
+                    try:
+                        close = int(close)
+                    except:
+                        continue
+                    rows.append({"일자": date, "현재가": close})
+                self.tr_data["opt10081"] = rows
 
         finally:
             QTimer.singleShot(0, self.tr_event_loop.quit)
