@@ -12,7 +12,7 @@
       position: fixed;
       top: 50px;
       right: -220px; /* 처음엔 숨어 있음 */
-      width: 250px;
+      width: 350px;
       background-color: #f8f9fa;
       border: 1px solid #ccc;
       border-right: none;
@@ -29,7 +29,7 @@
       position: fixed;
       top: 500px;
       right: -220px; /* 처음엔 숨김 상태 */
-      width: 250px;
+      width: 350px;
       background-color: #f8f9fa;
       border: 1px solid #ccc;
       border-right: none;
@@ -58,7 +58,6 @@
       position: absolute;
       left: -505px;
       top: 0;
-      /* width: 250px; */
       width: 500px;
       max-height: 400px;
       overflow-y: auto;
@@ -107,6 +106,13 @@
       <h2 class="mb-4">📈 거래량 상위 50종목</h2>
       <button class="btn btn-success" onclick="fetchVolumeLeaders()">조회하기</button>
       <div id="output-volume" class="card p-3 mt-3 shadow-sm" style="display: none;"></div>
+  </div>
+
+  <br/><br/>
+  <div class="container mt-5">
+      <h2 class="mb-4">골든크로스(준비) 종목 조회</h2>
+      <button class="btn btn-success" onclick="checkGoldenCross()">조회하기</button>
+      <div id="output-goldenCross" class="card p-3 mt-3 shadow-sm" style="display: none;"></div>
   </div>
 
   <!-- 오른쪽 사이드바 -->
@@ -206,7 +212,7 @@
     // 종목 추가
     function addStock() {
       const input = document.getElementById("stock-input");
-      const code = "A" + input.value.trim().toUpperCase();
+      const code = input.value.trim().toUpperCase();
       if (!code) return;
       let list = loadWatchlist();
       if (!list.includes(code)) {
@@ -226,107 +232,107 @@
     }
 
     function downloadWatchlist() {
-        const list = loadWatchlist();
-        if (!list.length) {
-            alert("관심종목이 비어 있습니다.");
-            return;
-        }
+      const list = loadWatchlist();
+      if (!list.length) {
+        alert("관심종목이 비어 있습니다.");
+        return;
+      }
 
-        const csv = list.join(",");  // 예: A005930,A035420
-        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-        const url = URL.createObjectURL(blob);
+      const csv = list.join(",");  // 예: A005930,A035420
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
 
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "watchlist.csv";
-        a.click();
-        URL.revokeObjectURL(url);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "watchlist.csv";
+      a.click();
+      URL.revokeObjectURL(url);
     }
 
     function uploadWatchlist(event) {
-        const file = event.target.files[0];
-        if (!file) return;
+      const file = event.target.files[0];
+      if (!file) return;
 
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            const content = e.target.result;
-            const codes = content.split(",").map(c => c.trim().toUpperCase()).filter(Boolean);
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const content = e.target.result;
+        const codes = content.split(",").map(c => c.trim().toUpperCase()).filter(Boolean);
 
-            if (codes.length === 0) {
-            alert("파일에 종목 코드가 없습니다.");
-            return;
-            }
+        if (codes.length === 0) {
+        alert("파일에 종목 코드가 없습니다.");
+        return;
+        }
 
-            const uniqueCodes = Array.from(new Set(codes));
-            saveWatchlist(uniqueCodes);
-            renderWatchlist();
-            alert("관심 종목이 성공적으로 복원되었습니다!");
-        };
-        reader.readAsText(file);
+        const uniqueCodes = Array.from(new Set(codes));
+        saveWatchlist(uniqueCodes);
+        renderWatchlist();
+        alert("관심 종목이 성공적으로 복원되었습니다!");
+      };
+      reader.readAsText(file);
     }
 
     function searchStock() {
         const keyword = document.getElementById("stockSearch").value;
         if (!keyword.trim()) {
-            document.getElementById("searchResults").style.display = "none";
-            document.getElementById("searchResults").innerHTML = "";
-            return;
+          document.getElementById("searchResults").style.display = "none";
+          document.getElementById("searchResults").innerHTML = "";
+          return;
         }
 
         fetch("/api/search-stock", {
-        method: "POST",
-        headers: {
+          method: "POST",
+          headers: {
             "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ keyword })
+          },
+          body: JSON.stringify({ keyword })
         })
         .then(response => response.json())
         .then(data => {
-            const resultDiv = document.getElementById("searchResults");
-            resultDiv.innerHTML = "";
+          const resultDiv = document.getElementById("searchResults");
+          resultDiv.innerHTML = "";
 
-            if (data.length === 0) {
-                resultDiv.style.display = "none";
-                return;
-            }
+          if (data.length === 0) {
+              resultDiv.style.display = "none";
+              return;
+          }
 
-            data.forEach(item => {
-              const div = document.createElement("div");
-              div.className = "d-flex justify-content-between align-items-center";
-              div.style.padding = "5px";
+          data.forEach(item => {
+            const div = document.createElement("div");
+            div.className = "d-flex justify-content-between align-items-center";
+            div.style.padding = "5px";
 
-              const label = document.createElement("span");
-              label.textContent = `${item.name} (${item.code})`;
+            const label = document.createElement("span");
+            label.textContent = `${item.name} (${item.code})`;
 
-              const btnGroup = document.createElement("div");
-              btnGroup.className = "d-flex gap-1";
+            const btnGroup = document.createElement("div");
+            btnGroup.className = "d-flex gap-1";
 
-              const btn = document.createElement("button");
-              btn.className = "btn btn-sm btn-outline-success";
-              btn.textContent = "관심 등록";
-              btn.onclick = () => {
-                document.getElementById("stock-input").value = item.name + "[" + item.code + "]";
-                addStock();
-              };
+            const btn = document.createElement("button");
+            btn.className = "btn btn-sm btn-outline-success";
+            btn.textContent = "관심 등록";
+            btn.onclick = () => {
+              document.getElementById("stock-input").value = item.name + "[" + item.code + "]";
+              addStock();
+            };
 
-              const btn2 = document.createElement("button");
-              btn2.className = "btn btn-sm btn-outline-success";
-              btn2.textContent = "BASKET 등록";
-              btn2.onclick = () => {
-                document.getElementById("basket-input").value = item.name + "[" + item.code + "]";
-                addStock2();
-              };
+            const btn2 = document.createElement("button");
+            btn2.className = "btn btn-sm btn-outline-success";
+            btn2.textContent = "BASKET 등록";
+            btn2.onclick = () => {
+              document.getElementById("basket-input").value = item.name + "[" + item.code + "]";
+              addStock2();
+            };
 
-              btnGroup.appendChild(btn);
-              btnGroup.appendChild(btn2);
+            btnGroup.appendChild(btn);
+            btnGroup.appendChild(btn2);
 
-              div.appendChild(label);
-              div.appendChild(btnGroup);
-              resultDiv.appendChild(div);
-            });
+            div.appendChild(label);
+            div.appendChild(btnGroup);
+            resultDiv.appendChild(div);
+          });
 
-            resultDiv.style.display = "block";
-        });
+          resultDiv.style.display = "block";
+      });
     }
 
     const STORAGE_KEY_2 = "basketlist";
@@ -393,7 +399,7 @@
 
     function addStock2() {
       const input = document.getElementById("basket-input");
-      const code = "A" + input.value.trim().toUpperCase();
+      const code = input.value.trim().toUpperCase();
       if (!code) return;
       let list = loadBasket();
       if (!list.includes(code)) {
@@ -555,6 +561,65 @@
             el.innerHTML = `<p class="text-danger">❌ 오류 발생: ${err}</p>`;
         }
     }
+
+    async function checkGoldenCross() {
+      const basket = loadBasket(); // 예: ["삼성전자[005930]", "카카오[035720]"]
+      const resultDiv = document.getElementById("output-goldenCross");
+      resultDiv.innerHTML = "<p>📡 골든크로스 분석 중...</p>";
+      resultDiv.style.display = "block";
+
+      resultDiv.innerHTML = ""; // 결과 초기화
+
+      basket.forEach(item => {
+        const str = item;
+        const lastBracketIndex = str.lastIndexOf("[");
+        const code = str.substring(lastBracketIndex + 1, str.length - 1);
+        console.log("code : "+code);
+
+        fetch('/detect-golden-cross', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ "code": code })
+        })
+        .then(res => res.json())
+        .then(data => {
+          console.log("✅ 골든크로스 결과:", data);
+
+          const box = document.createElement("div");
+          box.className = "border p-2 mb-2 rounded";
+
+          const title = document.createElement("strong");
+          title.textContent = item;
+
+          const result = document.createElement("div");
+          if (data.golden_cross === "Y") {
+            result.innerHTML = `<span class="text-success">✔ 골든크로스 발생</span>`;
+          } else {
+            result.innerHTML = `<span class="text-muted">✖ 조건 미충족</span>`;
+          }
+
+          result.innerHTML += `<br><span class="text-muted">${data.etc}</span>`;
+
+          if (data.reason) {
+            const reason = document.createElement("div");
+            reason.className = "text-danger small";
+            reason.textContent = "📌 " + data.reason;
+            box.appendChild(reason);
+          }
+
+          box.appendChild(title);
+          box.appendChild(result);
+          resultDiv.appendChild(box);
+        })
+        .catch(err => {
+          const errorBox = document.createElement("div");
+          errorBox.className = "border p-2 mb-2 text-danger";
+          errorBox.innerHTML = `<strong>${item}</strong> → 오류 발생: ${err}`;
+          resultDiv.appendChild(errorBox);
+        });
+      });
+    }
+
 
     function do_for_addStock(name, code){
       document.getElementById("stock-input").value = name + "[" + code + "]";

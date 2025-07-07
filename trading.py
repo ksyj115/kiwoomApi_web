@@ -244,6 +244,8 @@ class Trading:
         from datetime import datetime
         import pandas as pd
 
+        logger.info(f"detect_golden_cross > code : {code}")
+
         end_date = datetime.today().strftime('%Y%m%d')
 
         # TR 데이터 초기화
@@ -278,7 +280,7 @@ class Trading:
         if len(df) < 3:
             return {'code': code, 'golden_cross': 'N', 'reason': 'not enough data'}
 
-        # 최근 5일 기준 분석
+        # 최근 3일 기준 분석
         recent = df.iloc[-3:].copy()
         logger.info(f"[trading.py] recent: {recent}")
 
@@ -298,13 +300,50 @@ class Trading:
         closest_ma = long_ma_candidates[min_idx]
 
         # 조건 체크
-        cond1 = last_ma5 <= closest_ma or ((last_ma5 - closest_ma) / closest_ma <= 0.01)
+        # cond1 = last_ma5 <= closest_ma or ((last_ma5 - closest_ma) / closest_ma <= 0.01)
+        cond1 = (abs(last_ma5 - closest_ma) / closest_ma <= 0.01) or ((last_ma5 - closest_ma) / closest_ma <= 0.01)
         cond2 = recent['MA5'].iloc[0] == min(ma5s)
         cond3 = recent['MA5'].iloc[1] < recent['MA5'].iloc[2]
         cond4 = recent['MA5'].iloc[2] == max(ma5s)
 
-        all_conditions = all([cond1, cond2, cond3, cond4]) 
-        return {'code': code, 'golden_cross': 'Y' if all_conditions else 'N'}
+        all_conditions = all([cond1, cond2, cond3, cond4])
+        most_conditions = not all_conditions and all([cond1, cond3, cond4])
+        conditions = all([cond3, cond4])
+
+        all_etc = ''
+        if (last_ma5 - closest_ma) > 0 and ((last_ma5 - closest_ma) / closest_ma <= 0.01) and all_conditions:
+            all_etc = '골든크로스 돌파! 5일선 추가 1% 상승전! 매수 고려 (강력).'
+        elif (last_ma5 - closest_ma) > 0 and ((last_ma5 - closest_ma) / closest_ma <= 0.02) and all_conditions:
+            all_etc = '골든크로스 돌파! 5일선 추가 2% 상승전! 후발 매수 고려 (강력).'
+        elif (last_ma5 - closest_ma) > 0 and ((last_ma5 - closest_ma) / closest_ma <= 0.03) and all_conditions:
+            all_etc = '골든크로스 돌파! 5일선 추가 3% 상승전! 차익 실현 조심하며 후발 매수 고려 (강력).'
+        elif (last_ma5 - closest_ma) == 0 and all_conditions:
+            all_etc = '골든크로스 발생! 매수 고려 (강력).'
+        elif (last_ma5 - closest_ma) < 0 and (abs(last_ma5 - closest_ma) / closest_ma <= 0.01) and all_conditions:
+            all_etc = '골든크로스 발생 전 (1% 이내 근접). 매수 준비 고려.'
+        elif (last_ma5 - closest_ma) < 0 and (abs(last_ma5 - closest_ma) / closest_ma <= 0.02) and all_conditions:
+            all_etc = '골든크로스 발생 전 (2% 이내 근접). 매수 준비 고려.'
+        elif (last_ma5 - closest_ma) < 0 and (abs(last_ma5 - closest_ma) / closest_ma <= 0.03) and all_conditions:
+            all_etc = '골든크로스 발생 전 (3% 이내 근접). 관심.'
+
+        most_etc = ''
+        etc = ''
+        if (last_ma5 - closest_ma) > 0 and ((last_ma5 - closest_ma) / closest_ma <= 0.01) and most_conditions:
+            most_etc = '골든크로스 이미 발생했음. 5일선 1% 상위. 가까운 이평선 위로 지켜주는지 주의하며 매수 고려.'
+        elif (last_ma5 - closest_ma) > 0 and ((last_ma5 - closest_ma) / closest_ma <= 0.02) and most_conditions:
+            most_etc = '골든크로스 이미 발생했음. 5일선 2% 상위.'
+        elif (last_ma5 - closest_ma) > 0 and ((last_ma5 - closest_ma) / closest_ma <= 0.03) and most_conditions:
+            most_etc = '골든크로스 이미 발생했음. 5일선 3% 상위. 차익 실현 조심.'
+        elif (last_ma5 - closest_ma) == 0 and most_conditions:
+            most_etc = '골든크로스 발생! 매수 고려.'
+        elif (last_ma5 - closest_ma) < 0 and (abs(last_ma5 - closest_ma) / closest_ma <= 0.01) and most_conditions:
+            most_etc = '골든크로스 발생 전 (1% 이내 근접). 매수 준비 고려.'
+        elif (last_ma5 - closest_ma) < 0 and (abs(last_ma5 - closest_ma) / closest_ma <= 0.02) and most_conditions:
+            most_etc = '골든크로스 발생 전 (2% 이내 근접). 매수 준비 고려.'
+        elif (last_ma5 - closest_ma) < 0 and (abs(last_ma5 - closest_ma) / closest_ma <= 0.03) and most_conditions:
+            most_etc = '골든크로스 발생 전 (3% 이내 근접). 관심.'
+
+        return {'code': code, 'golden_cross': 'Y' if (all_conditions or most_conditions) else 'N', 'etc':all_etc if all_conditions else most_etc if most_conditions else etc}
 
     def search_stock_by_name(self, keyword):
         kospi_codes = self.api.ocx.dynamicCall("GetCodeListByMarket(QString)", ["0"]).split(';')

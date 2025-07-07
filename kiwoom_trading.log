@@ -1740,3 +1740,199 @@
 2025-07-07 14:48:09 - KiwoomTrading - INFO - 로그인 성공
 2025-07-07 14:51:34 - KiwoomTrading - INFO - 로그인 시도...
 2025-07-07 14:51:38 - KiwoomTrading - INFO - 로그인 성공
+2025-07-07 15:25:22 - KiwoomTrading - INFO - 로그인 시도...
+2025-07-07 15:25:27 - KiwoomTrading - INFO - 로그인 성공
+2025-07-07 15:26:21 - KiwoomTrading - INFO - 로그인 시도...
+2025-07-07 15:26:25 - KiwoomTrading - INFO - 로그인 성공
+2025-07-07 15:33:00 - KiwoomTrading - INFO - 로그인 시도...
+2025-07-07 15:33:04 - KiwoomTrading - INFO - 로그인 성공
+2025-07-07 15:39:23 - KiwoomTrading - INFO - 로그인 시도...
+2025-07-07 15:39:32 - KiwoomTrading - INFO - 로그인 성공
+2025-07-07 15:41:30 - KiwoomTrading - INFO - 로그인 시도...
+2025-07-07 15:41:34 - KiwoomTrading - INFO - 로그인 성공
+2025-07-07 15:41:56 - KiwoomTrading - INFO - detect_golden_cross > code : 44833
+2025-07-07 15:41:57 - KiwoomTrading - INFO - detect_golden_cross > code : 00593
+2025-07-07 15:41:57 - KiwoomTrading - INFO - detect_golden_cross > code : 90011
+2025-07-07 15:42:53 - KiwoomTrading - INFO - 로그인 시도...
+2025-07-07 15:42:57 - KiwoomTrading - INFO - 로그인 성공
+2025-07-07 15:43:04 - KiwoomTrading - INFO - detect_golden_cross > code : 448330
+2025-07-07 15:43:04 - KiwoomTrading - INFO - [trading.py] recent:            일자    현재가      MA5      MA20          MA60         MA120
+478  20250703  11110  10958.0  10860.75  10698.633333  10607.825000
+479  20250704  11075  10988.0  10873.25  10706.633333  10613.391667
+480  20250707  10990  11008.0  10878.75  10715.700000  10617.716667
+2025-07-07 15:43:04 - KiwoomTrading - INFO - [trading.py] ma5s: [10958.0, 10988.0, 11008.0]
+2025-07-07 15:43:04 - KiwoomTrading - INFO - [trading.py] last_ma5: 11008.0, last_ma20: 10878.75, last_ma60: 10715.7, last_ma120: 10617.716666666667
+2025-07-07 15:43:04 - KiwoomTrading - INFO - detect_golden_cross > code : 005935
+2025-07-07 15:43:04 - KiwoomTrading - INFO - [trading.py] recent:            일자    현재가      MA5     MA20          MA60         MA120
+478  20250703  52900  50760.0  49247.5  47050.000000  46620.833333
+479  20250704  52700  51180.0  49457.5  47153.333333  46684.166667
+480  20250707  51300  51540.0  49572.5  47274.166667  46724.583333
+2025-07-07 15:43:04 - KiwoomTrading - INFO - [trading.py] ma5s: [50760.0, 51180.0, 51540.0]
+2025-07-07 15:43:04 - KiwoomTrading - INFO - [trading.py] last_ma5: 51540.0, last_ma20: 49572.5, last_ma60: 47274.166666666664, last_ma120: 46724.583333333336
+2025-07-07 15:43:05 - KiwoomTrading - INFO - detect_golden_cross > code : 900110
+2025-07-07 15:43:05 - KiwoomTrading - INFO - [trading.py] recent:            일자  현재가   MA5   MA20   MA60      MA120
+478  20250703   91  64.8  57.90  51.00  51.650000
+479  20250704  118  77.4  61.45  52.15  52.125000
+480  20250707  112  89.0  64.70  53.25  52.541667
+2025-07-07 15:43:05 - KiwoomTrading - INFO - [trading.py] ma5s: [64.8, 77.4, 89.0]
+2025-07-07 15:43:05 - KiwoomTrading - INFO - [trading.py] last_ma5: 89.0, last_ma20: 64.7, last_ma60: 53.25, last_ma120: 52.541666666666664
+2025-07-07 16:03:24 - KiwoomTrading - INFO - 로그인 시도...
+2025-07-07 16:03:28 - KiwoomTrading - INFO - 로그인 성공
+2025-07-07 16:03:36 - KiwoomTrading - INFO - detect_golden_cross > code : 448330
+2025-07-07 16:03:36 - KiwoomTrading - INFO - [trading.py] recent:            일자    현재가      MA5      MA20          MA60         MA120
+478  20250703  11110  10958.0  10860.75  10698.633333  10607.825000
+479  20250704  11075  10988.0  10873.25  10706.633333  10613.391667
+480  20250707  10990  11008.0  10878.75  10715.700000  10617.716667
+2025-07-07 16:03:36 - KiwoomTrading - INFO - [trading.py] ma5s: [10958.0, 10988.0, 11008.0]
+2025-07-07 16:03:36 - KiwoomTrading - INFO - [trading.py] last_ma5: 11008.0, last_ma20: 10878.75, last_ma60: 10715.7, last_ma120: 10617.716666666667
+2025-07-07 16:03:36 - KiwoomTrading - INFO - detect_golden_cross > code : 005935
+2025-07-07 16:03:36 - KiwoomTrading - INFO - [trading.py] recent:            일자    현재가      MA5     MA20          MA60         MA120
+478  20250703  52900  50760.0  49247.5  47050.000000  46620.833333
+479  20250704  52700  51180.0  49457.5  47153.333333  46684.166667
+480  20250707  51300  51540.0  49572.5  47274.166667  46724.583333
+2025-07-07 16:03:36 - KiwoomTrading - INFO - [trading.py] ma5s: [50760.0, 51180.0, 51540.0]
+2025-07-07 16:03:36 - KiwoomTrading - INFO - [trading.py] last_ma5: 51540.0, last_ma20: 49572.5, last_ma60: 47274.166666666664, last_ma120: 46724.583333333336
+2025-07-07 16:03:37 - KiwoomTrading - INFO - detect_golden_cross > code : 900110
+2025-07-07 16:03:37 - KiwoomTrading - INFO - [trading.py] recent:            일자  현재가   MA5   MA20   MA60      MA120
+478  20250703   91  64.8  57.90  51.00  51.650000
+479  20250704  118  77.4  61.45  52.15  52.125000
+480  20250707  112  89.0  64.70  53.25  52.541667
+2025-07-07 16:03:37 - KiwoomTrading - INFO - [trading.py] ma5s: [64.8, 77.4, 89.0]
+2025-07-07 16:03:37 - KiwoomTrading - INFO - [trading.py] last_ma5: 89.0, last_ma20: 64.7, last_ma60: 53.25, last_ma120: 52.541666666666664
+2025-07-07 16:13:09 - KiwoomTrading - INFO - 로그인 시도...
+2025-07-07 16:13:13 - KiwoomTrading - INFO - 로그인 성공
+2025-07-07 16:13:31 - KiwoomTrading - INFO - detect_golden_cross > code : 448330
+2025-07-07 16:13:31 - KiwoomTrading - INFO - [trading.py] recent:            일자    현재가      MA5      MA20          MA60         MA120
+478  20250703  11110  10958.0  10860.75  10698.633333  10607.825000
+479  20250704  11075  10988.0  10873.25  10706.633333  10613.391667
+480  20250707  10990  11008.0  10878.75  10715.700000  10617.716667
+2025-07-07 16:13:31 - KiwoomTrading - INFO - [trading.py] ma5s: [10958.0, 10988.0, 11008.0]
+2025-07-07 16:13:31 - KiwoomTrading - INFO - [trading.py] last_ma5: 11008.0, last_ma20: 10878.75, last_ma60: 10715.7, last_ma120: 10617.716666666667
+2025-07-07 16:13:31 - KiwoomTrading - INFO - detect_golden_cross > code : 005935
+2025-07-07 16:13:32 - KiwoomTrading - INFO - [trading.py] recent:            일자    현재가      MA5     MA20          MA60         MA120
+478  20250703  52900  50760.0  49247.5  47050.000000  46620.833333
+479  20250704  52700  51180.0  49457.5  47153.333333  46684.166667
+480  20250707  51300  51540.0  49572.5  47274.166667  46724.583333
+2025-07-07 16:13:32 - KiwoomTrading - INFO - [trading.py] ma5s: [50760.0, 51180.0, 51540.0]
+2025-07-07 16:13:32 - KiwoomTrading - INFO - [trading.py] last_ma5: 51540.0, last_ma20: 49572.5, last_ma60: 47274.166666666664, last_ma120: 46724.583333333336
+2025-07-07 17:10:23 - KiwoomTrading - INFO - 로그인 시도...
+2025-07-07 17:10:33 - KiwoomTrading - INFO - 로그인 성공
+2025-07-07 17:10:38 - KiwoomTrading - INFO - detect_golden_cross > code : 448330
+2025-07-07 17:10:38 - KiwoomTrading - INFO - [trading.py] recent:            일자    현재가      MA5      MA20          MA60         MA120
+478  20250703  11110  10958.0  10860.75  10698.633333  10607.825000
+479  20250704  11075  10988.0  10873.25  10706.633333  10613.391667
+480  20250707  10990  11008.0  10878.75  10715.700000  10617.716667
+2025-07-07 17:10:38 - KiwoomTrading - INFO - [trading.py] ma5s: [10958.0, 10988.0, 11008.0]
+2025-07-07 17:10:38 - KiwoomTrading - INFO - [trading.py] last_ma5: 11008.0, last_ma20: 10878.75, last_ma60: 10715.7, last_ma120: 10617.716666666667
+2025-07-07 17:10:38 - KiwoomTrading - INFO - detect_golden_cross > code : 005935
+2025-07-07 17:10:39 - KiwoomTrading - INFO - [trading.py] recent:            일자    현재가      MA5     MA20          MA60         MA120
+478  20250703  52900  50760.0  49247.5  47050.000000  46620.833333
+479  20250704  52700  51180.0  49457.5  47153.333333  46684.166667
+480  20250707  51300  51540.0  49572.5  47274.166667  46724.583333
+2025-07-07 17:10:39 - KiwoomTrading - INFO - [trading.py] ma5s: [50760.0, 51180.0, 51540.0]
+2025-07-07 17:10:39 - KiwoomTrading - INFO - [trading.py] last_ma5: 51540.0, last_ma20: 49572.5, last_ma60: 47274.166666666664, last_ma120: 46724.583333333336
+2025-07-07 17:10:39 - KiwoomTrading - INFO - detect_golden_cross > code : 900110
+2025-07-07 17:10:39 - KiwoomTrading - INFO - [trading.py] recent:            일자  현재가   MA5   MA20   MA60      MA120
+478  20250703   91  64.8  57.90  51.00  51.650000
+479  20250704  118  77.4  61.45  52.15  52.125000
+480  20250707  112  89.0  64.70  53.25  52.541667
+2025-07-07 17:10:39 - KiwoomTrading - INFO - [trading.py] ma5s: [64.8, 77.4, 89.0]
+2025-07-07 17:10:39 - KiwoomTrading - INFO - [trading.py] last_ma5: 89.0, last_ma20: 64.7, last_ma60: 53.25, last_ma120: 52.541666666666664
+2025-07-07 17:11:29 - KiwoomTrading - INFO - detect_golden_cross > code : 448330
+2025-07-07 17:11:29 - KiwoomTrading - INFO - [trading.py] recent:            일자    현재가      MA5      MA20          MA60         MA120
+478  20250703  11110  10958.0  10860.75  10698.633333  10607.825000
+479  20250704  11075  10988.0  10873.25  10706.633333  10613.391667
+480  20250707  10990  11008.0  10878.75  10715.700000  10617.716667
+2025-07-07 17:11:29 - KiwoomTrading - INFO - [trading.py] ma5s: [10958.0, 10988.0, 11008.0]
+2025-07-07 17:11:29 - KiwoomTrading - INFO - [trading.py] last_ma5: 11008.0, last_ma20: 10878.75, last_ma60: 10715.7, last_ma120: 10617.716666666667
+2025-07-07 17:11:30 - KiwoomTrading - INFO - detect_golden_cross > code : 005935
+2025-07-07 17:11:30 - KiwoomTrading - INFO - [trading.py] recent:            일자    현재가      MA5     MA20          MA60         MA120
+478  20250703  52900  50760.0  49247.5  47050.000000  46620.833333
+479  20250704  52700  51180.0  49457.5  47153.333333  46684.166667
+480  20250707  51300  51540.0  49572.5  47274.166667  46724.583333
+2025-07-07 17:11:30 - KiwoomTrading - INFO - [trading.py] ma5s: [50760.0, 51180.0, 51540.0]
+2025-07-07 17:11:30 - KiwoomTrading - INFO - [trading.py] last_ma5: 51540.0, last_ma20: 49572.5, last_ma60: 47274.166666666664, last_ma120: 46724.583333333336
+2025-07-07 17:11:30 - KiwoomTrading - INFO - detect_golden_cross > code : 900110
+2025-07-07 17:11:30 - KiwoomTrading - INFO - [trading.py] recent:            일자  현재가   MA5   MA20   MA60      MA120
+478  20250703   91  64.8  57.90  51.00  51.650000
+479  20250704  118  77.4  61.45  52.15  52.125000
+480  20250707  112  89.0  64.70  53.25  52.541667
+2025-07-07 17:11:30 - KiwoomTrading - INFO - [trading.py] ma5s: [64.8, 77.4, 89.0]
+2025-07-07 17:11:30 - KiwoomTrading - INFO - [trading.py] last_ma5: 89.0, last_ma20: 64.7, last_ma60: 53.25, last_ma120: 52.541666666666664
+2025-07-07 17:11:31 - KiwoomTrading - INFO - detect_golden_cross > code : 047050
+2025-07-07 17:11:31 - KiwoomTrading - INFO - [trading.py] recent:            일자    현재가      MA5     MA20          MA60         MA120
+478  20250703  51000  49450.0  50185.0  49537.500000  48718.333333
+479  20250704  52000  50180.0  50260.0  49603.333333  48802.500000
+480  20250707  49850  50210.0  50182.5  49700.833333  48868.333333
+2025-07-07 17:11:31 - KiwoomTrading - INFO - [trading.py] ma5s: [49450.0, 50180.0, 50210.0]
+2025-07-07 17:11:31 - KiwoomTrading - INFO - [trading.py] last_ma5: 50210.0, last_ma20: 50182.5, last_ma60: 49700.833333333336, last_ma120: 48868.333333333336
+2025-07-07 17:11:31 - KiwoomTrading - INFO - detect_golden_cross > code : 058430
+2025-07-07 17:11:31 - KiwoomTrading - INFO - [trading.py] recent:            일자    현재가      MA5     MA20          MA60         MA120
+478  20250703  41500  39840.0  39442.5  37888.333333  36845.833333
+479  20250704  42250  40600.0  39652.5  37974.166667  36958.333333
+480  20250707  41500  41020.0  39800.0  38105.000000  37064.583333
+2025-07-07 17:11:31 - KiwoomTrading - INFO - [trading.py] ma5s: [39840.0, 40600.0, 41020.0]
+2025-07-07 17:11:31 - KiwoomTrading - INFO - [trading.py] last_ma5: 41020.0, last_ma20: 39800.0, last_ma60: 38105.0, last_ma120: 37064.583333333336
+2025-07-07 17:11:32 - KiwoomTrading - INFO - detect_golden_cross > code : 022100
+2025-07-07 17:11:32 - KiwoomTrading - INFO - [trading.py] recent:            일자    현재가      MA5     MA20          MA60         MA120
+478  20250703  24450  23810.0  23582.5  23498.333333  23084.833333
+479  20250704  24400  23980.0  23675.0  23501.666667  23119.833333
+480  20250707  23800  24050.0  23757.5  23510.000000  23146.916667
+2025-07-07 17:11:32 - KiwoomTrading - INFO - [trading.py] ma5s: [23810.0, 23980.0, 24050.0]
+2025-07-07 17:11:32 - KiwoomTrading - INFO - [trading.py] last_ma5: 24050.0, last_ma20: 23757.5, last_ma60: 23510.0, last_ma120: 23146.916666666668
+2025-07-07 17:11:32 - KiwoomTrading - INFO - detect_golden_cross > code : 003670
+2025-07-07 17:11:32 - KiwoomTrading - INFO - [trading.py] recent:            일자     현재가       MA5       MA20           MA60          MA120
+478  20250703  130300  126460.0  123870.00  118759.733333  126807.600000
+479  20250704  131200  127980.0  124662.65  118980.333333  126719.191667
+480  20250707  126600  128020.0  125293.15  119230.900000  126565.800000
+2025-07-07 17:11:32 - KiwoomTrading - INFO - [trading.py] ma5s: [126460.0, 127980.0, 128020.0]
+2025-07-07 17:11:32 - KiwoomTrading - INFO - [trading.py] last_ma5: 128020.0, last_ma20: 125293.15, last_ma60: 119230.9, last_ma120: 126565.8
+2025-07-07 17:19:23 - KiwoomTrading - INFO - detect_golden_cross > code : 448330
+2025-07-07 17:19:23 - KiwoomTrading - INFO - [trading.py] recent:            일자    현재가      MA5      MA20          MA60         MA120
+478  20250703  11110  10958.0  10860.75  10698.633333  10607.825000
+479  20250704  11075  10988.0  10873.25  10706.633333  10613.391667
+480  20250707  10990  11008.0  10878.75  10715.700000  10617.716667
+2025-07-07 17:19:23 - KiwoomTrading - INFO - [trading.py] ma5s: [10958.0, 10988.0, 11008.0]
+2025-07-07 17:19:23 - KiwoomTrading - INFO - [trading.py] last_ma5: 11008.0, last_ma20: 10878.75, last_ma60: 10715.7, last_ma120: 10617.716666666667
+2025-07-07 17:19:24 - KiwoomTrading - INFO - detect_golden_cross > code : 005935
+2025-07-07 17:19:24 - KiwoomTrading - INFO - [trading.py] recent:            일자    현재가      MA5     MA20          MA60         MA120
+478  20250703  52900  50760.0  49247.5  47050.000000  46620.833333
+479  20250704  52700  51180.0  49457.5  47153.333333  46684.166667
+480  20250707  51300  51540.0  49572.5  47274.166667  46724.583333
+2025-07-07 17:19:24 - KiwoomTrading - INFO - [trading.py] ma5s: [50760.0, 51180.0, 51540.0]
+2025-07-07 17:19:24 - KiwoomTrading - INFO - [trading.py] last_ma5: 51540.0, last_ma20: 49572.5, last_ma60: 47274.166666666664, last_ma120: 46724.583333333336
+2025-07-07 17:19:24 - KiwoomTrading - INFO - detect_golden_cross > code : 900110
+2025-07-07 17:19:24 - KiwoomTrading - INFO - [trading.py] recent:            일자  현재가   MA5   MA20   MA60      MA120
+478  20250703   91  64.8  57.90  51.00  51.650000
+479  20250704  118  77.4  61.45  52.15  52.125000
+480  20250707  112  89.0  64.70  53.25  52.541667
+2025-07-07 17:19:24 - KiwoomTrading - INFO - [trading.py] ma5s: [64.8, 77.4, 89.0]
+2025-07-07 17:19:24 - KiwoomTrading - INFO - [trading.py] last_ma5: 89.0, last_ma20: 64.7, last_ma60: 53.25, last_ma120: 52.541666666666664
+2025-07-07 17:19:25 - KiwoomTrading - INFO - detect_golden_cross > code : 047050
+2025-07-07 17:19:25 - KiwoomTrading - INFO - [trading.py] recent:            일자    현재가      MA5     MA20          MA60         MA120
+478  20250703  51000  49450.0  50185.0  49537.500000  48718.333333
+479  20250704  52000  50180.0  50260.0  49603.333333  48802.500000
+480  20250707  49850  50210.0  50182.5  49700.833333  48868.333333
+2025-07-07 17:19:25 - KiwoomTrading - INFO - [trading.py] ma5s: [49450.0, 50180.0, 50210.0]
+2025-07-07 17:19:25 - KiwoomTrading - INFO - [trading.py] last_ma5: 50210.0, last_ma20: 50182.5, last_ma60: 49700.833333333336, last_ma120: 48868.333333333336
+2025-07-07 17:19:25 - KiwoomTrading - INFO - detect_golden_cross > code : 058430
+2025-07-07 17:19:25 - KiwoomTrading - INFO - [trading.py] recent:            일자    현재가      MA5     MA20          MA60         MA120
+478  20250703  41500  39840.0  39442.5  37888.333333  36845.833333
+479  20250704  42250  40600.0  39652.5  37974.166667  36958.333333
+480  20250707  41500  41020.0  39800.0  38105.000000  37064.583333
+2025-07-07 17:19:25 - KiwoomTrading - INFO - [trading.py] ma5s: [39840.0, 40600.0, 41020.0]
+2025-07-07 17:19:25 - KiwoomTrading - INFO - [trading.py] last_ma5: 41020.0, last_ma20: 39800.0, last_ma60: 38105.0, last_ma120: 37064.583333333336
+2025-07-07 17:19:26 - KiwoomTrading - INFO - detect_golden_cross > code : 022100
+2025-07-07 17:19:26 - KiwoomTrading - INFO - [trading.py] recent:            일자    현재가      MA5     MA20          MA60         MA120
+478  20250703  24450  23810.0  23582.5  23498.333333  23084.833333
+479  20250704  24400  23980.0  23675.0  23501.666667  23119.833333
+480  20250707  23800  24050.0  23757.5  23510.000000  23146.916667
+2025-07-07 17:19:26 - KiwoomTrading - INFO - [trading.py] ma5s: [23810.0, 23980.0, 24050.0]
+2025-07-07 17:19:26 - KiwoomTrading - INFO - [trading.py] last_ma5: 24050.0, last_ma20: 23757.5, last_ma60: 23510.0, last_ma120: 23146.916666666668
+2025-07-07 17:19:26 - KiwoomTrading - INFO - detect_golden_cross > code : 003670
+2025-07-07 17:19:26 - KiwoomTrading - INFO - [trading.py] recent:            일자     현재가       MA5       MA20           MA60          MA120
+478  20250703  130300  126460.0  123870.00  118759.733333  126807.600000
+479  20250704  131200  127980.0  124662.65  118980.333333  126719.191667
+480  20250707  126600  128020.0  125293.15  119230.900000  126565.800000
+2025-07-07 17:19:26 - KiwoomTrading - INFO - [trading.py] ma5s: [126460.0, 127980.0, 128020.0]
+2025-07-07 17:19:26 - KiwoomTrading - INFO - [trading.py] last_ma5: 128020.0, last_ma20: 125293.15, last_ma60: 119230.9, last_ma120: 126565.8
