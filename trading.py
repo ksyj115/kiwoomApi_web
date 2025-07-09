@@ -5,11 +5,12 @@ from logger import logger
 import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import datetime
+from dotenv import load_dotenv
 import os
 from openai import OpenAI
-from news_crawler import search_naver_news_and_extract_content
-from gpt_handler import ask_gpt_invest_weather
 from google_news_scraper import get_google_news_snippets
+
+load_dotenv(dotenv_path="env_template.env")  # 파일 경로 직접 지정
 
 logger = logging.getLogger("KiwoomTrading")
 
@@ -282,11 +283,11 @@ class Trading:
         df['MA120'] = df['현재가'].rolling(window=120).mean()
 
         df = df.dropna().reset_index(drop=True)
-        if len(df) < 3:
+        if len(df) < 5:
             return {'code': code, 'golden_cross': 'N', 'reason': 'not enough data'}
 
-        # 최근 3일 기준 분석
-        recent = df.iloc[-3:].copy()
+        # 최근 5영업일 기준 분석
+        recent = df.iloc[-5:].copy()
         logger.info(f"[trading.py] recent: {recent}")
 
         ma5s = recent['MA5'].tolist()
@@ -302,40 +303,54 @@ class Trading:
         long_ma_candidates = [last_ma20, last_ma60, last_ma120]
         diffs = [abs(last_ma5 - x) for x in long_ma_candidates]
         min_idx = diffs.index(min(diffs))
+
+        closest_ma_nm = ''
+        if min_idx == 0:
+            closest_ma_nm = 'MA20'
+        elif min_idx == 1:
+            closest_ma_nm = 'MA60'
+        elif min_idx == 2:
+            closest_ma_nm = 'MA120'
+
         closest_ma = long_ma_candidates[min_idx]
 
         # 조건 체크
-        # 가장 가까운 장기이평선 밑으로 1% 이내에 접근한 상태.          또는    가장 가까운 장기이평선 위로 1% 이내로 상승한 상태.
-        cond1 = (abs(last_ma5 - closest_ma) / closest_ma <= 0.01) or ((last_ma5 - closest_ma) / closest_ma <= 0.01)
+        # 가장 가까운 장기이평선 밑으로 3% 이내에 접근한 상태.          또는    가장 가까운 장기이평선 위로 3% 이내로 상승한 상태.
+        cond1 = (abs(last_ma5 - closest_ma) / closest_ma <= 0.03) or ((last_ma5 - closest_ma) / closest_ma <= 0.03)
         # 3영업일 전 5일선이 최근 3일간 5일선 가격 중 가장 낮아야 함.
-        cond2 = recent['MA5'].iloc[0] == min(ma5s)
+        cond2 = recent['MA5'].iloc[0] == min(ma5s) or recent['MA5'].iloc[1] == min(ma5s)
         # 2영업일 전 5일선이 가장 최근 5일선 가격 보다 낮아야 함.
-        cond3 = recent['MA5'].iloc[1] < recent['MA5'].iloc[2]
+        cond3 = recent['MA5'].iloc[3] < recent['MA5'].iloc[4]
         # 가장 최근 5일선 가격이 가장 높아야 함.
-        cond4 = recent['MA5'].iloc[2] == max(ma5s)
+        cond4 = recent['MA5'].iloc[4] == max(ma5s)
         # 3영업일 전 5일선은 가장 가까운 장기이평선 가격과 1% 이상의 차이로 하락한 상태.
-        cond5 = recent['MA5'].iloc[0] < closest_ma and (abs(recent['MA5'].iloc[0] - closest_ma) / closest_ma > 0.01)
+        # cond5 = recent['MA5'].iloc[0] < closest_ma and (abs(recent['MA5'].iloc[0] - closest_ma) / closest_ma > 0.01)
+        cond5 = ( (last_ma5 - closest_ma) <= 0 and recent['MA5'].iloc[0] < recent[closest_ma_nm].iloc[0] ) or ((last_ma5 - closest_ma) > 0 and (recent['MA5'].iloc[0] < recent[closest_ma_nm].iloc[0] or recent['MA5'].iloc[0] == recent[closest_ma_nm].iloc[0]))
 
-        all_conditions = all([cond1, cond2, cond3, cond4, cond5])   # 가장 이상적인 골든크로스(기대) 상태
-        conditions = all([cond3, cond4, cond5])
+        all_conditions = all([cond1, cond2, cond3, cond4, cond5])   # 골든크로스(기대) 상태 1
+        conditions = all([cond1, cond3, cond4, cond5])   # 골든크로스(기대) 상태 2
 
-        all_etc = ''
+        comment = ''
         if (last_ma5 - closest_ma) > 0 and ((last_ma5 - closest_ma) / closest_ma <= 0.01) and all_conditions:
-            all_etc = '골든크로스 돌파! 5일선 추가 1% 상승전! (강력)매수 고려.'
+            comment = '골든크로스 돌파! 5일선 추가 1% 상승전! (강력)매수 고려.'
         elif (last_ma5 - closest_ma) > 0 and ((last_ma5 - closest_ma) / closest_ma <= 0.02) and all_conditions:
-            all_etc = '골든크로스 돌파! 5일선 추가 2% 상승전! (강력)후발 매수 고려.'
+            comment = '골든크로스 돌파! 5일선 추가 2% 상승전! (강력)후발 매수 고려.'
         elif (last_ma5 - closest_ma) > 0 and ((last_ma5 - closest_ma) / closest_ma <= 0.03) and all_conditions:
-            all_etc = '골든크로스 돌파! 5일선 추가 3% 상승전! 차익 실현 조심하며 (눌림목)후발 매수 고려.'
+            comment = '골든크로스 돌파! 5일선 추가 3% 상승전! 차익 실현 조심하며 (눌림목)후발 매수 고려.'
         elif (last_ma5 - closest_ma) == 0 and conditions:
-            all_etc = '골든크로스 발생! (골든크로스 돌파 확인하며 분할)매수.'
+            comment = '골든크로스 발생! (골든크로스 돌파 확인하며 분할)매수.'
         elif (last_ma5 - closest_ma) < 0 and (abs(last_ma5 - closest_ma) / closest_ma <= 0.01) and conditions:
-            all_etc = '골든크로스 발생 전 (1% 이내 근접). 매수 준비 고려.'
+            comment = '골든크로스 발생 전 (1% 이내 근접). 매수 준비 고려.'
         elif (last_ma5 - closest_ma) < 0 and (abs(last_ma5 - closest_ma) / closest_ma <= 0.02) and conditions:
-            all_etc = '골든크로스 발생 전 (2% 이내 근접). 골든크로스 시도 지켜볼 것.'
+            comment = '골든크로스 발생 전 (2% 이내 근접). 골든크로스 시도 지켜볼 것.'
         elif (last_ma5 - closest_ma) < 0 and (abs(last_ma5 - closest_ma) / closest_ma <= 0.03) and conditions:
-            all_etc = '골든크로스 발생 전 (3% 이내 근접). 골든크로스 시도 지켜볼 것.'
+            comment = '골든크로스 발생 전 (3% 이내 근접). 골든크로스 시도 지켜볼 것.'
+        elif (last_ma5 - closest_ma) > 0:
+            comment = f'5일선 가까운 이평선 위로 {round( ((last_ma5 - closest_ma) / closest_ma) * 100, 1)}% 상위'
+        elif (last_ma5 - closest_ma) < 0:
+            comment = f'5일선 가까운 이평선 아래로 {round( (abs(last_ma5 - closest_ma) / closest_ma) * 100, 1)}% 하위'
 
-        return {'code': code, 'golden_cross': 'Y' if all_conditions else 'N', 'etc':all_etc}
+        return {'code': code, 'golden_cross': 'Y' if all_conditions else 'N', 'comment':comment}
 
     def search_stock_by_name(self, keyword):
         kospi_codes = self.api.ocx.dynamicCall("GetCodeListByMarket(QString)", ["0"]).split(';')
@@ -357,23 +372,19 @@ class Trading:
 
         news = get_google_news_snippets("미국 증시", count=5)
 
-        system_msg = "너는 투자 전문가야. 다음 뉴스들을 참고해서 오늘의 증시 분위기와 단기 매매 진입 가능성을 간결히 판단해줘."
+        system_msg = "주식 투자자의 입장으로써 질문할게. 현재 시간 기준으로 미국 증시의 악재 및 호재 등 이슈가 되는 뉴스를 알려주고, 이로 인한 한국 증시의 영향(또는 미국 증시와 별개로 한국 증시의 (악재, 호재)이슈)을 알려줘. 다음 뉴스들은 너가 참고할 수 있게 내가 추가한 것들이야. 목적은 증시 분위기를 통해 매매 진입 하기에 매력이 있는 상황인지 알려줘."
 
         user_prompt = f"""
-            다음은 오늘의 증시 관련 주요 뉴스들이야:    
+            다음은 너가 참고할 수 있도록 추가한 오늘의 증시 관련 주요 뉴스들이야 (내가 추가한 뉴스 외에도 중요한 뉴스가 있다면 포함해줘.):    
             {news}
             ---
 
-            뉴스를 기반으로 아래 내용을 포함해서 분석해줘:
+            (내가 추가한 뉴스 및 그 밖에 증시에 중요한 뉴스)를 기반으로 아래 내용을 포함해서 분석해줘:
             - 거시경제 흐름
             - 주요 뉴스/리스크 요약
             - 투자 심리가 긍정적인지 부정적인지
-            - 오늘 단기 매매 진입에 대해 추천하는지 여부
-
-            예시 형식:
-            ---
-            - 전체적으로 투자 분위기는 긍정적입니다.
-            - 오늘은 단기 매매 진입을 고려해볼 수 있습니다.
+            - 오늘 (단기 또는 스윙) 매매 진입에 대해 추천하는지 여부 (예시 => [투자 날씨 맑음 : 매수 적극 권장, 투자 날씨 보통 : 차익 실현 주의하며 눌림목 매수 권장, 투자 날씨 흐림 : 매수 피하고 차익실현 권장, 투자 날씨 비 : 전체 현금화 권장] 등)
+            - 마지막에는 오늘 투자 진입하기에 좋은지 여부에 따라 ["positive", "negative"] 중 1개의 단어를 달아줘.
             """
 
         try:
@@ -390,7 +401,7 @@ class Trading:
             answer = response.choices[0].message.content.strip()
 
             # 투자 분위기 방향성 추론
-            positive_keywords = ['긍정', '추천', '진입 가능', '괜찮', '투자해볼']
+            positive_keywords = ['positive']
             direction = "negative"
             for word in positive_keywords:
                 if word in answer:
@@ -403,42 +414,6 @@ class Trading:
             from logger import logger
             logger.error(f"GPT API 호출 오류: {e}")
             return {"answer": "❌ GPT 응답 중 오류가 발생했습니다.", "direction": "negative"}
-
-    def run_daily_weather_check(self):
-        try:
-            titles = self.get_market_news_titles()
-
-            logger.info(f"titles : [{titles}]")
-
-            if not titles:
-                return {"answer": "❌ 뉴스 제목 조회 실패", "direction": "negative"}
-
-            articles = [search_naver_news_and_extract_content(t) for t in titles]
-            if not any(articles):
-                return {"answer": "❌ 뉴스 본문 수집 실패", "direction": "negative"}
-
-            gpt_result = ask_gpt_invest_weather(articles)
-
-            # 방향성 판별
-            if any(kw in gpt_result for kw in ["맑음", "추천", "긍정", "진입"]):
-                direction = "positive"
-            else:
-                direction = "negative"
-
-            return {"answer": gpt_result, "direction": direction}
-
-        except Exception as e:
-            logger.error(f"투자 날씨 예보 처리 중 오류: {e}")
-            return {"answer": "❌ GPT 처리 중 오류 발생", "direction": "negative"}
-
-    def get_market_news_titles(self, count=5):
-        self.tr_data.pop("OPT10051", None)
-        self.api.ocx.SetInputValue("종목코드", "")  # 전체 뉴스
-        self.api.ocx.CommRqData("market_news_req", "OPT10051", 0, "9999")
-        self.tr_event_loop.exec_()
-        
-        news_items = self.tr_data.get("OPT10051", [])
-        return [item["title"] for item in news_items[:count]]
 
     def get_google_news_test(self):
         try:

@@ -16,33 +16,14 @@
     <button class="btn btn-primary" onclick="location.href='/'">내 현황 홈</button>
     <button class="btn btn-primary" onclick="location.href='/index2'">종목 발굴</button>
     <button class="btn btn-primary" onclick="location.href='/index3'">투자 날씨</button>
-    <button class="btn btn-primary" onclick="location.href='/index4'">투자 날씨2</button>
+    <button class="btn btn-primary" onclick="location.href='/index4'">뉴스</button>
 
-    <button onclick="getInvestNewsWeather()">📊 증시 정보 기반 투자 날씨</button>
-
-    <div id="news-gpt-result"></div>
-    <img id="news-weather-img" src="" style="width:100px; display:none;" />
-
-    <button onclick="getGoogleNewsTest()">📰 테스트: 구글 뉴스 가져오기</button>
+    <br/><br/>
+    <button onclick="getGoogleNewsTest()">📰 구글 뉴스 가져오기</button>
 
     <pre id="google-news-result"></pre>
     
     <script>
-        async function getInvestNewsWeather() {
-            const res = await fetch("/get_invest_weather_news");
-            const data = await res.json();
-        
-            document.getElementById("news-gpt-result").innerText = data.answer;
-        
-            const img = document.getElementById("news-weather-img");
-            if (data.direction === "positive") {
-                img.src = "/static/sunny.png";
-            } else {
-                img.src = "/static/cloudy.png";
-            }
-            img.style.display = "block";
-        }
-
         async function getGoogleNewsTest() {
             const res = await fetch("/get_google_news_test");
             const data = await res.json();

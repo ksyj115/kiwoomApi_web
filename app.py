@@ -225,22 +225,14 @@ def api_search_stock():
 def get_weather():
     request_queue.put("get_invest_weather")
     waited = 0
-    while waited < 10:
-        if not response_queue.empty():
-            return jsonify(response_queue.get())
-        time.sleep(0.1)
-        waited += 0.1
-    return jsonify({"error": "timeout"})
+    timeout = 30  # ✅ 최대 30초까지 기다리도록 설정
 
-@app.route('/get_invest_weather_news')
-def get_invest_weather_news():
-    request_queue.put("get_invest_weather_news")
-    waited = 0
-    while waited < 10:
+    while waited < timeout:
         if not response_queue.empty():
             return jsonify(response_queue.get())
         time.sleep(0.1)
         waited += 0.1
+
     return jsonify({"error": "timeout"})
 
 @app.route('/get_google_news_test')

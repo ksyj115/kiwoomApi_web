@@ -90,7 +90,7 @@
   <button class="btn btn-primary" onclick="location.href='/'">내 현황 홈</button>
   <button class="btn btn-primary" onclick="location.href='/index2'">종목 발굴</button>
   <button class="btn btn-primary" onclick="location.href='/index3'">투자 날씨</button>
-  <button class="btn btn-primary" onclick="location.href='/index4'">투자 날씨2</button>
+  <button class="btn btn-primary" onclick="location.href='/index4'">뉴스</button>
 
   <div class="container">
     <div id="output-holdings" class="card p-3 mt-3 shadow-sm" style="display: none;"></div>
@@ -141,6 +141,62 @@
     CSV 파일 업로드
     <br>
     <input type="file" id="csv-basket-upload" class="form-control form-control-sm mt-2" accept=".csv" onchange="uploadBasket(event)">
+  </div>
+
+    <!-- 매수 모달 -->
+    <div class="modal fade" id="buyModal" tabindex="-1">
+      <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+          <h5 class="modal-title">📥 종목 매수</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+          <p id="buyStockInfo"></p>
+          <input type="hidden" id="buyCode">
+          <div class="mb-3">
+              <label>매수 가격</label>
+              <input type="number" id="buyPrice" class="form-control">
+          </div>
+          <div class="mb-3">
+              <label>매수 수량</label>
+              <input type="number" id="buyQty" class="form-control">
+          </div>
+          </div>
+          <div class="modal-footer">
+          <button class="btn btn-primary" onclick="submitBuyOrder()">매수</button>
+          <button class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+          </div>
+      </div>
+      </div>
+  </div>
+    
+  <!-- 매도 모달 -->
+  <div class="modal fade" id="sellModal" tabindex="-1">
+      <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+          <h5 class="modal-title">📤 종목 매도</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+          <p id="sellStockInfo"></p>
+          <input type="hidden" id="sellCode">
+          <div class="mb-3">
+              <label>매도 가격</label>
+              <input type="number" id="sellPrice" class="form-control">
+          </div>
+          <div class="mb-3">
+              <label>매도 수량</label>
+              <input type="number" id="sellQty" class="form-control">
+          </div>
+          </div>
+          <div class="modal-footer">
+          <button class="btn btn-danger" onclick="submitSellOrder()">매도</button>
+          <button class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+          </div>
+      </div>
+      </div>
   </div>
 
   <script>
@@ -572,19 +628,20 @@
 
       resultDiv.innerHTML = ""; // 결과 초기화
 
-      basket.forEach(item => {
+      for (const item of basket) {
         const str = item;
         const lastBracketIndex = str.lastIndexOf("[");
         const code = str.substring(lastBracketIndex + 1, str.length - 1);
-        console.log("code : "+code);
+        console.log("code : " + code);
 
-        fetch('/detect-golden-cross', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ "code": code })
-        })
-        .then(res => res.json())
-        .then(data => {
+        try {
+          const res = await fetch('/detect-golden-cross', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ "code": code })
+          });
+          const data = await res.json();
+
           console.log("✅ 골든크로스 결과:", data);
 
           const box = document.createElement("div");
@@ -600,7 +657,7 @@
             result.innerHTML = `<span class="text-muted">✖ 조건 미충족</span>`;
           }
 
-          result.innerHTML += `<br><span class="text-muted">${data.etc}</span>`;
+          result.innerHTML += `<br><span class="text-muted">${data.comment || ""}</span>`;
 
           if (data.reason) {
             const reason = document.createElement("div");
@@ -612,14 +669,14 @@
           box.appendChild(title);
           box.appendChild(result);
           resultDiv.appendChild(box);
-        })
-        .catch(err => {
+
+        } catch (err) {
           const errorBox = document.createElement("div");
           errorBox.className = "border p-2 mb-2 text-danger";
           errorBox.innerHTML = `<strong>${item}</strong> → 오류 발생: ${err}`;
           resultDiv.appendChild(errorBox);
-        });
-      });
+        }
+      }
     }
 
 
@@ -647,6 +704,74 @@
     window.addEventListener("load", function () {
       renderWatchlist();
       renderBasket();
+    });
+
+    function openBuyModal(code, name, price) {
+        document.getElementById("buyStockInfo").innerText = `${code} (${name}) 현재가: ${Number(price).toLocaleString()} 원`;
+        document.getElementById("buyCode").value = code;
+        document.getElementById("buyPrice").value = price;
+        document.getElementById("buyQty").value = "";
+        new bootstrap.Modal(document.getElementById("buyModal")).show();
+    }
+
+    function openSellModal(code, name, price) {
+        document.getElementById("sellStockInfo").innerText = `${code} (${name}) 현재가: ${Number(price).toLocaleString()} 원`;
+        document.getElementById("sellCode").value = code;
+        document.getElementById("sellPrice").value = price;
+        document.getElementById("sellQty").value = "";
+        new bootstrap.Modal(document.getElementById("sellModal")).show();
+    }
+
+    function submitBuyOrder() {
+        const code = document.getElementById("buyCode").value;
+        const price = parseInt(document.getElementById("buyPrice").value);
+        const qty = parseInt(document.getElementById("buyQty").value);
+
+        fetch("/api/buy", {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ code, price, qty })
+        })
+        .then(res => res.json())
+        .then(data => {
+            alert(data.message || JSON.stringify(data));
+            bootstrap.Modal.getInstance(document.getElementById("buyModal")).hide();
+        });
+    }
+
+    function submitSellOrder() {
+        const code = document.getElementById("sellCode").value;
+        const price = parseInt(document.getElementById("sellPrice").value);
+        const qty = parseInt(document.getElementById("sellQty").value);
+
+        fetch("/api/sell", {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ code, price, qty })
+        })
+        .then(res => res.json())
+        .then(data => {
+            alert(data.message || JSON.stringify(data));
+            bootstrap.Modal.getInstance(document.getElementById("sellModal")).hide();
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("click", function (e) {
+            const buyBtn = e.target.closest(".buy-btn");
+            const sellBtn = e.target.closest(".sell-btn");
+            if (buyBtn) {
+                const code = buyBtn.dataset.code;
+                const name = buyBtn.dataset.name;
+                const price = buyBtn.dataset.price;
+                openBuyModal(code, name, price);
+            } else if (sellBtn) {
+                const code = sellBtn.dataset.code;
+                const name = sellBtn.dataset.name;
+                const price = sellBtn.dataset.price;
+                openSellModal(code, name, price);
+            }
+        });
     });
   </script>
 </body>

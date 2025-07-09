@@ -20,7 +20,7 @@
     <button class="btn btn-primary" onclick="location.href='/'">내 현황 홈</button>
     <button class="btn btn-primary" onclick="location.href='/index2'">종목 발굴</button>
     <button class="btn btn-primary" onclick="location.href='/index3'">투자 날씨</button>
-    <button class="btn btn-primary" onclick="location.href='/index4'">투자 날씨2</button>
+    <button class="btn btn-primary" onclick="location.href='/index4'">뉴스</button>
     <br/><br/>
 
     <div class="container">
@@ -44,12 +44,6 @@
         <div id="output-unfilledOrders" class="card p-3 mt-3 shadow-sm" style="display: none;"></div>
     </div>
 
-    <br/><br/><br/><br/><br/><br/>
-    <div class="container mt-5">
-        <h2 class="mb-4">📈 거래량 상위 50종목</h2>
-        <button class="btn btn-success" onclick="fetchVolumeLeaders()">조회하기</button>
-        <div id="output-volume" class="card p-3 mt-3 shadow-sm" style="display: none;"></div>
-    </div>
     <br/><br/>
     <div class="container mt-5">
         <h2 class="mb-4">RSI 테스트 조회</h2>
@@ -62,8 +56,6 @@
         <button class="btn btn-success" onclick="getMovingAverage()">이동평균선 조회하기</button>
         <div id="output-moving-average" class="card p-3 mt-3 shadow-sm" style="display: none;"></div>
     </div>
-
-    <button onclick="checkGoldenCross()">골든크로스 탐색</button>
 
     <div class="container mt-5">
         <h2 class="mb-4">차트</h2>
@@ -292,77 +284,6 @@
                 el.innerHTML = `<p class="text-danger">❌ 오류 발생: ${err}</p>`;
             }
         }
-    
-        async function fetchVolumeLeaders() {
-            const el = document.getElementById("output-volume");
-            el.innerHTML = "<p>📡 조회 중입니다...</p>";
-            el.style.display = "block";
-
-            try {
-                // ✅ 먼저 holdings 로딩 완료까지 기다림
-                await fetchHoldings();
-
-                // ✅ 그 다음 volume 데이터 fetch
-                const res = await fetch("/api/volume-leaders");
-                const data = await res.json();
-
-                if (data.error) {
-                    el.innerHTML = `<p class="text-danger">❌ ${data.error}</p>`;
-                    return;
-                }
-
-                let html = `
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>종목코드</th>
-                                <th>종목명</th>
-                                <th>현재가</th>
-                                <th>거래량</th>
-                                <th>거래금액</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>`;
-
-                data.stocks.forEach(stock => {
-                    const isOwned = myHoldings.includes(stock.code);
-                    if (isOwned) {
-                        console.log("✅ 보유 종목 매칭:", stock.code, stock.name);
-                    }
-
-                    html += `
-                        <tr>
-                            <td>${stock.code}</td>
-                            <td>${stock.name}</td>
-                            <td>${Math.abs(Number(stock.price)).toLocaleString()} 원</td>
-                            <td>${Number(stock.vol).toLocaleString()} 주</td>
-                            <td>${Number(stock.amount).toLocaleString()} (백만)원</td>
-                            <td>
-                                <button class="btn btn-sm btn-outline-primary buy-btn"
-                                        data-code="${stock.code}"
-                                        data-name="${stock.name}"
-                                        data-price="${stock.price}">
-                                    구매
-                                </button>
-                                ${isOwned ? `
-                                <button class="btn btn-sm btn-outline-danger ms-2 sell-btn"
-                                        data-code="${stock.code}"
-                                        data-name="${stock.name}"
-                                        data-price="${stock.price}">
-                                    매도
-                                </button>` : ""}
-                            </td>
-                        </tr>`;
-                });
-
-                html += `</tbody></table>`;
-                el.innerHTML = html;
-            } catch (err) {
-                console.error("📛 fetchVolumeLeaders 에러:", err);
-                el.innerHTML = `<p class="text-danger">❌ 오류 발생: ${err}</p>`;
-            }
-        }
 
         function getRsiData() {
             fetch('/get-rsi-data', {
@@ -479,24 +400,6 @@
         });
         }
 
-        function checkGoldenCross() {
-            // const codes = ["005930", "000660", "036830", "064760", "052690", "025770"];  // 예시: 삼성전자, SK하이닉스 ...
-
-            fetch('/detect-golden-cross', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ code: "005490" })
-            })
-            .then(res => res.json())
-            .then(data => {
-                console.log("🔍 골든크로스 탐색 결과:", data);
-                alert(JSON.stringify(data, null, 2));
-            })
-            .catch(err => {
-                console.error("에러 발생:", err);
-            });
-        }
-
         let chartInstance;
         async function loadChart() {
             const res = await fetch('/api/chart-data');
@@ -528,74 +431,6 @@
                 }
             });
         }
-
-        function openBuyModal(code, name, price) {
-            document.getElementById("buyStockInfo").innerText = `${code} (${name}) 현재가: ${Number(price).toLocaleString()} 원`;
-            document.getElementById("buyCode").value = code;
-            document.getElementById("buyPrice").value = price;
-            document.getElementById("buyQty").value = "";
-            new bootstrap.Modal(document.getElementById("buyModal")).show();
-        }
-
-        function openSellModal(code, name, price) {
-            document.getElementById("sellStockInfo").innerText = `${code} (${name}) 현재가: ${Number(price).toLocaleString()} 원`;
-            document.getElementById("sellCode").value = code;
-            document.getElementById("sellPrice").value = price;
-            document.getElementById("sellQty").value = "";
-            new bootstrap.Modal(document.getElementById("sellModal")).show();
-        }
-
-        function submitBuyOrder() {
-            const code = document.getElementById("buyCode").value;
-            const price = parseInt(document.getElementById("buyPrice").value);
-            const qty = parseInt(document.getElementById("buyQty").value);
-
-            fetch("/api/buy", {
-                method: "POST",
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ code, price, qty })
-            })
-            .then(res => res.json())
-            .then(data => {
-                alert(data.message || JSON.stringify(data));
-                bootstrap.Modal.getInstance(document.getElementById("buyModal")).hide();
-            });
-        }
-
-        function submitSellOrder() {
-            const code = document.getElementById("sellCode").value;
-            const price = parseInt(document.getElementById("sellPrice").value);
-            const qty = parseInt(document.getElementById("sellQty").value);
-
-            fetch("/api/sell", {
-                method: "POST",
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ code, price, qty })
-            })
-            .then(res => res.json())
-            .then(data => {
-                alert(data.message || JSON.stringify(data));
-                bootstrap.Modal.getInstance(document.getElementById("sellModal")).hide();
-            });
-        }
-
-        document.addEventListener("DOMContentLoaded", function () {
-            document.addEventListener("click", function (e) {
-                const buyBtn = e.target.closest(".buy-btn");
-                const sellBtn = e.target.closest(".sell-btn");
-                if (buyBtn) {
-                    const code = buyBtn.dataset.code;
-                    const name = buyBtn.dataset.name;
-                    const price = buyBtn.dataset.price;
-                    openBuyModal(code, name, price);
-                } else if (sellBtn) {
-                    const code = sellBtn.dataset.code;
-                    const name = sellBtn.dataset.name;
-                    const price = sellBtn.dataset.price;
-                    openSellModal(code, name, price);
-                }
-            });
-        });
     </script>
 </body>
 </html>
