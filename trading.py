@@ -5,6 +5,11 @@ from logger import logger
 import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import datetime
+import os
+from openai import OpenAI
+from news_crawler import search_naver_news_and_extract_content
+from gpt_handler import ask_gpt_invest_weather
+from google_news_scraper import get_google_news_snippets
 
 logger = logging.getLogger("KiwoomTrading")
 
@@ -347,6 +352,103 @@ class Trading:
 
         return result[:20]
 
+    def ask_gpt_for_invest_weather(self):
+        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+        news = get_google_news_snippets("미국 증시", count=5)
+
+        system_msg = "너는 투자 전문가야. 다음 뉴스들을 참고해서 오늘의 증시 분위기와 단기 매매 진입 가능성을 간결히 판단해줘."
+
+        user_prompt = f"""
+            다음은 오늘의 증시 관련 주요 뉴스들이야:    
+            {news}
+            ---
+
+            뉴스를 기반으로 아래 내용을 포함해서 분석해줘:
+            - 거시경제 흐름
+            - 주요 뉴스/리스크 요약
+            - 투자 심리가 긍정적인지 부정적인지
+            - 오늘 단기 매매 진입에 대해 추천하는지 여부
+
+            예시 형식:
+            ---
+            - 전체적으로 투자 분위기는 긍정적입니다.
+            - 오늘은 단기 매매 진입을 고려해볼 수 있습니다.
+            """
+
+        try:
+            response = client.chat.completions.create(
+                model="gpt-4o",
+                messages=[
+                    {"role": "system", "content": system_msg},
+                    {"role": "user", "content": user_prompt}
+                ],
+                temperature=0.7,
+                max_tokens=600
+            )
+
+            answer = response.choices[0].message.content.strip()
+
+            # 투자 분위기 방향성 추론
+            positive_keywords = ['긍정', '추천', '진입 가능', '괜찮', '투자해볼']
+            direction = "negative"
+            for word in positive_keywords:
+                if word in answer:
+                    direction = "positive"
+                    break
+
+            return {"answer": answer, "direction": direction}
+
+        except Exception as e:
+            from logger import logger
+            logger.error(f"GPT API 호출 오류: {e}")
+            return {"answer": "❌ GPT 응답 중 오류가 발생했습니다.", "direction": "negative"}
+
+    def run_daily_weather_check(self):
+        try:
+            titles = self.get_market_news_titles()
+
+            logger.info(f"titles : [{titles}]")
+
+            if not titles:
+                return {"answer": "❌ 뉴스 제목 조회 실패", "direction": "negative"}
+
+            articles = [search_naver_news_and_extract_content(t) for t in titles]
+            if not any(articles):
+                return {"answer": "❌ 뉴스 본문 수집 실패", "direction": "negative"}
+
+            gpt_result = ask_gpt_invest_weather(articles)
+
+            # 방향성 판별
+            if any(kw in gpt_result for kw in ["맑음", "추천", "긍정", "진입"]):
+                direction = "positive"
+            else:
+                direction = "negative"
+
+            return {"answer": gpt_result, "direction": direction}
+
+        except Exception as e:
+            logger.error(f"투자 날씨 예보 처리 중 오류: {e}")
+            return {"answer": "❌ GPT 처리 중 오류 발생", "direction": "negative"}
+
+    def get_market_news_titles(self, count=5):
+        self.tr_data.pop("OPT10051", None)
+        self.api.ocx.SetInputValue("종목코드", "")  # 전체 뉴스
+        self.api.ocx.CommRqData("market_news_req", "OPT10051", 0, "9999")
+        self.tr_event_loop.exec_()
+        
+        news_items = self.tr_data.get("OPT10051", [])
+        return [item["title"] for item in news_items[:count]]
+
+    def get_google_news_test(self):
+        try:
+            news = get_google_news_snippets("미국 증시", count=5)
+            return news
+        except Exception as e:
+            from logger import logger
+            logger.error(f"[Google 뉴스 테스트 오류] {e}")
+            return {"error": str(e)}
+
     def _on_receive_tr_data(self, screen_no, rqname, trcode, recordname, prev_next, data_len, error_code, message, splm_msg):
         try:
             if rqname == "opw00018_req":
@@ -481,6 +583,15 @@ class Trading:
                         continue
                     rows.append({"일자": date, "현재가": close})
                 self.tr_data["opt10081"] = rows
+
+            elif rqname == "market_news_req":
+                news_list = []
+                count = self.api.ocx.GetRepeatCnt(trcode, rqname)
+                for i in range(count):
+                    title = self.api.ocx.GetCommData(trcode, rqname, i, "뉴스제목").strip()
+                    time = self.api.ocx.GetCommData(trcode, rqname, i, "시간").strip()
+                    news_list.append({"title": title, "time": time})
+                self.tr_data["OPT10051"] = news_list
 
         finally:
             QTimer.singleShot(0, self.tr_event_loop.quit)

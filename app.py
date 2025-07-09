@@ -15,6 +15,14 @@ def index():
 def index2():
     return render_template("index2.html")
 
+@app.route("/index3")
+def index3():
+    return render_template("index3.html")
+
+@app.route("/index4")
+def index4():
+    return render_template("index4.html")
+
 @app.route("/api/account")
 def get_account():
     request_queue.put("get_account")  # 요청 큐에 명령 전달
@@ -211,6 +219,39 @@ def api_search_stock():
         time.sleep(0.1)
         waited += 0.1
 
+    return jsonify({"error": "timeout"})
+
+@app.route('/get_invest_weather')
+def get_weather():
+    request_queue.put("get_invest_weather")
+    waited = 0
+    while waited < 10:
+        if not response_queue.empty():
+            return jsonify(response_queue.get())
+        time.sleep(0.1)
+        waited += 0.1
+    return jsonify({"error": "timeout"})
+
+@app.route('/get_invest_weather_news')
+def get_invest_weather_news():
+    request_queue.put("get_invest_weather_news")
+    waited = 0
+    while waited < 10:
+        if not response_queue.empty():
+            return jsonify(response_queue.get())
+        time.sleep(0.1)
+        waited += 0.1
+    return jsonify({"error": "timeout"})
+
+@app.route('/get_google_news_test')
+def get_google_news_test():
+    request_queue.put("get_google_news_test")
+    waited = 0
+    while waited < 10:
+        if not response_queue.empty():
+            return jsonify(response_queue.get())
+        time.sleep(0.1)
+        waited += 0.1
     return jsonify({"error": "timeout"})
 
 def run_flask():

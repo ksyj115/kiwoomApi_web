@@ -1936,3 +1936,51 @@
 480  20250707  126600  128020.0  125293.15  119230.900000  126565.800000
 2025-07-07 17:19:26 - KiwoomTrading - INFO - [trading.py] ma5s: [126460.0, 127980.0, 128020.0]
 2025-07-07 17:19:26 - KiwoomTrading - INFO - [trading.py] last_ma5: 128020.0, last_ma20: 125293.15, last_ma60: 119230.9, last_ma120: 126565.8
+2025-07-08 14:35:02 - KiwoomTrading - INFO - 로그인 시도...
+2025-07-08 14:35:11 - KiwoomTrading - INFO - 로그인 성공
+2025-07-08 14:46:33 - KiwoomTrading - INFO - 로그인 시도...
+2025-07-08 14:46:37 - KiwoomTrading - INFO - 로그인 성공
+2025-07-08 14:47:08 - KiwoomTrading - ERROR - GPT API 호출 오류: 
+
+You tried to access openai.ChatCompletion, but this is no longer supported in openai>=1.0.0 - see the README at https://github.com/openai/openai-python for the API.
+
+You can run `openai migrate` to automatically upgrade your codebase to use the 1.0.0 interface. 
+
+Alternatively, you can pin your installation to the old version, e.g. `pip install openai==0.28`
+
+A detailed migration guide is available here: https://github.com/openai/openai-python/discussions/742
+
+2025-07-08 14:54:56 - KiwoomTrading - INFO - 로그인 시도...
+2025-07-08 14:55:05 - KiwoomTrading - INFO - 로그인 성공
+2025-07-08 15:59:19 - KiwoomTrading - INFO - 로그인 시도...
+2025-07-08 15:59:28 - KiwoomTrading - INFO - 로그인 성공
+2025-07-08 15:59:39 - KiwoomTrading - ERROR - 투자 날씨 예보 처리 중 오류: 'QAxWidget' object has no attribute 'get_market_news_titles'
+2025-07-08 16:02:05 - KiwoomTrading - INFO - 로그인 시도...
+2025-07-08 16:02:09 - KiwoomTrading - INFO - 로그인 성공
+2025-07-08 16:03:48 - KiwoomTrading - INFO - 로그인 시도...
+2025-07-08 16:03:52 - KiwoomTrading - INFO - 로그인 성공
+2025-07-08 16:05:58 - KiwoomTrading - INFO - 로그인 시도...
+2025-07-08 16:06:02 - KiwoomTrading - INFO - 로그인 성공
+2025-07-08 16:06:08 - KiwoomTrading - INFO - titles : [['', '', '', '', '']]
+2025-07-08 16:06:31 - KiwoomTrading - INFO - titles : [['', '', '', '', '']]
+2025-07-08 16:31:59 - KiwoomTrading - INFO - 로그인 시도...
+2025-07-08 16:32:03 - KiwoomTrading - INFO - 로그인 성공
+2025-07-08 16:32:30 - KiwoomTrading - ERROR - [Google 뉴스 테스트 오류] Could not reach host. Are you offline?
+2025-07-08 16:55:26 - KiwoomTrading - INFO - 로그인 시도...
+2025-07-08 16:55:30 - KiwoomTrading - INFO - 로그인 성공
+2025-07-08 17:01:19 - KiwoomTrading - INFO - 로그인 시도...
+2025-07-08 17:01:23 - KiwoomTrading - INFO - 로그인 성공
+2025-07-08 17:01:32 - KiwoomTrading - ERROR - [Google 뉴스 테스트 오류] Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+
+2025-07-08 17:02:45 - KiwoomTrading - INFO - 로그인 시도...
+2025-07-08 17:02:49 - KiwoomTrading - INFO - 로그인 성공
+2025-07-08 17:09:08 - KiwoomTrading - INFO - 로그인 시도...
+2025-07-08 17:09:12 - KiwoomTrading - INFO - 로그인 성공
+2025-07-08 17:14:05 - KiwoomTrading - INFO - 로그인 시도...
+2025-07-08 17:14:09 - KiwoomTrading - INFO - 로그인 성공
+2025-07-08 17:50:32 - KiwoomTrading - INFO - 로그인 시도...
+2025-07-08 17:50:37 - KiwoomTrading - INFO - 로그인 성공
+2025-07-08 17:51:06 - KiwoomTrading - ERROR - GPT API 호출 오류: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2025-07-08 17:57:02 - KiwoomTrading - INFO - 로그인 시도...
+2025-07-08 17:57:11 - KiwoomTrading - INFO - 로그인 성공
+2025-07-08 17:57:31 - KiwoomTrading - ERROR - GPT API 호출 오류: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}

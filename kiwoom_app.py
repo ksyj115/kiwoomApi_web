@@ -48,6 +48,12 @@ class KiwoomAppWrapper:
             elif isinstance(cmd, dict) and cmd.get("type") == "detect_golden_cross":
                 result = self.trading.detect_golden_cross(cmd["code"])
             elif isinstance(cmd, dict) and cmd.get("type") == "search_stock_by_name":
-                result = self.trading.search_stock_by_name(cmd["keyword"])      
+                result = self.trading.search_stock_by_name(cmd["keyword"])    
+            elif cmd == "get_invest_weather":
+                result = self.trading.ask_gpt_for_invest_weather()  
+            elif cmd == "get_invest_weather_news":
+                result = self.trading.run_daily_weather_check()
+            elif cmd == "get_google_news_test":
+                result = self.trading.get_google_news_test()
 
             response_queue.put(result)
