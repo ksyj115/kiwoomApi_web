@@ -9,8 +9,10 @@ request_queue = Queue()
 response_queue = Queue()
 
 class KiwoomAppWrapper:
+
     def __init__(self):
         self.app = QApplication([])
+        self.app.setQuitOnLastWindowClosed(False)
         self.api = KiwoomAPI()
         self.trading = Trading(self.api)
         self.timer = QTimer()
@@ -41,16 +43,16 @@ class KiwoomAppWrapper:
                 result = self.trading.get_unfilled_orders()
             elif cmd == "get_rsi_data":
                 result = self.trading.analyze_rsi()
-            elif cmd == "get_moving_average":
-                result = self.trading.get_moving_average()
-            elif cmd == "get_stock_data":
-                result = self.trading.get_stock_data()
+            elif isinstance(cmd, dict) and cmd.get("type") == "get_moving_average":
+                result = self.trading.get_moving_average(cmd["code"])
             elif isinstance(cmd, dict) and cmd.get("type") == "detect_golden_cross":
                 result = self.trading.detect_golden_cross(cmd["code"])
             elif isinstance(cmd, dict) and cmd.get("type") == "search_stock_by_name":
                 result = self.trading.search_stock_by_name(cmd["keyword"])    
             elif cmd == "get_invest_weather":
                 result = self.trading.ask_gpt_for_invest_weather()  
+            elif cmd == "get_invest_micro":
+                result = self.trading.ask_gpt_for_get_invest_micro()  
             elif cmd == "get_google_news_test":
                 result = self.trading.get_google_news_test()
 

@@ -88,9 +88,9 @@
 </head>
 <body class="p-5 bg-light">
   <button class="btn btn-primary" onclick="location.href='/'">내 현황 홈</button>
-  <button class="btn btn-primary" onclick="location.href='/index2'">종목 발굴</button>
   <button class="btn btn-primary" onclick="location.href='/index3'">투자 날씨</button>
   <button class="btn btn-primary" onclick="location.href='/index4'">뉴스</button>
+  <button class="btn btn-primary" onclick="location.href='/index2'">종목 발굴</button>
 
   <div class="container">
     <div id="output-holdings" class="card p-3 mt-3 shadow-sm" style="display: none;"></div>
@@ -101,7 +101,6 @@
     <input type="text" id="stockSearch" placeholder="예: 삼성전자" onkeyup="searchStock()" />
     <div id="searchResults" style="border: 1px solid #ccc; max-height: 200px; overflow-y: auto; display: none;"></div>
   </div>
-
 
   <br/><br/><br/><br/><br/><br/>
   <div class="container mt-5">
@@ -143,60 +142,60 @@
     <input type="file" id="csv-basket-upload" class="form-control form-control-sm mt-2" accept=".csv" onchange="uploadBasket(event)">
   </div>
 
-    <!-- 매수 모달 -->
-    <div class="modal fade" id="buyModal" tabindex="-1">
-      <div class="modal-dialog">
+  <!-- 매수 모달 -->
+  <div class="modal fade" id="buyModal" tabindex="-1">
+    <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-header">
-          <h5 class="modal-title">📥 종목 매수</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            <h5 class="modal-title">📥 종목 매수</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
           <div class="modal-body">
-          <p id="buyStockInfo"></p>
-          <input type="hidden" id="buyCode">
-          <div class="mb-3">
-              <label>매수 가격</label>
-              <input type="number" id="buyPrice" class="form-control">
-          </div>
-          <div class="mb-3">
-              <label>매수 수량</label>
-              <input type="number" id="buyQty" class="form-control">
-          </div>
+            <p id="buyStockInfo"></p>
+            <input type="hidden" id="buyCode">
+            <div class="mb-3">
+                <label>매수 가격</label>
+                <input type="number" id="buyPrice" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label>매수 수량</label>
+                <input type="number" id="buyQty" class="form-control">
+            </div>
           </div>
           <div class="modal-footer">
-          <button class="btn btn-primary" onclick="submitBuyOrder()">매수</button>
-          <button class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+            <button class="btn btn-primary" onclick="submitBuyOrder()">매수</button>
+            <button class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
           </div>
       </div>
-      </div>
+    </div>
   </div>
     
   <!-- 매도 모달 -->
   <div class="modal fade" id="sellModal" tabindex="-1">
-      <div class="modal-dialog">
+    <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-header">
-          <h5 class="modal-title">📤 종목 매도</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            <h5 class="modal-title">📤 종목 매도</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
           <div class="modal-body">
-          <p id="sellStockInfo"></p>
-          <input type="hidden" id="sellCode">
-          <div class="mb-3">
-              <label>매도 가격</label>
-              <input type="number" id="sellPrice" class="form-control">
-          </div>
-          <div class="mb-3">
-              <label>매도 수량</label>
-              <input type="number" id="sellQty" class="form-control">
-          </div>
+            <p id="sellStockInfo"></p>
+            <input type="hidden" id="sellCode">
+            <div class="mb-3">
+                <label>매도 가격</label>
+                <input type="number" id="sellPrice" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label>매도 수량</label>
+                <input type="number" id="sellQty" class="form-control">
+            </div>
           </div>
           <div class="modal-footer">
-          <button class="btn btn-danger" onclick="submitSellOrder()">매도</button>
-          <button class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+            <button class="btn btn-danger" onclick="submitSellOrder()">매도</button>
+            <button class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
           </div>
       </div>
-      </div>
+    </div>
   </div>
 
   <script>
@@ -656,8 +655,8 @@
           } else {
             result.innerHTML = `<span class="text-muted">✖ 조건 미충족</span>`;
           }
-
-          result.innerHTML += `<br><span class="text-muted">${data.comment || ""}</span>`;
+          console.log('getMovingAverage(code) : ' + '${code}');
+          result.innerHTML += `<br><span class="text-muted">${data.comment || ""}</span>&nbsp;&nbsp;<button class="btn btn-success" onclick="getMovingAverage('${code}')">이동평균선 확인</button>`;
 
           if (data.reason) {
             const reason = document.createElement("div");
@@ -679,6 +678,17 @@
       }
     }
 
+    function getMovingAverage(code) {
+      fetch('/get-moving-average', {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ code })
+      })
+      .then(res => res.json())
+      .then(data => {
+        console.log("data : "+data)
+      });
+    }
 
     function do_for_addStock(name, code){
       document.getElementById("stock-input").value = name + "[" + code + "]";

@@ -155,27 +155,24 @@ def do_something():
 
 @app.route('/get-moving-average', methods=['POST'])
 def getMovingAverage():
-    request_queue.put("get_moving_average")
+    data = request.json
+    code = data.get("code")
+
+    request_queue.put({
+        "type": "get_moving_average",
+        "code": code
+    })
+
+    timeout = 10
     waited = 0
-    while waited < 10:
+    while waited < timeout:
         if not response_queue.empty():
-            return jsonify(response_queue.get())
+            result = response_queue.get()
+            return jsonify(result)
         time.sleep(0.1)
         waited += 0.1
 
-    # 아무 응답도 보내지 않고 종료 (void처럼)
-    return '', 204  # 또는 return '', 200
-
-@app.route('/api/chart-data')
-def chart_data():
-    request_queue.put('get_stock_data')
-    waited = 0
-    while waited < 10:
-        if not response_queue.empty():
-            return jsonify(response_queue.get())
-        time.sleep(0.1)
-        waited += 0.1
-    return jsonify({'error': 'timeout'})
+    return jsonify({"error": "timeout"})
 
 @app.route('/detect-golden-cross', methods=['POST'])
 def detect_golden_cross():
@@ -224,6 +221,20 @@ def api_search_stock():
 @app.route('/get_invest_weather')
 def get_weather():
     request_queue.put("get_invest_weather")
+    waited = 0
+    timeout = 30  # ✅ 최대 30초까지 기다리도록 설정
+
+    while waited < timeout:
+        if not response_queue.empty():
+            return jsonify(response_queue.get())
+        time.sleep(0.1)
+        waited += 0.1
+
+    return jsonify({"error": "timeout"})
+
+@app.route('/get_invest_micro')
+def get_micro():
+    request_queue.put("get_invest_micro")
     waited = 0
     timeout = 30  # ✅ 최대 30초까지 기다리도록 설정
 

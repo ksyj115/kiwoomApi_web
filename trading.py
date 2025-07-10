@@ -2,17 +2,58 @@ from PyQt5.QtCore import QEventLoop, QTimer
 from config import Config
 import logging
 from logger import logger
+from multiprocessing import Process
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib import font_manager, rc
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.figure import Figure
+from PyQt5.QtWidgets import QDialog, QWidget, QVBoxLayout
 from datetime import datetime
 from dotenv import load_dotenv
 import os
 from openai import OpenAI
-from google_news_scraper import get_google_news_snippets
+from google_news_scraper import get_google_news_snippets, get_google_nasdaq_snippets
 
 load_dotenv(dotenv_path="env_template.env")  # 파일 경로 직접 지정
 
 logger = logging.getLogger("KiwoomTrading")
+
+# 윈도우 한글 폰트 경로
+font_path = "C:/Windows/Fonts/H2GPRM.TTF"  # 맑은 고딕
+
+# 폰트 적용
+font_name = font_manager.FontProperties(fname=font_path).get_name()
+rc('font', family=font_name)
+
+# 마이너스 기호 깨짐 방지
+plt.rcParams['axes.unicode_minus'] = False
+
+class ChartDialog(QDialog):
+    def __init__(self, df):
+        super().__init__()
+        self.setWindowTitle("삼성전자 이동평균선 차트")
+        self.setGeometry(200, 200, 1000, 600)
+
+        layout = QVBoxLayout()
+        self.setLayout(layout)
+
+        fig = Figure(figsize=(12, 6))
+        canvas = FigureCanvas(fig)
+        ax = fig.add_subplot(111)
+
+        ax.plot(df.index, df['현재가'], label='종가', color='black', linewidth=1)
+        ax.plot(df.index, df['MA5'], label='5일선', color='blue')
+        ax.plot(df.index, df['MA20'], label='20일선', color='orange')
+        ax.plot(df.index, df['MA60'], label='60일선', color='green')
+        ax.plot(df.index, df['MA120'], label='120일선', color='red')
+        ax.set_title("삼성전자 이동평균선 차트")
+        ax.set_xlabel("날짜")
+        ax.set_ylabel("가격")
+        ax.legend()
+        ax.grid(True)
+
+        layout.addWidget(canvas)
 
 class Trading:
     def __init__(self, kiwoom_api):
@@ -185,6 +226,9 @@ class Trading:
             "RSI(SMA)_yesterday": round(rsi_sma_yesterday, 2)
         }
 
+    """
+    키움증권 API 데이터만 화면으로 반환하여, chart.js 로 출력 하려고 하였으나 보류.
+
     def get_moving_average(self):
 
         # 조회할 종목코드
@@ -194,7 +238,7 @@ class Trading:
         df = self.api.ocx.block_request(
             "opt10081",
             종목코드=code,
-            기준일자="20250628",
+            기준일자="20250710",
             수정주가구분=1,
             output="주식일봉차트조회",
             next=0
@@ -216,35 +260,75 @@ class Trading:
             })
 
         return result
+    """
+    def get_moving_average(self, code):
+        # code = "005930"
+        # end_date = "20250710"
+        logger.info(f"str(code) : {str(code)}")
 
-    def get_stock_data(self, code="005930", end_date="20250628"):
+        self.tr_data.pop("opt10081", None)
+        self.api.ocx.SetInputValue("종목코드", str(code))
+        # self.api.ocx.SetInputValue("기준일자", end_date)
+        self.api.ocx.SetInputValue("수정주가구분", "1")
+        self.api.ocx.CommRqData("opt10081_req", "opt10081", 0, "5001")
+        self.tr_event_loop.exec_()
 
-        df = self.api.ocx.block_request(
-            "opt10081",
-            종목코드=code,
-            기준일자=end_date,
-            수정주가구분=1,
-            output="주식일봉차트조회",
-            next=0
-        )
+        """
+        data = self.tr_data.get("opt10081", [])
+        if not data or len(data) < 5:
+            return {"error": "데이터 부족"}
 
+        df = pd.DataFrame(data)
+        df['일자'] = pd.to_datetime(df['일자'], format='%Y%m%d')
+        df['현재가'] = df['현재가'].astype(int)
+        df = df.sort_values('일자').set_index('일자')
+
+        df['MA5'] = df['현재가'].rolling(5).mean()
+        df['MA20'] = df['현재가'].rolling(20).mean()
+        df['MA60'] = df['현재가'].rolling(60).mean()
+        df['MA120'] = df['현재가'].rolling(120).mean()
+
+        def show_chart():
+            chart = ChartDialog(df)
+            chart.exec_()
+
+        p = Process(target=show_chart)
+        p.start()
+        """
+
+        data = self.tr_data.get("opt10081", [])
+        if not data or len(data) < 5:
+            return {"error": "데이터 부족"}
+
+        df = pd.DataFrame(data)
+
+        # 데이터 가공
         df['현재가'] = df['현재가'].astype(int)
         df['일자'] = pd.to_datetime(df['일자'])
         df.sort_values('일자', inplace=True)
+        df.set_index('일자', inplace=True)
 
+        # 이동평균 계산
         df['MA5'] = df['현재가'].rolling(window=5).mean()
         df['MA20'] = df['현재가'].rolling(window=20).mean()
         df['MA60'] = df['현재가'].rolling(window=60).mean()
         df['MA120'] = df['현재가'].rolling(window=120).mean()
 
-        return {
-            "dates": df['일자'].dt.strftime('%Y-%m-%d').tolist(),
-            "close": df['현재가'].tolist(),
-            "MA5": df['MA5'].fillna('').tolist(),
-            "MA20": df['MA20'].fillna('').tolist(),
-            "MA60": df['MA60'].fillna('').tolist(),
-            "MA120": df['MA120'].fillna('').tolist()
-        }
+        # 그래프 그리기 (이동평균선만)
+        plt.figure(figsize=(12, 6))
+        plt.plot(df.index, df['MA5'], label='5일선', color='blue')
+        plt.plot(df.index, df['MA20'], label='20일선', color='orange')
+        plt.plot(df.index, df['MA60'], label='60일선', color='green')
+        plt.plot(df.index, df['MA120'], label='120일선', color='red')
+
+        plt.xlabel('날짜')
+        plt.ylabel('가격')
+        plt.title('이동평균선 (5/20/60/120일)')
+        plt.legend()
+        plt.grid(True)
+        plt.show()
+
+        return {"status": "success"}
 
     def detect_golden_cross(self, code):
         from datetime import datetime
@@ -371,13 +455,20 @@ class Trading:
         client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
         news = get_google_news_snippets("미국 증시", count=5)
+        news2 = get_google_news_snippets("한국 증시", count=5)
 
         system_msg = "주식 투자자의 입장으로써 질문할게. 현재 시간 기준으로 미국 증시의 악재 및 호재 등 이슈가 되는 뉴스를 알려주고, 이로 인한 한국 증시의 영향(또는 미국 증시와 별개로 한국 증시의 (악재, 호재)이슈)을 알려줘. 다음 뉴스들은 너가 참고할 수 있게 내가 추가한 것들이야. 목적은 증시 분위기를 통해 매매 진입 하기에 매력이 있는 상황인지 알려줘."
 
         user_prompt = f"""
             다음은 너가 참고할 수 있도록 추가한 오늘의 증시 관련 주요 뉴스들이야 (내가 추가한 뉴스 외에도 중요한 뉴스가 있다면 포함해줘.):    
+
+            1. 미국 증시 뉴스 :
+            -------------------
             {news}
-            ---
+            -------------------
+            2. 한국 증시 뉴스 :
+            {news2}
+            -------------------
 
             (내가 추가한 뉴스 및 그 밖에 증시에 중요한 뉴스)를 기반으로 아래 내용을 포함해서 분석해줘:
             - 거시경제 흐름
@@ -415,9 +506,56 @@ class Trading:
             logger.error(f"GPT API 호출 오류: {e}")
             return {"answer": "❌ GPT 응답 중 오류가 발생했습니다.", "direction": "negative"}
 
+    def ask_gpt_for_get_invest_micro(self):
+
+        try:
+            nasdaq = get_google_nasdaq_snippets("나스닥", count=10)
+            return nasdaq
+        except Exception as e:
+            from logger import logger
+            logger.error(f"[Google nasdaq 테스트 오류] {e}")
+            return {"error": str(e)}
+
+    def ask_gpt_for_get_invest_micro_TMP(self):
+        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+        system_msg = "주식 투자자의 입장으로써 질문하는 거야. 항상 답변 해주면서, 만약 답변 내용과 관련되어 추천해줄 수 있는 종목이 있다면 구체적으로 같이 알려주면 좋겠어. 결국 목적은 돈을 벌기 위한(또는 돈을 최대한 잃지 않는) 것이기 때문이야."
+
+        user_prompt = f"""
+            현재 시간 기준,
+            미국 증시 및 한국 증시의 거시적 시장 상황 점검을 부탁할게.
+            (아래의 항목을 기준으로 답변 부탁해. 각 항목은 번호를 붙여 놓았고, "=>" 다음에 오는 내용은 해당 질문을 통해 확인하고자 하는 목적이야. 참고하여 답변해주기를 바래.)
+
+            1. 전날 미국 증시 (나스닥, S&P500, 다우) 흐름 => 장기 지수 추세, 변곡점 여부
+            2. 주요 선물지수 (나스닥, S&P500 선물) => 장 시작 전 분위기 파악
+            3. VIX (공포지수) 변화 => 시장 불안 심리 점검
+            4. 주요 경제지표 발표 일정 (오늘 발표 예정 지표) 또는 큰 악재 및 호재가 있는지 여부 => 금리, 실업률, CPI 등 서프라이즈 이슈 대비
+            5. 달러 인덱스, 금리, 유가, 원/달러 환율 => 자금 흐름 및 수출주 영향 판단
+            """
+
+        try:
+            response = client.chat.completions.create(
+                model="gpt-4o",
+                messages=[
+                    {"role": "system", "content": system_msg},
+                    {"role": "user", "content": user_prompt}
+                ],
+                temperature=0.7,
+                max_tokens=600
+            )
+
+            answer = response.choices[0].message.content.strip()
+
+            return {"answer": answer}
+
+        except Exception as e:
+            from logger import logger
+            logger.error(f"GPT API 호출 오류: {e}")
+            return {"answer": "❌ GPT 응답 중 오류가 발생했습니다.", "direction": "negative"}
+
     def get_google_news_test(self):
         try:
-            news = get_google_news_snippets("미국 증시", count=5)
+            news = get_google_news_snippets("미국 증시", count=10)
             return news
         except Exception as e:
             from logger import logger

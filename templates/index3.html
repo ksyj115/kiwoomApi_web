@@ -14,23 +14,30 @@
 </head>
 <body class="p-5 bg-light">
     <button class="btn btn-primary" onclick="location.href='/'">내 현황 홈</button>
-    <button class="btn btn-primary" onclick="location.href='/index2'">종목 발굴</button>
     <button class="btn btn-primary" onclick="location.href='/index3'">투자 날씨</button>
     <button class="btn btn-primary" onclick="location.href='/index4'">뉴스</button>
+    <button class="btn btn-primary" onclick="location.href='/index2'">종목 발굴</button>
 
     <br/><br/>
     <h1>📈 오늘의 투자 날씨 예보</h1>
     <button class="btn btn-primary" onclick="getWeather()">오늘의 투자 날씨 보기</button>
 
-    <div id="gpt-result"></div>
+    <div id="gpt-result-invest_weather"></div>
     <img id="weather-img" src="" alt="날씨 이미지">
+
+    <br/><br/><br/>
+    <h1>1. 거시적 시장 상황 점검</h1>
+    <button class="btn btn-primary" onclick="getMicroSituation()">확인 하기</button>
+
+    <div id="gpt-result-invest_micro"></div>
 
     <script>
         async function getWeather() {
+            document.getElementById("gpt-result-invest_weather").innerText =  `<p class="text-muted">⌛ GPT 의 "오늘의 투자 날씨" 불러오는 중...</p>`
             const response = await fetch('/get_invest_weather');
             const data = await response.json();
 
-            document.getElementById("gpt-result").innerText = data.answer;
+            document.getElementById("gpt-result-invest_weather").innerText = data.answer;
 
             const img = document.getElementById("weather-img");
             if (data.direction === "positive") {
@@ -39,6 +46,14 @@
                 img.src = "/static/cloudy.png";
             }
             img.style.display = "block";
+        }
+
+        async function getMicroSituation() {
+            document.getElementById("gpt-result-invest_micro").innerText =  `<p class="text-muted">⌛ GPT 의 "오늘의 거시적 시장 상황" 불러오는 중...</p>`
+            const response = await fetch('/get_invest_micro');
+            const data = await response.json();
+
+            document.getElementById("gpt-result-invest_micro").innerText = data.answer;
         }
     </script>
 </body>
