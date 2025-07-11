@@ -33,7 +33,7 @@
 
     <script>
         async function getWeather() {
-            document.getElementById("gpt-result-invest_weather").innerText =  `<p class="text-muted">⌛ GPT 의 "오늘의 투자 날씨" 불러오는 중...</p>`
+            document.getElementById("gpt-result-invest_weather").innerHTML =  '<p class="text-muted">⌛ GPT 의 "오늘의 투자 날씨" 불러오는 중...</p>'
             const response = await fetch('/get_invest_weather');
             const data = await response.json();
 
@@ -49,7 +49,7 @@
         }
 
         async function getMicroSituation() {
-            document.getElementById("gpt-result-invest_micro").innerText =  `<p class="text-muted">⌛ GPT 의 "오늘의 거시적 시장 상황" 불러오는 중...</p>`
+            document.getElementById("gpt-result-invest_micro").innerHTML =  `<p class="text-muted">⌛ GPT 의 "오늘의 거시적 시장 상황" 불러오는 중...</p>`
             const response = await fetch('/get_invest_micro');
             const data = await response.json();
 

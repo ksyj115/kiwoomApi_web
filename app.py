@@ -25,6 +25,9 @@ def index4():
 
 @app.route("/api/account")
 def get_account():
+    while not response_queue.empty():
+        response_queue.get()  # 남아있는 응답 버림
+
     request_queue.put("get_account")  # 요청 큐에 명령 전달
 
     timeout = 10
@@ -40,6 +43,9 @@ def get_account():
 
 @app.route("/api/available_cash")
 def get_available_cash():
+    while not response_queue.empty():
+        response_queue.get()  # 남아있는 응답 버림
+
     request_queue.put("get_available_cash")  # 요청 큐에 명령 전달
 
     timeout = 10
@@ -55,6 +61,9 @@ def get_available_cash():
 
 @app.route("/api/holdings")
 def get_holdings():
+    while not response_queue.empty():
+        response_queue.get()  # 남아있는 응답 버림
+
     request_queue.put("get_holdings")  # 요청 큐에 명령 전달
 
     timeout = 10
@@ -70,6 +79,9 @@ def get_holdings():
 
 @app.route("/api/volume-leaders")
 def get_volume_leaders():
+    while not response_queue.empty():
+        response_queue.get()  # 남아있는 응답 버림
+
     request_queue.put("volume_leaders")
     timeout = 10
     waited = 0
@@ -83,6 +95,9 @@ def get_volume_leaders():
 
 @app.route("/api/buy", methods=["POST"])
 def place_buy_order():
+    while not response_queue.empty():
+        response_queue.get()  # 남아있는 응답 버림
+
     data = request.json
     code = data.get("code")
     price = data.get("price")
@@ -108,6 +123,9 @@ def place_buy_order():
 
 @app.route("/api/sell", methods=["POST"])
 def place_sell_order():
+    while not response_queue.empty():
+        response_queue.get()  # 남아있는 응답 버림
+
     data = request.json
     code = data.get("code")
     price = data.get("price")
@@ -133,6 +151,9 @@ def place_sell_order():
 
 @app.route("/api/unfilled_orders")
 def get_unfilled_orders():
+    while not response_queue.empty():
+        response_queue.get()  # 남아있는 응답 버림
+
     request_queue.put("get_unfilled_orders")
     waited = 0
     while waited < 10:
@@ -144,9 +165,12 @@ def get_unfilled_orders():
 
 @app.route('/get-rsi-data', methods=['POST'])
 def do_something():
+    while not response_queue.empty():
+        response_queue.get()  # 남아있는 응답 버림
+
     request_queue.put("get_rsi_data")
     waited = 0
-    while waited < 10:
+    while waited < 30:
         if not response_queue.empty():
             return jsonify(response_queue.get())
         time.sleep(0.1)
@@ -155,6 +179,9 @@ def do_something():
 
 @app.route('/get-moving-average', methods=['POST'])
 def getMovingAverage():
+    while not response_queue.empty():
+        response_queue.get()  # 남아있는 응답 버림
+
     data = request.json
     code = data.get("code")
 
@@ -163,7 +190,7 @@ def getMovingAverage():
         "code": code
     })
 
-    timeout = 10
+    timeout = 30
     waited = 0
     while waited < timeout:
         if not response_queue.empty():
@@ -176,6 +203,9 @@ def getMovingAverage():
 
 @app.route('/detect-golden-cross', methods=['POST'])
 def detect_golden_cross():
+    while not response_queue.empty():
+        response_queue.get()  # 남아있는 응답 버림
+
     data = request.json
     code = data.get("code")
 
@@ -197,6 +227,9 @@ def detect_golden_cross():
 
 @app.route('/api/search-stock', methods=["POST"])
 def api_search_stock():
+    while not response_queue.empty():
+        response_queue.get()  # 남아있는 응답 버림
+
     data = request.json
     keyword = data.get("keyword", "").strip()
 
@@ -208,7 +241,7 @@ def api_search_stock():
         "keyword": keyword
     })
 
-    timeout = 10
+    timeout = 30
     waited = 0
     while waited < timeout:
         if not response_queue.empty():
@@ -222,7 +255,7 @@ def api_search_stock():
 def get_weather():
     request_queue.put("get_invest_weather")
     waited = 0
-    timeout = 30  # ✅ 최대 30초까지 기다리도록 설정
+    timeout = 60  # ✅ 최대 60초까지 기다리도록 설정
 
     while waited < timeout:
         if not response_queue.empty():
@@ -232,11 +265,15 @@ def get_weather():
 
     return jsonify({"error": "timeout"})
 
+# 임시 보류
 @app.route('/get_invest_micro')
 def get_micro():
+    while not response_queue.empty():
+        response_queue.get()  # 남아있는 응답 버림
+
     request_queue.put("get_invest_micro")
     waited = 0
-    timeout = 30  # ✅ 최대 30초까지 기다리도록 설정
+    timeout = 60  # ✅ 최대 60초까지 기다리도록 설정
 
     while waited < timeout:
         if not response_queue.empty():
@@ -248,9 +285,12 @@ def get_micro():
 
 @app.route('/get_google_news_test')
 def get_google_news_test():
+    while not response_queue.empty():
+        response_queue.get()  # 남아있는 응답 버림
+
     request_queue.put("get_google_news_test")
     waited = 0
-    while waited < 10:
+    while waited < 60:
         if not response_queue.empty():
             return jsonify(response_queue.get())
         time.sleep(0.1)

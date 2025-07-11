@@ -409,7 +409,8 @@ class Trading:
         cond4 = recent['MA5'].iloc[4] == max(ma5s)
         # 3영업일 전 5일선은 가장 가까운 장기이평선 가격과 1% 이상의 차이로 하락한 상태.
         # cond5 = recent['MA5'].iloc[0] < closest_ma and (abs(recent['MA5'].iloc[0] - closest_ma) / closest_ma > 0.01)
-        cond5 = ( (last_ma5 - closest_ma) <= 0 and recent['MA5'].iloc[0] < recent[closest_ma_nm].iloc[0] ) or ((last_ma5 - closest_ma) > 0 and (recent['MA5'].iloc[0] < recent[closest_ma_nm].iloc[0] or recent['MA5'].iloc[0] == recent[closest_ma_nm].iloc[0]))
+        # 가장 최근 5일선이 가장 가까운 장기이평선 미돌파 시 5영업일 전 5일선은 5영업일 전 가장 가까운 이평선 아래여야 함.      가장 최근 5일선이 가장 가까운 장기이평선 돌파 시 5영업일 전 5일선은 5영업일 전 가장 가까운 이평선과 같거나 아래여야 함.
+        cond5 = ( (last_ma5 - closest_ma) <= 0 and recent['MA5'].iloc[0] < recent[closest_ma_nm].iloc[0] ) or ( (last_ma5 - closest_ma) > 0 and (recent['MA5'].iloc[0] <= recent[closest_ma_nm].iloc[0]) )
 
         all_conditions = all([cond1, cond2, cond3, cond4, cond5])   # 골든크로스(기대) 상태 1
         conditions = all([cond1, cond3, cond4, cond5])   # 골든크로스(기대) 상태 2
@@ -454,10 +455,10 @@ class Trading:
     def ask_gpt_for_invest_weather(self):
         client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-        news = get_google_news_snippets("미국 증시", count=5)
-        news2 = get_google_news_snippets("한국 증시", count=5)
+        news = get_google_news_snippets("미국 증시", count=10)
+        news2 = get_google_news_snippets("한국 증시", count=10)
 
-        system_msg = "주식 투자자의 입장으로써 질문할게. 현재 시간 기준으로 미국 증시의 악재 및 호재 등 이슈가 되는 뉴스를 알려주고, 이로 인한 한국 증시의 영향(또는 미국 증시와 별개로 한국 증시의 (악재, 호재)이슈)을 알려줘. 다음 뉴스들은 너가 참고할 수 있게 내가 추가한 것들이야. 목적은 증시 분위기를 통해 매매 진입 하기에 매력이 있는 상황인지 알려줘."
+        system_msg = "주식 투자자의 입장으로써 질문할게. 현재 시간 기준으로 미국 증시의 악재 및 호재 등 이슈가 되는 뉴스를 알려주고, 이로 인한 한국 증시의 영향(또는 미국 증시와 별개로 한국 증시의 (악재, 호재)이슈)을 알려줘. 다음 뉴스들은 너가 참고할 수 있게 내가 추가한 것들이야. 목적은 증시 분위기를 통해 매매 진입 하기에 매력이 있는 상황인지 확인하기 위함이야."
 
         user_prompt = f"""
             다음은 너가 참고할 수 있도록 추가한 오늘의 증시 관련 주요 뉴스들이야 (내가 추가한 뉴스 외에도 중요한 뉴스가 있다면 포함해줘.):    
