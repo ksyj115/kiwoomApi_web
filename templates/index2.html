@@ -11,8 +11,9 @@
     #watchlist-bar {
       position: fixed;
       top: 50px;
-      right: -220px; /* 처음엔 숨어 있음 */
-      width: 350px;
+      right: -15%; /* 처음엔 숨어 있음 */
+      width: 20%;
+      height: 35%;
       background-color: #f8f9fa;
       border: 1px solid #ccc;
       border-right: none;
@@ -28,8 +29,9 @@
     #basketlist-bar {
       position: fixed;
       top: 500px;
-      right: -220px; /* 처음엔 숨김 상태 */
-      width: 350px;
+      right: -15%; /* 처음엔 숨김 상태 */
+      width: 20%;
+      height: 35%;
       background-color: #f8f9fa;
       border: 1px solid #ccc;
       border-right: none;
@@ -59,7 +61,7 @@
       left: -505px;
       top: 0;
       width: 500px;
-      max-height: 400px;
+      max-height: 260%;
       overflow-y: auto;
       background-color: #fff;
       border: 1px solid #ccc;
@@ -96,6 +98,8 @@
     <div id="output-holdings" class="card p-3 mt-3 shadow-sm" style="display: none;"></div>
   </div>
 
+  <button class="btn btn-sm btn-outline-primary w-20 mt-2" onclick="downloadTradinghistory()">매매기록 CSV 다운로드</button>
+
   <div style="margin-top: 30px;">
     <label for="stockSearch">종목명 검색: </label>
     <input type="text" id="stockSearch" placeholder="예: 삼성전자" onkeyup="searchStock()" />
@@ -111,9 +115,14 @@
 
   <br/><br/>
   <div class="container mt-5">
-      <h2 class="mb-4">골든크로스(준비) 종목 조회</h2>
-      <button class="btn btn-success" onclick="checkGoldenCross()">조회하기</button>
-      <!-- <div id="output-goldenCross" class="card p-3 mt-3 shadow-sm" style="display: none;"></div> -->
+      <h2 class="mb-4">골든크로스(예상) 종목 조회</h2>&nbsp;&nbsp;&nbsp;<span>※ 5일선, 20일선 모두 단기이평선에 해당하나, 여기서는 5일선을 기준으로 돌파상태를 조회합니다.</span>
+      <br/><br/><button class="btn btn-success" onclick="checkGoldenCross()">조회하기</button>
+  </div>
+
+  <br/><br/>
+  <div class="container mt-5">
+      <h2 class="mb-4">데드크로스(예상) 종목 조회 (BASKET)</h2>&nbsp;&nbsp;&nbsp;<span>※ 5일선, 20일선 모두 단기이평선에 해당하나, 여기서는 5일선을 기준으로 (하향)돌파상태를 조회합니다.</span>
+      <br/><br/><button class="btn btn-success" onclick="checkDeadCross()">조회하기</button>
   </div>
 
   <!-- 골든크로스 결과 모달 -->
@@ -121,11 +130,29 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">골든크로스(준비) 종목 조회 결과</h5>
+            <h5 class="modal-title">골든크로스(예상) 종목 조회 결과</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
           <div class="modal-body" style="max-height: 60vh; overflow-y: auto;">
             <div id="output-goldenCross" class="card p-3 mt-3 shadow-sm"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 데드크로스 결과 모달 -->
+  <div class="modal fade" id="deadCrossModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">데드크로스(예상) 종목 조회 결과</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body" style="max-height: 60vh; overflow-y: auto;">
+            <div id="output-deadCross" class="card p-3 mt-3 shadow-sm"></div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
@@ -171,6 +198,7 @@
           <div class="modal-body">
             <p id="buyStockInfo"></p>
             <input type="hidden" id="buyCode">
+            <input type="hidden" id="buyName">
             <div class="mb-3">
                 <label>매수 가격</label>
                 <input type="number" id="buyPrice" class="form-control">
@@ -199,6 +227,7 @@
           <div class="modal-body">
             <p id="sellStockInfo"></p>
             <input type="hidden" id="sellCode">
+            <input type="hidden" id="sellName">
             <div class="mb-3">
                 <label>매도 가격</label>
                 <input type="number" id="sellPrice" class="form-control">
@@ -219,6 +248,8 @@
   <script>
     let myHoldings = [];
     const STORAGE_KEY = "watchlist";
+    const STORAGE_KEY_2 = "basketlist";
+    const STORAGE_KEY_3 = "tradinghistory";
 
     // 관심종목 불러오기
     function loadWatchlist() {
@@ -410,8 +441,6 @@
       });
     }
 
-    const STORAGE_KEY_2 = "basketlist";
-
     function loadBasket() {
       return JSON.parse(localStorage.getItem(STORAGE_KEY_2) || "[]");
     }
@@ -531,6 +560,51 @@
       reader.readAsText(file);
     }
 
+    // 매매기록 불러오기
+    function tradinghistory() {
+      const saved = localStorage.getItem(STORAGE_KEY_3);
+      return saved ? JSON.parse(saved) : [];
+    }
+
+    // 매매기록 저장
+    function saveTradinghistory(list) {
+      localStorage.setItem(STORAGE_KEY_3, JSON.stringify(list));
+    }
+
+    // 매매기록 추가
+    function addTradinghistory(code, name, price, qty, flag) {
+      let today = new Date();   
+
+      let year = today.getFullYear(); // 년도
+      let month = today.getMonth() + 1;  // 월
+      let date = today.getDate();  // 날짜
+
+      let tradingDate = year + '.' + month + '.' + date;
+      let param = tradingDate + '_' + name + '['+code+']_' + str(price) + '_' + str(qty)  + '_' + flag
+
+      let list = tradinghistory();
+      list.push(param);
+      saveTradinghistory(list);
+    }
+
+    // 매매기록 csv 파일 다운로드
+    function downloadTradinghistory() {
+      const list = tradinghistory();
+      if (!list.length) {
+            alert("매매기록이 비어 있습니다.");
+            return;
+        }
+      const csv = list.join(",");
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "tradinghistory.csv";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
     async function fetchHoldings() {
       const el = document.getElementById("output-holdings");
 
@@ -605,14 +679,14 @@
                           <button class="btn btn-sm btn-outline-primary buy-btn"
                                   data-code="${stock.code}"
                                   data-name="${stock.name}"
-                                  data-price="${stock.price}">
+                                  data-price="${Math.abs(stock.price)}">
                               구매
                           </button>
                           ${isOwned ? `
                           <button class="btn btn-sm btn-outline-danger ms-2 sell-btn"
                                   data-code="${stock.code}"
                                   data-name="${stock.name}"
-                                  data-price="${stock.price}">
+                                  data-price="${Math.abs(stock.price)}">
                               매도
                           </button>` : ""}
                       </td>
@@ -673,14 +747,14 @@
             <button class="btn btn-sm btn-outline-primary buy-btn"
                 data-code="${data.code}"
                 data-name="${data.name}"
-                data-price="${data.price}">
+                data-price="${Math.abs(data.price)}">
               구매
             </button>
             ${isOwned ? `
             <button class="btn btn-sm btn-outline-danger ms-2 sell-btn"
                 data-code="${data.code}"
                 data-name="${data.name}"
-                data-price="${data.price}">
+                data-price="${Math.abs(data.price)}">
               매도
             </button>` : ""}
           `;
@@ -693,12 +767,12 @@
 
           const result = document.createElement("div");
           if (data.golden_cross === "Y") {
-            result.innerHTML = `<span class="text-success">✔ 골든크로스 발생</span>`;
+            result.innerHTML = `<span class="text-success">✔ 골든크로스 ${data.comment2 || ""}</span>`;
           } else {
             result.innerHTML = `<span class="text-muted">✖ 조건 미충족</span>`;
           }
           console.log('getMovingAverage(code) : ' + '${code}');
-          result.innerHTML += `<br><span class="text-muted">${data.comment || ""}</span>&nbsp;&nbsp;<button class="btn btn-success" onclick="getMovingAverage('${code}')">이동평균선 확인</button>`;
+          result.innerHTML += `<br><span class="text-muted">${data.comment || ""}</span><br><button class="btn btn-success" onclick="getMovingAverage('${code}')">이동평균선 확인</button>`;
 
           if (data.reason) {
             const reason = document.createElement("div");
@@ -721,6 +795,92 @@
       }
 
       alert("골든크로스 조회가 완료되었습니다.");
+    }
+
+    async function checkDeadCross() {
+      const basket = loadBasket(); // 예: ["삼성전자[005930]", "카카오[035720]"]
+      const resultDiv = document.getElementById("output-deadCross");
+      resultDiv.innerHTML = "<p>📡 데드크로스 분석 중...</p>";
+      // resultDiv.style.display = "block";
+      const modal = new bootstrap.Modal(document.getElementById("deadCrossModal"));
+      modal.show();
+
+      resultDiv.innerHTML = ""; // 결과 초기화
+
+      for (const item of basket) {
+        const str = item;
+        const lastBracketIndex = str.lastIndexOf("[");
+        const code = str.substring(lastBracketIndex + 1, str.length - 1);
+        console.log("code : " + code);
+
+        try {
+          const res = await fetch('/detect-dead-cross', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ "code": code })
+          });
+          const data = await res.json();
+
+          console.log("✅ 데드크로스 결과:", data);
+
+          // ✅ 먼저 holdings 로딩 완료까지 기다림
+          await fetchHoldings();
+
+          const isOwned = myHoldings.includes(code);
+
+          const buttons = document.createElement("div");
+          buttons.innerHTML = `
+            <button class="btn btn-sm btn-outline-primary buy-btn"
+                data-code="${data.code}"
+                data-name="${data.name}"
+                data-price="${Math.abs(data.price)}">
+              구매
+            </button>
+            ${isOwned ? `
+            <button class="btn btn-sm btn-outline-danger ms-2 sell-btn"
+                data-code="${data.code}"
+                data-name="${data.name}"
+                data-price="${Math.abs(data.price)}">
+              매도
+            </button>` : ""}
+          `;
+
+          const box = document.createElement("div");
+          box.className = "border p-2 mb-2 rounded";
+
+          const title = document.createElement("strong");
+          title.textContent = item;
+
+          const result = document.createElement("div");
+          if (data.dead_cross === "Y") {
+            result.innerHTML = `<span class="text-success">✔ 데드크로스 ${data.comment2 || ""}</span>`;
+          } else {
+            result.innerHTML = `<span class="text-muted">✖ 조건 미충족</span>`;
+          }
+          console.log('getMovingAverage(code) : ' + '${code}');
+          result.innerHTML += `<br><span class="text-muted">${data.comment || ""}</span><br><button class="btn btn-success" onclick="getMovingAverage('${code}')">이동평균선 확인</button>`;
+
+          if (data.reason) {
+            const reason = document.createElement("div");
+            reason.className = "text-danger small";
+            reason.textContent = "📌 " + data.reason;
+            box.appendChild(reason);
+          }
+
+          box.appendChild(title);
+          box.appendChild(result);
+          box.appendChild(buttons);
+          resultDiv.appendChild(box);
+
+        } catch (err) {
+          const errorBox = document.createElement("div");
+          errorBox.className = "border p-2 mb-2 text-danger";
+          errorBox.innerHTML = `<strong>${item}</strong> → 오류 발생: ${err}`;
+          resultDiv.appendChild(errorBox);
+        }
+      }
+
+      alert("데드크로스 조회가 완료되었습니다.");
     }
 
     function getMovingAverage(code) {
@@ -764,7 +924,8 @@
     function openBuyModal(code, name, price) {
         document.getElementById("buyStockInfo").innerText = `${code} (${name}) 현재가: ${Number(price).toLocaleString()} 원`;
         document.getElementById("buyCode").value = code;
-        document.getElementById("buyPrice").value = price;
+        document.getElementById("buyName").value = name;
+        document.getElementById("buyPrice").value = Math.abs(price);
         document.getElementById("buyQty").value = "";
         new bootstrap.Modal(document.getElementById("buyModal")).show();
     }
@@ -772,14 +933,16 @@
     function openSellModal(code, name, price) {
         document.getElementById("sellStockInfo").innerText = `${code} (${name}) 현재가: ${Number(price).toLocaleString()} 원`;
         document.getElementById("sellCode").value = code;
-        document.getElementById("sellPrice").value = price;
+        document.getElementById("sellName").value = name;
+        document.getElementById("sellPrice").value = Math.abs(price);
         document.getElementById("sellQty").value = "";
         new bootstrap.Modal(document.getElementById("sellModal")).show();
     }
 
     function submitBuyOrder() {
         const code = document.getElementById("buyCode").value;
-        const price = parseInt(document.getElementById("buyPrice").value);
+        const name = document.getElementById("buyName").value;
+        const price = Math.abs(parseInt(document.getElementById("buyPrice").value));
         const qty = parseInt(document.getElementById("buyQty").value);
 
         fetch("/api/buy", {
@@ -791,12 +954,14 @@
         .then(data => {
             alert(data.message || JSON.stringify(data));
             bootstrap.Modal.getInstance(document.getElementById("buyModal")).hide();
+            addTradinghistory(code, name, price, qty, 'buy')
         });
     }
 
     function submitSellOrder() {
         const code = document.getElementById("sellCode").value;
-        const price = parseInt(document.getElementById("sellPrice").value);
+        const name = document.getElementById("sellName").value;
+        const price = Math.abs(parseInt(document.getElementById("sellPrice").value));
         const qty = parseInt(document.getElementById("sellQty").value);
 
         fetch("/api/sell", {
@@ -808,6 +973,7 @@
         .then(data => {
             alert(data.message || JSON.stringify(data));
             bootstrap.Modal.getInstance(document.getElementById("sellModal")).hide();
+            addTradinghistory(code, name, price, qty, 'sell')
         });
     }
 

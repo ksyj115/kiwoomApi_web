@@ -411,26 +411,28 @@ class Trading:
         min_idx = diffs.index(min(diffs))
 
         closest_ma_nm = ''
+        closest_ma_nm2 = ''
         if min_idx == 0:
             closest_ma_nm = 'MA20'
+            closest_ma_nm2 = '<b style="color:#DAA520;">20일선</b>'
         elif min_idx == 1:
             closest_ma_nm = 'MA60'
+            closest_ma_nm2 = '<b style="color:green;">60일선</b>'
         elif min_idx == 2:
             closest_ma_nm = 'MA120'
+            closest_ma_nm2 = '<b style="color:red;">120일선</b>'
 
         closest_ma = long_ma_candidates[min_idx]
 
         # 조건 체크
-        # 가장 가까운 장기이평선 밑으로 3% 이내에 접근한 상태.          또는    가장 가까운 장기이평선 위로 3% 이내로 상승한 상태.
-        cond1 = (abs(last_ma5 - closest_ma) / closest_ma <= 0.03) or ((last_ma5 - closest_ma) / closest_ma <= 0.03)
-        # 3영업일 전 5일선이 최근 3일간 5일선 가격 중 가장 낮아야 함.
+        # 가장 가까운 장기이평선 밑으로(또는 상위) 3% 이내에 접근한 상태.
+        cond1 = (abs(last_ma5 - closest_ma) / closest_ma <= 0.03)
+        # 4영업일(또는 3영업일) 전 5일선이 최근 5일간 5일선 가격 중 가장 낮아야 함.
         cond2 = recent['MA5'].iloc[0] == min(ma5s) or recent['MA5'].iloc[1] == min(ma5s)
         # 2영업일 전 5일선이 가장 최근 5일선 가격 보다 낮아야 함.
         cond3 = recent['MA5'].iloc[3] < recent['MA5'].iloc[4]
         # 가장 최근 5일선 가격이 가장 높아야 함.
         cond4 = recent['MA5'].iloc[4] == max(ma5s)
-        # 3영업일 전 5일선은 가장 가까운 장기이평선 가격과 1% 이상의 차이로 하락한 상태.
-        # cond5 = recent['MA5'].iloc[0] < closest_ma and (abs(recent['MA5'].iloc[0] - closest_ma) / closest_ma > 0.01)
         # 가장 최근 5일선이 가장 가까운 장기이평선 미돌파 시 5영업일 전 5일선은 5영업일 전 가장 가까운 이평선 아래여야 함.      가장 최근 5일선이 가장 가까운 장기이평선 돌파 시 5영업일 전 5일선은 5영업일 전 가장 가까운 이평선과 같거나 아래여야 함.
         cond5 = ( (last_ma5 - closest_ma) <= 0 and recent['MA5'].iloc[0] < recent[closest_ma_nm].iloc[0] ) or ( (last_ma5 - closest_ma) > 0 and (recent['MA5'].iloc[0] <= recent[closest_ma_nm].iloc[0]) )
 
@@ -438,24 +440,30 @@ class Trading:
         conditions = all([cond1, cond3, cond4, cond5])   # 골든크로스(기대) 상태 2
 
         comment = ''
+        comment2 = ''
         if (last_ma5 - closest_ma) > 0 and ((last_ma5 - closest_ma) / closest_ma <= 0.01) and all_conditions:
-            comment = '골든크로스 돌파! 5일선 추가 1% 상승전! (강력)매수 고려.'
+            comment = '골든크로스 돌파! <b style="color:blue;">5일선</b>이 '+closest_ma_nm2+' 위로 추가 1% 상승전! (강력)매수 고려.'
         elif (last_ma5 - closest_ma) > 0 and ((last_ma5 - closest_ma) / closest_ma <= 0.02) and all_conditions:
-            comment = '골든크로스 돌파! 5일선 추가 2% 상승전! (강력)후발 매수 고려.'
+            comment = '골든크로스 돌파! <b style="color:blue;">5일선</b>이 '+closest_ma_nm2+' 위로 추가 2% 상승전! (강력)후발 매수 고려.'
         elif (last_ma5 - closest_ma) > 0 and ((last_ma5 - closest_ma) / closest_ma <= 0.03) and all_conditions:
-            comment = '골든크로스 돌파! 5일선 추가 3% 상승전! 차익 실현 조심하며 (눌림목)후발 매수 고려.'
+            comment = '골든크로스 돌파! <b style="color:blue;">5일선</b>이 '+closest_ma_nm2+' 위로 추가 3% 상승전! 차익 실현 조심하며 (눌림목)후발 매수 고려.'
         elif (last_ma5 - closest_ma) == 0 and conditions:
-            comment = '골든크로스 발생! (골든크로스 돌파 확인하며 분할)매수.'
+            comment = '골든크로스 발생! (<b style="color:blue;">5일선</b>이 '+closest_ma_nm2+' 위로 골든크로스 돌파 확인하며 분할)매수.'
         elif (last_ma5 - closest_ma) < 0 and (abs(last_ma5 - closest_ma) / closest_ma <= 0.01) and conditions:
-            comment = '골든크로스 발생 전 (1% 이내 근접). 매수 준비 고려.'
+            comment = '골든크로스 발생 전 (<b style="color:blue;">5일선</b>이 '+closest_ma_nm2+' 향하여 1% 이내 근접). 매수 준비 고려.'
         elif (last_ma5 - closest_ma) < 0 and (abs(last_ma5 - closest_ma) / closest_ma <= 0.02) and conditions:
-            comment = '골든크로스 발생 전 (2% 이내 근접). 골든크로스 시도 지켜볼 것.'
+            comment = '골든크로스 발생 전 (<b style="color:blue;">5일선</b>이 '+closest_ma_nm2+' 향하여 2% 이내 근접). 골든크로스 시도 지켜볼 것.'
         elif (last_ma5 - closest_ma) < 0 and (abs(last_ma5 - closest_ma) / closest_ma <= 0.03) and conditions:
-            comment = '골든크로스 발생 전 (3% 이내 근접). 골든크로스 시도 지켜볼 것.'
+            comment = '골든크로스 발생 전 (<b style="color:blue;">5일선</b>이 '+closest_ma_nm2+' 향하여 3% 이내 근접). 골든크로스 시도 지켜볼 것.'
         elif (last_ma5 - closest_ma) > 0:
-            comment = f'5일선 가까운 이평선 위로 {round( ((last_ma5 - closest_ma) / closest_ma) * 100, 1)}% 상위'
+            comment = f'<b style="color:blue;">5일선</b>이 '+closest_ma_nm2+f' 위로 {round( ((last_ma5 - closest_ma) / closest_ma) * 100, 1)}% 상위'
         elif (last_ma5 - closest_ma) < 0:
-            comment = f'5일선 가까운 이평선 아래로 {round( (abs(last_ma5 - closest_ma) / closest_ma) * 100, 1)}% 하위'
+            comment = f'<b style="color:blue;">5일선</b>이 '+closest_ma_nm2+f' 아래로 {round( (abs(last_ma5 - closest_ma) / closest_ma) * 100, 1)}% 하위'
+
+        if (last_ma5 - closest_ma) >= 0:
+            comment2 = '발생'
+        else:
+            comment2 = '대비'
 
         name = self.api.ocx.dynamicCall("GetMasterCodeName(QString)", [code])    
 
@@ -472,7 +480,137 @@ class Trading:
         price = data.get("현재가", 0)
         price = int(price.replace(",", "")) if price else 0
 
-        return {'code': code, 'name':name, 'price':price, 'golden_cross': 'Y' if all_conditions else 'N', 'comment':comment}
+        return {'code': code, 'name':name, 'price':price, 'golden_cross': 'Y' if all_conditions else 'N', 'comment':comment, 'comment2':comment2}
+
+    def detect_dead_cross(self, code):
+        from datetime import datetime
+        import pandas as pd
+
+        logger.info(f"detect_dead_cross > code : {code}")
+
+        end_date = datetime.today().strftime('%Y%m%d')
+
+        # TR 데이터 초기화
+        self.tr_data.pop("opt10081", None)
+
+        # 요청 세팅
+        self.api.ocx.SetInputValue("종목코드", code)
+        self.api.ocx.SetInputValue("기준일자", end_date)
+        self.api.ocx.SetInputValue("수정주가구분", "1")
+        self.api.ocx.CommRqData("opt10081_req", "opt10081", 0, "5001")
+
+        # 이벤트 루프 대기
+        self.tr_event_loop.exec_()
+
+        # 결과 가져오기
+        data = self.tr_data.get("opt10081", [])
+        if not data or len(data) < 120:
+            return {'code': code, 'golden_cross': 'N', 'reason': 'not enough data'}
+
+        df = pd.DataFrame(data)
+        df = df[['일자', '현재가']].copy()
+        df['현재가'] = df['현재가'].astype(int)
+        df.sort_values(by='일자', inplace=True)
+
+        # 이동 평균선 계산
+        df['MA5'] = df['현재가'].rolling(window=5).mean()
+        df['MA20'] = df['현재가'].rolling(window=20).mean()
+        df['MA60'] = df['현재가'].rolling(window=60).mean()
+        df['MA120'] = df['현재가'].rolling(window=120).mean()
+
+        df = df.dropna().reset_index(drop=True)
+        if len(df) < 5:
+            return {'code': code, 'dead_cross': 'N', 'reason': 'not enough data'}
+
+        # 최근 5영업일 기준 분석
+        recent = df.iloc[-5:].copy()
+        logger.info(f"[trading.py] recent: {recent}")
+
+        ma5s = recent['MA5'].tolist()
+        logger.info(f"[trading.py] ma5s: {ma5s}")
+
+        last_ma5 = recent['MA5'].iloc[-1]
+        last_ma20 = recent['MA20'].iloc[-1]
+        last_ma60 = recent['MA60'].iloc[-1]
+        last_ma120 = recent['MA120'].iloc[-1]
+
+        logger.info(f"[trading.py] last_ma5: {last_ma5}, last_ma20: {last_ma20}, last_ma60: {last_ma60}, last_ma120: {last_ma120}")
+
+        long_ma_candidates = [last_ma20, last_ma60, last_ma120]
+        diffs = [abs(last_ma5 - x) for x in long_ma_candidates]
+        min_idx = diffs.index(min(diffs))
+
+        closest_ma_nm = ''
+        closest_ma_nm2 = ''
+        if min_idx == 0:
+            closest_ma_nm = 'MA20'
+            closest_ma_nm2 = '<b style="color:#DAA520;">20일선</b>'
+        elif min_idx == 1:
+            closest_ma_nm = 'MA60'
+            closest_ma_nm2 = '<b style="color:green;">60일선</b>'
+        elif min_idx == 2:
+            closest_ma_nm = 'MA120'
+            closest_ma_nm2 = '<b style="color:red;">120일선</b>'
+
+        closest_ma = long_ma_candidates[min_idx]
+
+        # 조건 체크
+        # 가장 가까운 장기이평선 밑으로(또는 상위) 3% 이내에 접근한 상태.
+        cond1 = (abs(last_ma5 - closest_ma) / closest_ma <= 0.03)
+        # 4영업일(또는 3영업일) 전 5일선이 최근 5일간 5일선 가격 중 가장 높아야 함.
+        cond2 = recent['MA5'].iloc[0] == max(ma5s) or recent['MA5'].iloc[1] == max(ma5s)
+        # 1영업일 전 5일선이 가장 최근 5일선 가격 보다 높아야 함.
+        cond3 = recent['MA5'].iloc[3] > recent['MA5'].iloc[4]
+        # 가장 최근 5일선 가격이 가장 낮아야 함.
+        cond4 = recent['MA5'].iloc[4] == min(ma5s)
+        # 가장 최근 5일선이 가장 가까운 장기이평선 미(하향)돌파 시 5영업일 전 5일선은 5영업일 전 가장 가까운 이평선 상위여야 함.      가장 최근 5일선이 가장 가까운 장기이평선 (하향)돌파 시 5영업일 전 5일선은 5영업일 전 가장 가까운 이평선과 같거나 상위여야 함.
+        cond5 = ( (last_ma5 - closest_ma) >= 0 and recent['MA5'].iloc[0] > recent[closest_ma_nm].iloc[0] ) or ( (last_ma5 - closest_ma) < 0 and (recent['MA5'].iloc[0] >= recent[closest_ma_nm].iloc[0]) )
+
+        all_conditions = all([cond1, cond2, cond3, cond4, cond5])   # 데드크로스(기대) 상태 1
+        conditions = all([cond1, cond3, cond4, cond5])   # 데드크로스(기대) 상태 2
+
+        comment = ''
+        comment2 = ''
+        if (last_ma5 - closest_ma) < 0 and (abs(last_ma5 - closest_ma) / closest_ma <= 0.01) and all_conditions:
+            comment = '데드크로스 하향 돌파! <b style="color:blue;">5일선</b>이 '+closest_ma_nm2+' 아래로 추가 1% 하락전! (이평선 반등 확인하며 하방 뚫릴 시)매도 고려.'
+        elif (last_ma5 - closest_ma) < 0 and (abs(last_ma5 - closest_ma) / closest_ma <= 0.02) and all_conditions:
+            comment = '데드크로스 하향 돌파! <b style="color:blue;">5일선</b>이 '+closest_ma_nm2+' 아래로 추가 2% 하락전! (강력)매도 고려.'
+        elif (last_ma5 - closest_ma) < 0 and (abs(last_ma5 - closest_ma) / closest_ma <= 0.03) and all_conditions:
+            comment = '데드크로스 하향 돌파! <b style="color:blue;">5일선</b>이 '+closest_ma_nm2+' 아래로 추가 3% 하락전! (강력)매도 고려.'
+        elif (last_ma5 - closest_ma) == 0 and conditions:
+            comment = '데드크로스 발생! (<b style="color:blue;">5일선</b>이 '+closest_ma_nm2+' 아래로 하방 돌파 확인하며 분할)매도 고려. (또는 이평선 지켜주며 반등 시 분할 매수)'
+        elif (last_ma5 - closest_ma) > 0 and ((last_ma5 - closest_ma) / closest_ma <= 0.01) and conditions:
+            comment = '데드크로스 발생 전 (<b style="color:blue;">5일선</b>이 하방으로 '+closest_ma_nm2+' 향하여 1% 이내 근접). 매도 준비 고려.'
+        elif (last_ma5 - closest_ma) > 0 and ((last_ma5 - closest_ma) / closest_ma <= 0.02) and conditions:
+            comment = '데드크로스 발생 전 (<b style="color:blue;">5일선</b>이 하방으로 '+closest_ma_nm2+' 향하여 2% 이내 근접). (이평선 지켜주는지 주의하며)매도 준비 고려.'
+        elif (last_ma5 - closest_ma) > 0 and (abs(last_ma5 - closest_ma) / closest_ma <= 0.03) and conditions:
+            comment = '데드크로스 발생 전 (<b style="color:blue;">5일선</b>이 하방으로 '+closest_ma_nm2+' 향하여 3% 이내 근접). (이평선 지켜주는지 주의하며)매도 준비 고려.'
+        elif (last_ma5 - closest_ma) > 0:
+            comment = f'<b style="color:blue;">5일선</b>이 '+closest_ma_nm2+f' 위로 {round( ((last_ma5 - closest_ma) / closest_ma) * 100, 1)}% 상위'
+        elif (last_ma5 - closest_ma) < 0:
+            comment = f'<b style="color:blue;">5일선</b>이 '+closest_ma_nm2+f' 아래로 {round( (abs(last_ma5 - closest_ma) / closest_ma) * 100, 1)}% 하위'
+
+        if (last_ma5 - closest_ma) <= 0:
+            comment2 = '발생'
+        else:
+            comment2 = '주의'
+
+        name = self.api.ocx.dynamicCall("GetMasterCodeName(QString)", [code])    
+
+        self.tr_data.pop("opt10001", None)
+        self.api.ocx.SetInputValue("종목코드", code)
+        self.api.ocx.CommRqData("opt10001_req", "opt10001", 0, "0104")
+
+        self.tr_event_loop.exec_()
+
+        data = self.tr_data.get("opt10001", {})
+
+        logger.info(f"opt10001 > data : {data}")
+
+        price = data.get("현재가", 0)
+        price = int(price.replace(",", "")) if price else 0
+
+        return {'code': code, 'name':name, 'price':price, 'dead_cross': 'Y' if all_conditions else 'N', 'comment':comment, 'comment2':comment2}
 
     def search_stock_by_name(self, keyword):
         kospi_codes = self.api.ocx.dynamicCall("GetCodeListByMarket(QString)", ["0"]).split(';')

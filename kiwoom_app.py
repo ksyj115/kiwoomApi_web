@@ -54,6 +54,8 @@ class KiwoomAppWrapper:
                 result = self.trading.get_moving_average(cmd["code"])
             elif isinstance(cmd, dict) and cmd.get("type") == "detect_golden_cross":
                 result = self.trading.detect_golden_cross(cmd["code"])
+            elif isinstance(cmd, dict) and cmd.get("type") == "detect_dead_cross":
+                result = self.trading.detect_dead_cross(cmd["code"])
             elif isinstance(cmd, dict) and cmd.get("type") == "search_stock_by_name":
                 result = self.trading.search_stock_by_name(cmd["keyword"])    
             elif cmd == "get_invest_weather":

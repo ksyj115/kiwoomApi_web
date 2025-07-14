@@ -253,6 +253,30 @@ def detect_golden_cross():
 
     return jsonify({"error": "timeout"})
 
+@app.route('/detect-dead-cross', methods=['POST'])
+def detect_dead_cross():
+    while not response_queue.empty():
+        response_queue.get()  # 남아있는 응답 버림
+
+    data = request.json
+    code = data.get("code")
+
+    request_queue.put({
+        "type": "detect_dead_cross",
+        "code": code
+    })
+
+    timeout = 10
+    waited = 0
+    while waited < timeout:
+        if not response_queue.empty():
+            result = response_queue.get()
+            return jsonify(result)
+        time.sleep(0.1)
+        waited += 0.1
+
+    return jsonify({"error": "timeout"})
+
 @app.route('/api/search-stock', methods=["POST"])
 def api_search_stock():
     while not response_queue.empty():
