@@ -163,6 +163,34 @@ def get_unfilled_orders():
         waited += 0.1
     return jsonify({"error": "timeout"})
 
+@app.route("/api/cancel_order", methods=["POST"])
+def cancel_order():
+    while not response_queue.empty():
+        response_queue.get()  # 남아있는 응답 버림
+
+    data = request.json
+    order_no = data.get("order_no")
+    code = data.get("code")
+    qty = data.get("qty")
+    order_type = data.get("order_type", "")
+
+    request_queue.put({
+        "type": "cancel_order",
+        "order_no": order_no,
+        "code": code,
+        "qty": qty,
+        "order_type": order_type
+    })
+
+    waited = 0
+    while waited < 10:
+        if not response_queue.empty():
+            return jsonify(response_queue.get())
+        time.sleep(0.1)
+        waited += 0.1
+
+    return jsonify({"error": "timeout"})
+
 @app.route('/get-rsi-data', methods=['POST'])
 def do_something():
     while not response_queue.empty():

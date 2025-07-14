@@ -243,6 +243,7 @@
                                 <th>체결수량</th>
                                 <th>주문가격</th>
                                 <th>남은수량</th>
+                                <th>취소</th>
                             </tr>
                         </thead>
                         <tbody>`;
@@ -257,6 +258,7 @@
                             <td>${order.filled.toLocaleString()} 주</td>
                             <td>${order.price.toLocaleString()} 원</td>
                             <td>${remaining.toLocaleString()} 주</td>
+                            <td><button class="btn btn-danger btn-sm" onclick="cancelOrder('${order.order_no}','${order.code}', ${remaining}, '${order.order_type}')">주문 취소</button></td>
                         </tr>`;
                 });
 
@@ -265,6 +267,28 @@
 
             } catch (err) {
                 el.innerHTML = `<p class="text-danger">❌ 오류 발생: ${err}</p>`;
+            }
+        }
+
+        async function cancelOrder(orderNo, code, qty, orderType) {
+            if (!confirm('해당 주문을 취소하시겠습니까?')) return;
+            try {
+                const res = await fetch('/api/cancel_order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ order_no: orderNo, code: code, qty: qty, order_type: orderType })
+                });
+                const data = await res.json();
+                if (data.error) {
+                    alert('취소 실패: ' + data.error);
+                } else {
+                    alert('주문 취소 요청을 전송했습니다.');
+                    fetchUnfilledOrders();
+                }
+            } catch (err) {
+                alert('취소 요청 오류: ' + err);
             }
         }
 

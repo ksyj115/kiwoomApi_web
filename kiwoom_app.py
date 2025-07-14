@@ -41,6 +41,13 @@ class KiwoomAppWrapper:
                 result = self.trading.place_sell_order(cmd["code"], cmd["price"], cmd["qty"])
             elif cmd == "get_unfilled_orders":
                 result = self.trading.get_unfilled_orders()
+            elif isinstance(cmd, dict) and cmd.get("type") == "cancel_order":
+                result = self.trading.cancel_order(
+                    cmd.get("code"),
+                    cmd.get("order_no"),
+                    cmd.get("qty", 0),
+                    cmd.get("order_type", ""),
+                )
             elif cmd == "get_rsi_data":
                 result = self.trading.analyze_rsi()
             elif isinstance(cmd, dict) and cmd.get("type") == "get_moving_average":

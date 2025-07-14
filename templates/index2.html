@@ -113,7 +113,25 @@
   <div class="container mt-5">
       <h2 class="mb-4">골든크로스(준비) 종목 조회</h2>
       <button class="btn btn-success" onclick="checkGoldenCross()">조회하기</button>
-      <div id="output-goldenCross" class="card p-3 mt-3 shadow-sm" style="display: none;"></div>
+      <!-- <div id="output-goldenCross" class="card p-3 mt-3 shadow-sm" style="display: none;"></div> -->
+  </div>
+
+  <!-- 골든크로스 결과 모달 -->
+  <div class="modal fade" id="goldenCrossModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">골든크로스(준비) 종목 조회 결과</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body" style="max-height: 60vh; overflow-y: auto;">
+            <div id="output-goldenCross" class="card p-3 mt-3 shadow-sm"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+          </div>
+      </div>
+    </div>
   </div>
 
   <!-- 오른쪽 사이드바 -->
@@ -623,7 +641,9 @@
       const basket = loadBasket(); // 예: ["삼성전자[005930]", "카카오[035720]"]
       const resultDiv = document.getElementById("output-goldenCross");
       resultDiv.innerHTML = "<p>📡 골든크로스 분석 중...</p>";
-      resultDiv.style.display = "block";
+      // resultDiv.style.display = "block";
+      const modal = new bootstrap.Modal(document.getElementById("goldenCrossModal"));
+      modal.show();
 
       resultDiv.innerHTML = ""; // 결과 초기화
 

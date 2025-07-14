@@ -179,6 +179,28 @@ class Trading:
         self.tr_event_loop.exec_()
         return self.tr_data.get("opt10075", {"orders": []})
 
+    def cancel_order(self, code, order_no, qty, order_type=""):
+        """미체결 주문 취소"""
+        try:
+            logger.info(f"[주문취소 요청] {order_no} | {code} | {qty}주 | {order_type}")
+            # 매수취소:3, 매도취소:4 - 주문구분으로 판별, 기본은 3(매수취소)
+            order_flag = 3 if "매수" in order_type else 4
+            self.api.ocx.SendOrder(
+                "주문취소",
+                "0103",
+                Config.ACCNO,
+                order_flag,
+                code,
+                qty,
+                0,
+                "00",
+                order_no,
+            )
+            return {"message": "✅ 주문 취소 요청 완료"}
+        except Exception as e:
+            logger.log_error("CANCEL_ORDER", str(e))
+            return {"error": str(e)}
+
     def get_close_prices(self, code="005930", count=250):
         today = datetime.today().strftime('%Y%m%d')
         df = self.api.ocx.block_request("opt10081",
@@ -687,6 +709,8 @@ class Trading:
                     qty = self.api.ocx.GetCommData(trcode, rqname, i, "주문수량").strip()
                     filled = self.api.ocx.GetCommData(trcode, rqname, i, "체결수량").strip()
                     price = self.api.ocx.GetCommData(trcode, rqname, i, "주문가격").strip()
+                    order_no = self.api.ocx.GetCommData(trcode, rqname, i, "주문번호").strip()
+                    order_type = self.api.ocx.GetCommData(trcode, rqname, i, "주문구분").strip()
 
                     logger.info(f"[trading.py] unfilled_orders_req => {code} | {name} | {qty} | {filled} | {price}")
 
@@ -696,6 +720,8 @@ class Trading:
                         "qty": int(qty.replace(",", "") or 0),
                         "filled": int(filled.replace(",", "") or 0),
                         "price": int(price.replace(",", "") or 0),
+                        "order_no": order_no,
+                        "order_type": order_type,
                     })
 
                 self.tr_data["opt10075"] = {"orders": orders}
