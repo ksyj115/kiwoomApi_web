@@ -643,6 +643,28 @@
 
           console.log("✅ 골든크로스 결과:", data);
 
+          // ✅ 먼저 holdings 로딩 완료까지 기다림
+          await fetchHoldings();
+
+          const isOwned = myHoldings.includes(code);
+
+          const buttons = document.createElement("div");
+          buttons.innerHTML = `
+            <button class="btn btn-sm btn-outline-primary buy-btn"
+                data-code="${data.code}"
+                data-name="${data.name}"
+                data-price="${data.price}">
+              구매
+            </button>
+            ${isOwned ? `
+            <button class="btn btn-sm btn-outline-danger ms-2 sell-btn"
+                data-code="${data.code}"
+                data-name="${data.name}"
+                data-price="${data.price}">
+              매도
+            </button>` : ""}
+          `;
+
           const box = document.createElement("div");
           box.className = "border p-2 mb-2 rounded";
 
@@ -667,6 +689,7 @@
 
           box.appendChild(title);
           box.appendChild(result);
+          box.appendChild(buttons);
           resultDiv.appendChild(box);
 
         } catch (err) {
@@ -676,6 +699,8 @@
           resultDiv.appendChild(errorBox);
         }
       }
+
+      alert("골든크로스 조회가 완료되었습니다.");
     }
 
     function getMovingAverage(code) {

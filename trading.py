@@ -435,7 +435,22 @@ class Trading:
         elif (last_ma5 - closest_ma) < 0:
             comment = f'5일선 가까운 이평선 아래로 {round( (abs(last_ma5 - closest_ma) / closest_ma) * 100, 1)}% 하위'
 
-        return {'code': code, 'golden_cross': 'Y' if all_conditions else 'N', 'comment':comment}
+        name = self.api.ocx.dynamicCall("GetMasterCodeName(QString)", [code])    
+
+        self.tr_data.pop("opt10001", None)
+        self.api.ocx.SetInputValue("종목코드", code)
+        self.api.ocx.CommRqData("opt10001_req", "opt10001", 0, "0103")
+
+        self.tr_event_loop.exec_()
+
+        data = self.tr_data.get("opt10001", {})
+
+        logger.info(f"opt10001 > data : {data}")
+
+        price = data.get("현재가", 0)
+        price = int(price.replace(",", "")) if price else 0
+
+        return {'code': code, 'name':name, 'price':price, 'golden_cross': 'Y' if all_conditions else 'N', 'comment':comment}
 
     def search_stock_by_name(self, keyword):
         kospi_codes = self.api.ocx.dynamicCall("GetCodeListByMarket(QString)", ["0"]).split(';')
@@ -706,6 +721,12 @@ class Trading:
                     time = self.api.ocx.GetCommData(trcode, rqname, i, "시간").strip()
                     news_list.append({"title": title, "time": time})
                 self.tr_data["OPT10051"] = news_list
+
+            elif rqname == "opt10001_req":
+                price = self.api.ocx.GetCommData(trcode, rqname, 0, "현재가").strip()
+                self.tr_data["opt10001"] = {
+                    "현재가": price
+                }
 
         finally:
             QTimer.singleShot(0, self.tr_event_loop.quit)
