@@ -248,45 +248,14 @@ class Trading:
             "RSI(SMA)_yesterday": round(rsi_sma_yesterday, 2)
         }
 
-    """
-    키움증권 API 데이터만 화면으로 반환하여, chart.js 로 출력 하려고 하였으나 보류.
+    def get_moving_average(self, code, history_date, history_code, history_price, history_qty, history_flag):
 
-    def get_moving_average(self):
-
-        # 조회할 종목코드
-        code = "005930"  # 삼성전자
-
-        # 일봉 데이터 요청
-        df = self.api.ocx.block_request(
-            "opt10081",
-            종목코드=code,
-            기준일자="20250710",
-            수정주가구분=1,
-            output="주식일봉차트조회",
-            next=0
-        )
-
-        df = df.sort_values(by='일자')  # 날짜 오름차순
-        df['일자'] = pd.to_datetime(df['일자'], format='%Y%m%d').dt.strftime('%Y-%m-%d')
-
-        df['MA_5'] = df['현재가'].rolling(window=5).mean()
-        df['MA_20'] = df['현재가'].rolling(window=20).mean()
-
-        result = []
-        for _, row in df.iterrows():
-            result.append({
-                'date': row['일자'],
-                'close': row['현재가'],
-                'ma_5': round(row['MA_5'], 2) if not pd.isna(row['MA_5']) else None,
-                'ma_20': round(row['MA_20'], 2) if not pd.isna(row['MA_20']) else None
-            })
-
-        return result
-    """
-    def get_moving_average(self, code):
-        # code = "005930"
-        # end_date = "20250710"
-        logger.info(f"str(code) : {str(code)}")
+        logger.info(f"get_moving_average > str(code) : {str(code)}")
+        logger.info(f"get_moving_average > history_date : {history_date}")
+        logger.info(f"get_moving_average > history_code : {history_code}")
+        logger.info(f"get_moving_average > history_price : {history_price}")
+        logger.info(f"get_moving_average > history_qty : {history_qty}")
+        logger.info(f"get_moving_average > history_flag : {history_flag}")
 
         self.tr_data.pop("opt10081", None)
         self.api.ocx.SetInputValue("종목코드", str(code))
@@ -294,29 +263,6 @@ class Trading:
         self.api.ocx.SetInputValue("수정주가구분", "1")
         self.api.ocx.CommRqData("opt10081_req", "opt10081", 0, "5001")
         self.tr_event_loop.exec_()
-
-        """
-        data = self.tr_data.get("opt10081", [])
-        if not data or len(data) < 5:
-            return {"error": "데이터 부족"}
-
-        df = pd.DataFrame(data)
-        df['일자'] = pd.to_datetime(df['일자'], format='%Y%m%d')
-        df['현재가'] = df['현재가'].astype(int)
-        df = df.sort_values('일자').set_index('일자')
-
-        df['MA5'] = df['현재가'].rolling(5).mean()
-        df['MA20'] = df['현재가'].rolling(20).mean()
-        df['MA60'] = df['현재가'].rolling(60).mean()
-        df['MA120'] = df['현재가'].rolling(120).mean()
-
-        def show_chart():
-            chart = ChartDialog(df)
-            chart.exec_()
-
-        p = Process(target=show_chart)
-        p.start()
-        """
 
         data = self.tr_data.get("opt10081", [])
         if not data or len(data) < 5:
@@ -343,11 +289,61 @@ class Trading:
         plt.plot(df.index, df['MA60'], label='60일선', color='green')
         plt.plot(df.index, df['MA120'], label='120일선', color='red')
 
+        # -------------------- 매매 마커 표시 --------------------
+        buy_date = []
+        buy_price = []
+        sell_date = []
+        sell_price = []
+
+        history_flag_list = []
+        history_date_list = []
+        history_price_list = []
+
+        try:
+            # 단일값일 경우 리스트로 변환
+            if isinstance(history_flag, str):
+                history_flag_list = history_flag.split(',')
+            if isinstance(history_date, str):
+                history_date_list = history_date.split(',')
+            if isinstance(history_price, str):
+                history_price_list = history_price.split(',')
+
+            for idx, flag in enumerate(history_flag_list):
+                dt = pd.to_datetime(history_date_list[idx])
+                price = float(history_price_list[idx])
+                if flag == 'buy':
+                    buy_date.append(dt)
+                    buy_price.append(price)
+                elif flag == 'sell':
+                    sell_date.append(dt)
+                    sell_price.append(price)
+
+            # 매수 마커
+            if buy_date:
+                first = True
+                for d, p in zip(buy_date, buy_price):
+                    plt.scatter(d, p, color='purple', marker='^', s=100, label='매수' if first else "")
+                    first = False
+
+            # 매도 마커
+            if sell_date:
+                first = True
+                for d, p in zip(sell_date, sell_price):
+                    plt.scatter(d, p, color='green', marker='v', s=100, label='매도' if first else "")
+                    first = False
+
+        except Exception as e:
+            logger.warning(f"💥 마커 표시 중 오류: {e}")
+        # -------------------- 매매 마커 표시 --------------------
+
         plt.xlabel('날짜')
         plt.ylabel('가격')
         plt.title('이동평균선 (5/20/60/120일)')
         plt.legend()
         plt.grid(True)
+        #------------------
+        plt.tight_layout()
+        #------------------
         plt.show()
 
         return {"status": "success"}

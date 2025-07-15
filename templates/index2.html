@@ -98,7 +98,10 @@
     <div id="output-holdings" class="card p-3 mt-3 shadow-sm" style="display: none;"></div>
   </div>
 
-  <button class="btn btn-sm btn-outline-primary w-20 mt-2" onclick="downloadTradinghistory()">매매기록 CSV 다운로드</button>
+  <button class="btn btn-sm btn-outline-primary w-20 mt-2" onclick="getTradinghistory()">매매기록 조회</button>
+  <br/><button class="btn btn-sm btn-outline-primary w-20 mt-2" onclick="downloadTradinghistory()">매매기록 CSV 다운로드</button>
+  <br/>매매기록 CSV 업로드
+  <input type="file" id="csv-history-upload" class="form-control form-control-sm mt-2" accept=".csv" onchange="uploadTradinghistory(event)">
 
   <div style="margin-top: 30px;">
     <label for="stockSearch">종목명 검색: </label>
@@ -123,6 +126,24 @@
   <div class="container mt-5">
       <h2 class="mb-4">데드크로스(예상) 종목 조회 (BASKET)</h2>&nbsp;&nbsp;&nbsp;<span>※ 5일선, 20일선 모두 단기이평선에 해당하나, 여기서는 5일선을 기준으로 (하향)돌파상태를 조회합니다.</span>
       <br/><br/><button class="btn btn-success" onclick="checkDeadCross()">조회하기</button>
+  </div>
+
+  <!-- 매매기록 모달 -->
+  <div class="modal fade" id="myTradinghistoryModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">매매기록 조회</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body" style="max-height: 60vh; overflow-y: auto;">
+            <div id="output-myTradinghistory" class="card p-3 mt-3 shadow-sm"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+          </div>
+      </div>
+    </div>
   </div>
 
   <!-- 골든크로스 결과 모달 -->
@@ -246,10 +267,19 @@
   </div>
 
   <script>
+    let myModalInstance;
+
     let myHoldings = [];
     const STORAGE_KEY = "watchlist";
     const STORAGE_KEY_2 = "basketlist";
     const STORAGE_KEY_3 = "tradinghistory";
+    
+    let myTradinghistory_date = [];
+    let myTradinghistory_code = [];
+    let myTradinghistory_price = [];
+    let myTradinghistory_qty = [];
+    let myTradinghistory_flag = [];
+    setTradinghistory();
 
     // 관심종목 불러오기
     function loadWatchlist() {
@@ -575,27 +605,31 @@
     function addTradinghistory(code, name, price, qty, flag) {
       let today = new Date();   
 
-      let year = today.getFullYear(); // 년도
-      let month = today.getMonth() + 1;  // 월
-      let date = today.getDate();  // 날짜
+      let year = today.getFullYear();             // 년도: 2024
+      let month = (today.getMonth() + 1).toString().padStart(2, '0');  // 월: 01 ~ 12
+      let date = today.getDate().toString().padStart(2, '0');          // 일: 01 ~ 31
 
-      let tradingDate = year + '.' + month + '.' + date;
-      let param = tradingDate + '_' + name + '['+code+']_' + str(price) + '_' + str(qty)  + '_' + flag
+      // let tradingDate = year + '-' + month + '-' + date;
+      let tradingDate = `${year}${month}${date}`;   // 최종 결과: "20240722"
+
+      let param = tradingDate + '_' + name + '['+code+']_' + (price).toString() + '_' + (qty).toString()  + '_' + flag
 
       let list = tradinghistory();
       list.push(param);
       saveTradinghistory(list);
     }
 
-    // 매매기록 csv 파일 다운로드
     function downloadTradinghistory() {
       const list = tradinghistory();
       if (!list.length) {
-            alert("매매기록이 비어 있습니다.");
-            return;
-        }
+        alert("매매기록이 비어 있습니다.");
+        return;
+      }
+
       const csv = list.join(",");
-      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const bom = new Uint8Array([0xEF, 0xBB, 0xBF]); // 🔑 UTF-8 BOM
+
+      const blob = new Blob([bom, csv], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
 
       const a = document.createElement("a");
@@ -603,6 +637,144 @@
       a.download = "tradinghistory.csv";
       a.click();
       URL.revokeObjectURL(url);
+    }
+
+    function uploadTradinghistory(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const content = e.target.result;
+        const codes = content
+          .split(",")
+          .map(c => c.trim())
+          .filter(Boolean);
+
+        if (codes.length === 0) {
+          alert("파일에 매매기록이 없습니다.");
+          return;
+        }
+
+        const uniqueCodes = Array.from(new Set(codes));
+        saveTradinghistory(uniqueCodes);
+        alert("매매기록이 성공적으로 복원되었습니다!");
+      };
+
+      // ✅ 인코딩 명시 (일반적으로 UTF-8)
+      reader.readAsText(file, 'utf-8');
+    }
+
+    // 매매기록 삭제
+    function removeHistory(index) {
+      console.log("removeHistory");
+      console.log("index : "+index);
+
+      let list = tradinghistory();
+      const deletedIndex = index;
+      list.splice(deletedIndex, 1);
+
+      saveTradinghistory(list);
+      getTradinghistory();
+    }
+
+    function setTradinghistory() {
+      myTradinghistory_date = [];
+      myTradinghistory_code = [];
+      myTradinghistory_price = [];
+      myTradinghistory_qty = [];
+      myTradinghistory_flag = [];
+
+      const list = tradinghistory();
+      
+      list.forEach(trade => {
+        let tradeArr = trade.split("_");
+        myTradinghistory_date.push(tradeArr[0]);
+        
+        const str = tradeArr[1];
+        const lastBracketIndex = str.lastIndexOf("[");
+        const code = str.substring(lastBracketIndex + 1, str.length - 1);
+        myTradinghistory_code.push(code);
+
+        myTradinghistory_price.push(tradeArr[2]);
+        myTradinghistory_qty.push(tradeArr[3]);
+        myTradinghistory_flag.push(tradeArr[4]);
+      });
+
+      console.log("myTradinghistory_date : "+myTradinghistory_date);
+      console.log("myTradinghistory_code : "+myTradinghistory_code);
+      console.log("myTradinghistory_price : "+myTradinghistory_price);
+      console.log("myTradinghistory_qty : "+myTradinghistory_qty);
+      console.log("myTradinghistory_flag : "+myTradinghistory_flag);
+    }
+
+
+    function getTradinghistory() {
+      const list = tradinghistory();
+      const container = document.getElementById("output-myTradinghistory");
+      container.innerHTML = "<p>매매기록 조회 중...</p>";
+
+      // const modal = new bootstrap.Modal(document.getElementById("myTradinghistoryModal"));
+      // modal.show();
+      if (!myModalInstance) {
+        myModalInstance = new bootstrap.Modal(document.getElementById("myTradinghistoryModal"));
+      }
+      myModalInstance.show();
+
+      if (!list.length) {
+        container.innerHTML = "<p class='text-muted'>📭 매매기록이 없습니다.</p>";
+        return;
+      }
+
+      // 테이블 시작
+      let html = `
+        <table class="table table-bordered table-striped table-sm">
+          <thead class="table-light">
+            <tr>
+              <th>No</th>
+              <th>날짜</th>
+              <th>종목명</th>
+              <th>종목코드</th>
+              <th>매매가격</th>
+              <th>수량</th>
+              <th>구분</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      list.forEach((trade, index) => {
+        let tradeArr = trade.split("_");
+        const date = tradeArr[0];
+
+        const str = tradeArr[1];
+        const lastBracketIndex = str.lastIndexOf("[");
+        const code = str.substring(lastBracketIndex + 1, str.length - 1);
+        const nm = str.substring(0, lastBracketIndex);
+
+        const price = tradeArr[2];
+        const qty = tradeArr[3];
+        const flag = tradeArr[4] === "buy" ? "매수" : "매도";
+
+        html += `
+          <tr>
+            <td>${index + 1}</td>
+            <td>${date}</td>
+            <td>${nm}</td>
+            <td>${code}</td>
+            <td>${Number(price).toLocaleString()} 원</td>
+            <td>${qty} 주</td>
+            <td>${flag}</td>
+            <td><button class="btn btn-sm btn-outline-danger ms-2" onclick="removeHistory(${index})">삭제</button></td>
+          </tr>
+        `;
+      });
+
+      html += "</tbody></table>";
+      container.innerHTML = html;
+
+      setTradinghistory();
     }
 
     async function fetchHoldings() {
@@ -728,6 +900,24 @@
         console.log("code : " + code);
 
         try {
+          let history_date = [];
+          let history_code = [];
+          let history_price = [];
+          let history_qty = [];
+          let history_flag = [];
+
+          if(myTradinghistory_code.length > 0){
+            myTradinghistory_code.forEach( (historyCode, index) => {
+              if(historyCode === code){
+                history_date.push(myTradinghistory_date[index]);
+                history_code.push(myTradinghistory_code[index]);
+                history_price.push(myTradinghistory_price[index]);
+                history_qty.push(myTradinghistory_qty[index]);
+                history_flag.push(myTradinghistory_flag[index]);
+              }
+            });
+          }
+
           const res = await fetch('/detect-golden-cross', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -771,8 +961,7 @@
           } else {
             result.innerHTML = `<span class="text-muted">✖ 조건 미충족</span>`;
           }
-          console.log('getMovingAverage(code) : ' + '${code}');
-          result.innerHTML += `<br><span class="text-muted">${data.comment || ""}</span><br><button class="btn btn-success" onclick="getMovingAverage('${code}')">이동평균선 확인</button>`;
+          result.innerHTML += `<br><span class="text-muted">${data.comment || ""}</span><br><button class="btn btn-success" onclick="getMovingAverage('${code}','${history_date}','${history_code}','${history_price}','${history_qty}','${history_flag}')">이동평균선 확인</button>`;
 
           if (data.reason) {
             const reason = document.createElement("div");
@@ -857,7 +1046,6 @@
           } else {
             result.innerHTML = `<span class="text-muted">✖ 조건 미충족</span>`;
           }
-          console.log('getMovingAverage(code) : ' + '${code}');
           result.innerHTML += `<br><span class="text-muted">${data.comment || ""}</span><br><button class="btn btn-success" onclick="getMovingAverage('${code}')">이동평균선 확인</button>`;
 
           if (data.reason) {
@@ -883,11 +1071,18 @@
       alert("데드크로스 조회가 완료되었습니다.");
     }
 
-    function getMovingAverage(code) {
+    function getMovingAverage(code, history_date, history_code, history_price, history_qty, history_flag) {
       fetch('/get-moving-average', {
         method: "POST",
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ code })
+        body: JSON.stringify({ 
+          "code": code,
+          "history_date": history_date,
+          "history_code": history_code,
+          "history_price": history_price,
+          "history_qty": history_qty,
+          "history_flag": history_flag
+        })
       })
       .then(res => res.json())
       .then(data => {
@@ -939,42 +1134,57 @@
         new bootstrap.Modal(document.getElementById("sellModal")).show();
     }
 
-    function submitBuyOrder() {
+    async function submitBuyOrder() {
         const code = document.getElementById("buyCode").value;
         const name = document.getElementById("buyName").value;
         const price = Math.abs(parseInt(document.getElementById("buyPrice").value));
         const qty = parseInt(document.getElementById("buyQty").value);
 
-        fetch("/api/buy", {
-            method: "POST",
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ code, price, qty })
-        })
-        .then(res => res.json())
-        .then(data => {
+        try {
+            const res = await fetch("/api/buy", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code, price, qty })
+            });
+
+            const data = await res.json();
+
+            // ✅ 여기부터 순차적으로 실행됨
+            addTradinghistory(code, name, price, qty, 'buy');
+
             alert(data.message || JSON.stringify(data));
             bootstrap.Modal.getInstance(document.getElementById("buyModal")).hide();
-            addTradinghistory(code, name, price, qty, 'buy')
-        });
+
+        } catch (err) {
+            console.error("❌ 매수 요청 중 오류 발생:", err);
+            alert("❌ 매수 요청 실패: " + err.message);
+        }
     }
 
-    function submitSellOrder() {
+    async function submitSellOrder() {
         const code = document.getElementById("sellCode").value;
         const name = document.getElementById("sellName").value;
         const price = Math.abs(parseInt(document.getElementById("sellPrice").value));
         const qty = parseInt(document.getElementById("sellQty").value);
 
-        fetch("/api/sell", {
-            method: "POST",
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ code, price, qty })
-        })
-        .then(res => res.json())
-        .then(data => {
-            alert(data.message || JSON.stringify(data));
-            bootstrap.Modal.getInstance(document.getElementById("sellModal")).hide();
-            addTradinghistory(code, name, price, qty, 'sell')
-        });
+        try {
+          const res = await fetch("/api/sell", {
+              method: "POST",
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ code, price, qty })
+          });
+
+          const data = await res.json();
+
+          // ✅ 여기부터 순차적으로 실행됨
+          addTradinghistory(code, name, price, qty, 'sell');
+
+          alert(data.message || JSON.stringify(data));
+          bootstrap.Modal.getInstance(document.getElementById("sellModal")).hide();          
+        } catch (err) {
+          console.error("❌ 매수 요청 중 오류 발생:", err);
+          alert("❌ 매도 요청 실패: " + err.message);
+        }
     }
 
     document.addEventListener("DOMContentLoaded", function () {
@@ -993,6 +1203,17 @@
                 openSellModal(code, name, price);
             }
         });
+    });
+
+    document.addEventListener('hidden.bs.modal', function () {
+      // modal-backdrop 제거
+      document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+
+      // body에 남아있는 modal-open 클래스 제거
+      document.body.classList.remove('modal-open');
+
+      // body의 스타일 초기화 (스크롤 막힘 해제 등)
+      document.body.style = 'p-5 bg-light';
     });
   </script>
 </body>

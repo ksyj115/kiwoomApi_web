@@ -212,10 +212,20 @@ def getMovingAverage():
 
     data = request.json
     code = data.get("code")
+    history_date = data.get("history_date")
+    history_code = data.get("history_code")
+    history_price = data.get("history_price")
+    history_qty = data.get("history_qty")
+    history_flag = data.get("history_flag")
 
     request_queue.put({
         "type": "get_moving_average",
-        "code": code
+        "code": code,
+        "history_date": history_date,
+        "history_code": history_code,
+        "history_price": history_price,
+        "history_qty": history_qty,
+        "history_flag": history_flag
     })
 
     timeout = 30

@@ -51,7 +51,7 @@ class KiwoomAppWrapper:
             elif cmd == "get_rsi_data":
                 result = self.trading.analyze_rsi()
             elif isinstance(cmd, dict) and cmd.get("type") == "get_moving_average":
-                result = self.trading.get_moving_average(cmd["code"])
+                result = self.trading.get_moving_average(cmd["code"], cmd["history_date"], cmd["history_code"], cmd["history_price"], cmd["history_qty"], cmd["history_flag"])
             elif isinstance(cmd, dict) and cmd.get("type") == "detect_golden_cross":
                 result = self.trading.detect_golden_cross(cmd["code"])
             elif isinstance(cmd, dict) and cmd.get("type") == "detect_dead_cross":
