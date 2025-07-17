@@ -128,6 +128,14 @@
       <br/><br/><button class="btn btn-success" onclick="checkDeadCross()">조회하기</button>
   </div>
 
+  <br/><br/>
+  <div class="container mt-5">
+      <h2 class="mb-4">RSI 조회</h2>
+      <input type="text" id="rsiCode" value="" /><br>
+      <button class="btn btn-success" onclick="getRsiData()">실시간 RSI 조회하기</button>
+      <div id="output-rsi" class="card p-3 mt-3 shadow-sm" style="display: none;"></div>
+  </div>
+
   <!-- 매매기록 모달 -->
   <div class="modal fade" id="myTradinghistoryModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
@@ -893,6 +901,9 @@
 
       resultDiv.innerHTML = ""; // 결과 초기화
 
+      // ✅ 먼저 holdings 로딩 완료까지 기다림
+      await fetchHoldings();
+
       for (const item of basket) {
         const str = item;
         const lastBracketIndex = str.lastIndexOf("[");
@@ -925,55 +936,63 @@
           });
           const data = await res.json();
 
-          console.log("✅ 골든크로스 결과:", data);
-
-          // ✅ 먼저 holdings 로딩 완료까지 기다림
-          await fetchHoldings();
-
-          const isOwned = myHoldings.includes(code);
-
-          const buttons = document.createElement("div");
-          buttons.innerHTML = `
-            <button class="btn btn-sm btn-outline-primary buy-btn"
-                data-code="${data.code}"
-                data-name="${data.name}"
-                data-price="${Math.abs(data.price)}">
-              구매
-            </button>
-            ${isOwned ? `
-            <button class="btn btn-sm btn-outline-danger ms-2 sell-btn"
-                data-code="${data.code}"
-                data-name="${data.name}"
-                data-price="${Math.abs(data.price)}">
-              매도
-            </button>` : ""}
-          `;
-
-          const box = document.createElement("div");
-          box.className = "border p-2 mb-2 rounded";
-
-          const title = document.createElement("strong");
-          title.textContent = item;
-
-          const result = document.createElement("div");
+          //----------------------- 골든크로스 발생(대비) 종목만 출력 ------------------
           if (data.golden_cross === "Y") {
-            result.innerHTML = `<span class="text-success">✔ 골든크로스 ${data.comment2 || ""}</span>`;
-          } else {
-            result.innerHTML = `<span class="text-muted">✖ 조건 미충족</span>`;
-          }
-          result.innerHTML += `<br><span class="text-muted">${data.comment || ""}</span><br><button class="btn btn-success" onclick="getMovingAverage('${code}','${history_date}','${history_code}','${history_price}','${history_qty}','${history_flag}')">이동평균선 확인</button>`;
+          //----------------------- 골든크로스 발생(대비) 종목만 출력 ------------------
 
-          if (data.reason) {
-            const reason = document.createElement("div");
-            reason.className = "text-danger small";
-            reason.textContent = "📌 " + data.reason;
-            box.appendChild(reason);
-          }
+            console.log("✅ 골든크로스 결과:", data);
 
-          box.appendChild(title);
-          box.appendChild(result);
-          box.appendChild(buttons);
-          resultDiv.appendChild(box);
+            // ✅ 먼저 holdings 로딩 완료까지 기다림
+            // await fetchHoldings();
+
+            const isOwned = myHoldings.includes(code);
+
+            const buttons = document.createElement("div");
+            buttons.innerHTML = `
+              <button class="btn btn-sm btn-outline-primary buy-btn"
+                  data-code="${data.code}"
+                  data-name="${data.name}"
+                  data-price="${Math.abs(data.price)}">
+                구매
+              </button>
+              ${isOwned ? `
+              <button class="btn btn-sm btn-outline-danger ms-2 sell-btn"
+                  data-code="${data.code}"
+                  data-name="${data.name}"
+                  data-price="${Math.abs(data.price)}">
+                매도
+              </button>` : ""}
+            `;
+
+            const box = document.createElement("div");
+            box.className = "border p-2 mb-2 rounded";
+
+            const title = document.createElement("strong");
+            title.textContent = item;
+
+            const result = document.createElement("div");
+            if (data.golden_cross === "Y") {
+              result.innerHTML = `<span class="text-success">✔ 골든크로스 ${data.comment2 || ""}</span>`;
+            } else {
+              result.innerHTML = `<span class="text-muted">✖ 조건 미충족</span>`;
+            }
+            result.innerHTML += `<br><span class="text-muted">${data.comment || ""}</span><br><button class="btn btn-success" onclick="getMovingAverage('${code}','${history_date}','${history_code}','${history_price}','${history_qty}','${history_flag}')">이동평균선 확인</button>`;
+
+            if (data.reason) {
+              const reason = document.createElement("div");
+              reason.className = "text-danger small";
+              reason.textContent = "📌 " + data.reason;
+              box.appendChild(reason);
+            }
+
+            box.appendChild(title);
+            box.appendChild(result);
+            box.appendChild(buttons);
+            resultDiv.appendChild(box);
+
+          //----------------------- 골든크로스 발생(대비) 종목만 출력 ------------------
+          }
+          //----------------------- 골든크로스 발생(대비) 종목만 출력 ------------------
 
         } catch (err) {
           const errorBox = document.createElement("div");
@@ -1010,55 +1029,63 @@
           });
           const data = await res.json();
 
-          console.log("✅ 데드크로스 결과:", data);
-
-          // ✅ 먼저 holdings 로딩 완료까지 기다림
-          await fetchHoldings();
-
-          const isOwned = myHoldings.includes(code);
-
-          const buttons = document.createElement("div");
-          buttons.innerHTML = `
-            <button class="btn btn-sm btn-outline-primary buy-btn"
-                data-code="${data.code}"
-                data-name="${data.name}"
-                data-price="${Math.abs(data.price)}">
-              구매
-            </button>
-            ${isOwned ? `
-            <button class="btn btn-sm btn-outline-danger ms-2 sell-btn"
-                data-code="${data.code}"
-                data-name="${data.name}"
-                data-price="${Math.abs(data.price)}">
-              매도
-            </button>` : ""}
-          `;
-
-          const box = document.createElement("div");
-          box.className = "border p-2 mb-2 rounded";
-
-          const title = document.createElement("strong");
-          title.textContent = item;
-
-          const result = document.createElement("div");
+          //----------------------- 데드크로스 발생(대비) 종목만 출력 ------------------
           if (data.dead_cross === "Y") {
-            result.innerHTML = `<span class="text-success">✔ 데드크로스 ${data.comment2 || ""}</span>`;
-          } else {
-            result.innerHTML = `<span class="text-muted">✖ 조건 미충족</span>`;
-          }
-          result.innerHTML += `<br><span class="text-muted">${data.comment || ""}</span><br><button class="btn btn-success" onclick="getMovingAverage('${code}')">이동평균선 확인</button>`;
+          //----------------------- 데드크로스 발생(대비) 종목만 출력 ------------------
 
-          if (data.reason) {
-            const reason = document.createElement("div");
-            reason.className = "text-danger small";
-            reason.textContent = "📌 " + data.reason;
-            box.appendChild(reason);
-          }
+            console.log("✅ 데드크로스 결과:", data);
 
-          box.appendChild(title);
-          box.appendChild(result);
-          box.appendChild(buttons);
-          resultDiv.appendChild(box);
+            // ✅ 먼저 holdings 로딩 완료까지 기다림
+            await fetchHoldings();
+
+            const isOwned = myHoldings.includes(code);
+
+            const buttons = document.createElement("div");
+            buttons.innerHTML = `
+              <button class="btn btn-sm btn-outline-primary buy-btn"
+                  data-code="${data.code}"
+                  data-name="${data.name}"
+                  data-price="${Math.abs(data.price)}">
+                구매
+              </button>
+              ${isOwned ? `
+              <button class="btn btn-sm btn-outline-danger ms-2 sell-btn"
+                  data-code="${data.code}"
+                  data-name="${data.name}"
+                  data-price="${Math.abs(data.price)}">
+                매도
+              </button>` : ""}
+            `;
+
+            const box = document.createElement("div");
+            box.className = "border p-2 mb-2 rounded";
+
+            const title = document.createElement("strong");
+            title.textContent = item;
+
+            const result = document.createElement("div");
+            if (data.dead_cross === "Y") {
+              result.innerHTML = `<span class="text-success">✔ 데드크로스 ${data.comment2 || ""}</span>`;
+            } else {
+              result.innerHTML = `<span class="text-muted">✖ 조건 미충족</span>`;
+            }
+            result.innerHTML += `<br><span class="text-muted">${data.comment || ""}</span><br><button class="btn btn-success" onclick="getMovingAverage('${code}')">이동평균선 확인</button>`;
+
+            if (data.reason) {
+              const reason = document.createElement("div");
+              reason.className = "text-danger small";
+              reason.textContent = "📌 " + data.reason;
+              box.appendChild(reason);
+            }
+
+            box.appendChild(title);
+            box.appendChild(result);
+            box.appendChild(buttons);
+            resultDiv.appendChild(box);
+
+          //----------------------- 데드크로스 발생(대비) 종목만 출력 ------------------
+          }
+          //----------------------- 데드크로스 발생(대비) 종목만 출력 ------------------
 
         } catch (err) {
           const errorBox = document.createElement("div");
@@ -1088,6 +1115,19 @@
       .then(data => {
         console.log("data : "+data)
       });
+    }
+
+    async function getRsiData() {
+      let rsiCode = $("#rsiCode").val();
+
+      const res = await fetch("/get-rsi-data", {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ "rsiCode": rsiCode })
+      });
+      const data = await res.json();
+      let result = `rsi : ${data.rsi}` + `\navg_gain : ${data.avg_gain}` + `\navg_loss : ${data.avg_loss}`;
+      console.log(result);
     }
 
     function do_for_addStock(name, code){

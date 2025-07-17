@@ -25,12 +25,6 @@
     <div id="gpt-result-invest_weather"></div>
     <img id="weather-img" src="" alt="날씨 이미지">
 
-    <br/><br/><br/>
-    <h1>1. 거시적 시장 상황 점검</h1>
-    <button class="btn btn-primary" onclick="getMicroSituation()">확인 하기</button>
-
-    <div id="gpt-result-invest_micro"></div>
-
     <script>
         async function getWeather() {
             document.getElementById("gpt-result-invest_weather").innerHTML =  '<p class="text-muted">⌛ GPT 의 "오늘의 투자 날씨" 불러오는 중...</p>'
@@ -46,14 +40,6 @@
                 img.src = "/static/cloudy.png";
             }
             img.style.display = "block";
-        }
-
-        async function getMicroSituation() {
-            document.getElementById("gpt-result-invest_micro").innerHTML =  `<p class="text-muted">⌛ GPT 의 "오늘의 거시적 시장 상황" 불러오는 중...</p>`
-            const response = await fetch('/get_invest_micro');
-            const data = await response.json();
-
-            document.getElementById("gpt-result-invest_micro").innerText = data.answer;
         }
     </script>
 </body>

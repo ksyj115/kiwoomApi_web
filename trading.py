@@ -12,8 +12,9 @@ from PyQt5.QtWidgets import QDialog, QWidget, QVBoxLayout
 from datetime import datetime
 from dotenv import load_dotenv
 import os
+import csv
 from openai import OpenAI
-from google_news_scraper import get_google_news_snippets, get_google_nasdaq_snippets
+from google_news_scraper import get_google_news_snippets
 
 load_dotenv(dotenv_path="env_template.env")  # 파일 경로 직접 지정
 
@@ -201,52 +202,151 @@ class Trading:
             logger.log_error("CANCEL_ORDER", str(e))
             return {"error": str(e)}
 
-    def get_close_prices(self, code="005930", count=250):
+    def get_close_prices(self, code, count):
         today = datetime.today().strftime('%Y%m%d')
-        df = self.api.ocx.block_request("opt10081",
-                                    종목코드=code,
-                                    기준일자=today,
-                                    수정주가구분=1,
-                                    output="주식일봉차트조회",
-                                    next=0)
-        close_prices = df['현재가'].astype(int).tolist()
-        return close_prices[:count]
 
-    def calculate_rsi(self, prices, period=14, method='ema'):
-        close = pd.Series(prices)
-        delta = close.diff()
-        gain = delta.clip(lower=0)
-        loss = -delta.clip(upper=0)
+        self.tr_data.pop("opt10081", None)
+        self.api.ocx.SetInputValue("종목코드", code)
+        self.api.ocx.SetInputValue("기준일자", today)
+        self.api.ocx.SetInputValue("수정주가구분", "1")
+        self.api.ocx.SetInputValue("output", "주식일봉차트조회")
+        self.api.ocx.CommRqData("opt10081_req", "opt10081", 0, "5000")
+        self.tr_event_loop.exec_()
 
-        if method == 'sma':
-            avg_gain = gain.rolling(window=period).mean()
-            avg_loss = loss.rolling(window=period).mean()
-        elif method == 'ema':
-            avg_gain = gain.ewm(alpha=1/period, min_periods=period, adjust=False).mean()
-            avg_loss = loss.ewm(alpha=1/period, min_periods=period, adjust=False).mean()
+        df = self.tr_data.get("opt10081", [])
+
+        if(count == 0):
+            close_prices = df
         else:
-            raise ValueError("method must be 'sma' or 'ema'")
+            close_prices = df[:count]
 
-        rs = avg_gain / avg_loss
-        rsi = 100 - (100 / (1 + rs))
-        return rsi
+        logger.info(f"close_prices : {close_prices}")
+        return close_prices
 
-    def analyze_rsi(self):
-        
-        prices = self.get_close_prices()
+    def calculate_rsi(self, prices, period=14):
+        gains = []
+        losses = []
+        rsi = 0
 
-        rsi_ema_today = self.calculate_rsi(prices, method='ema').dropna().iloc[-1]
-        rsi_ema_yesterday = self.calculate_rsi(prices[1:], method='ema').dropna().iloc[-1]
+        for i in range(1, len(prices)):
+            delta = prices[i] - prices[i - 1]
+            if delta > 0:
+                gains.append(delta)
+                losses.append(0)
+            else:
+                gains.append(0)
+                losses.append(abs(delta))
 
-        rsi_sma_today = self.calculate_rsi(prices, method='sma').dropna().iloc[-1]
-        rsi_sma_yesterday = self.calculate_rsi(prices[1:], method='sma').dropna().iloc[-1]
+        avg_gain = sum(gains[:period]) / period
+        avg_loss = sum(losses[:period]) / period
+
+        for i in range(period, len(prices) - 1):
+            gain = gains[i]
+            loss = losses[i]
+            avg_gain = (avg_gain * (period - 1) + gain) / period
+            avg_loss = (avg_loss * (period - 1) + loss) / period
+
+            if avg_loss == 0:
+                rsi = 100
+            else:
+                rs = avg_gain / avg_loss
+                rsi = 100 - (100 / (1 + rs))
 
         return {
-            "RSI(EMA)_today": round(rsi_ema_today, 2),
-            "RSI(EMA)_yesterday": round(rsi_ema_yesterday, 2),
-            "RSI(SMA)_today": round(rsi_sma_today, 2),
-            "RSI(SMA)_yesterday": round(rsi_sma_yesterday, 2)
+            "rsi" : round(rsi, 2)
+            ,"avg_gain" : round(avg_gain, 2)
+            ,"avg_loss" : round(avg_loss, 2)
         }
+
+    def analyze_rsi(self, rsiCode):
+        logger.info(f"analyze_rsi > rsiCode : {rsiCode}")
+        
+        prices = self.get_close_prices(rsiCode, 0)
+
+        #1. 가격만 추출 (종가 리스트 만들기)
+        close_values = [item['현재가'] for item in prices]
+
+        #2. 가격 순서 뒤집기 (과거 → 최근 순으로)
+        #   get_close_prices()는 최신 데이터부터 먼저 오기 때문에, RSI 계산을 위해서는 과거 → 최신 순서로 뒤집어야 함.
+        close_values = close_values[::-1]
+
+        #3. RSI 계산 함수 만들기
+        rsi_dict = self.calculate_rsi(close_values, period=14)
+        logger.info(f"RSI 정보: {rsi_dict}")
+
+        if rsi_dict:
+            # [rsi, avg_gain, avg_loss] csv 파일에 저장
+            today_rsi_data = str(rsi_dict['rsi']) + '_' + str(rsi_dict['avg_gain']) + '_' + str(rsi_dict['avg_loss'])
+            logger.info(f"today_rsi_data : {today_rsi_data}")
+            self.save_single_rsi_to_csv(rsiCode, today_rsi_data)
+
+            return rsi_dict
+        else:
+            logger.warning("RSI 계산에 필요한 데이터가 부족합니다.")
+            return None
+
+    def save_single_rsi_to_csv(self, rsiCode: str, today_rsi_data: str):
+
+        # 1. (YYYY-MM-DD 형식)오늘 날짜와 RSI 데이터, 해당 데이터를 담을 csv 파일 준비
+        today = datetime.today().strftime('%Y-%m-%d')
+        file_path = 'rsi_data.csv'
+
+        # 2. 기존 CSV 읽기
+        if os.path.exists(file_path):
+            with open(file_path, 'r', newline='', encoding='utf-8-sig') as f:
+                reader = csv.reader(f)
+                rows = list(reader)
+        else:
+            # 파일이 없으면 헤더부터 새로 작성
+            rows = [["종목코드"]]
+
+        # 3. 날짜 열 추가 (헤더 확장). 오늘 날짜가 헤더에 없으면 새 열로 추가.
+        header = rows[0]
+        if today not in header:
+            header.append(today)
+        today_index = header.index(today)  # 오늘 날짜 열 번호
+
+
+        #   rows는 csv 파일의 전체 행 리스트 (예시)
+        #   rows = [
+        #       ["종목코드", "2025-07-15", "2025-07-16"],                                       rows[0] = 헤더
+        #       ["005930", "67.42_715.15_304.78", "70.43_726.09_304.78"],                     rows[1]
+        #       ["047200", "42.75_960.51_1257.22", "43.85_981.81_1257.32"],                   rows[2]
+        #   ]
+
+        code_to_row = {row[0]: row for row in rows[1:]}  # "rows[1:]"은 헤더를 제외한 데이터 행들만 추출. "row[0]"은 해당 row의 첫번째 열 "005930"
+        # 결과적으로, **종목코드를 키(key)**로 하고 **해당 행 전체를 값(value)**으로 하는 딕셔너리가 생성
+        #   code_to_row = {
+        #       '005930': ['005930', '67.42_715.15_304.78', '70.43_726.09_304.78'],
+        #       '047200': ['047200', '42.75_960.51_1257.22', '43.85_981.81_1257.32']
+        #   }
+
+
+        # 4. 조건문: 해당 종목코드가 이미 있는지 확인
+        if rsiCode in code_to_row:          # 종목코드가 code_to_row 딕셔너리에 이미 있다면
+            row = code_to_row[rsiCode]      # 그 종목의 기존 행(row)을 불러옴 ( 이미 있는 행이므로 append() 하지 않음 )
+        else:
+            row = [rsiCode]                 # 새 종목코드라면 새 행 생성
+            rows.append(row)
+
+        # 5. 기존 행 길이를 헤더에 맞춤
+        while len(row) <= today_index:
+            row.append("")
+
+        # 6. RSI 값을 덮어쓰기 or 새로 추가
+        row[today_index] = today_rsi_data
+
+        # 7. 전체 행 다시 구성
+        new_rows = [header]
+        for r in rows[1:]:
+            if r[0] != rsiCode:
+                new_rows.append(r)
+        new_rows.append(row)
+
+        # 8. csv 파일 저장
+        with open(file_path, 'w', newline='', encoding='utf-8-sig') as f:
+            writer = csv.writer(f)
+            writer.writerows(new_rows)
 
     def get_moving_average(self, code, history_date, history_code, history_price, history_qty, history_flag):
 
@@ -259,7 +359,6 @@ class Trading:
 
         self.tr_data.pop("opt10081", None)
         self.api.ocx.SetInputValue("종목코드", str(code))
-        # self.api.ocx.SetInputValue("기준일자", end_date)
         self.api.ocx.SetInputValue("수정주가구분", "1")
         self.api.ocx.CommRqData("opt10081_req", "opt10081", 0, "5001")
         self.tr_event_loop.exec_()
@@ -400,6 +499,26 @@ class Trading:
         last_ma60 = recent['MA60'].iloc[-1]
         last_ma120 = recent['MA120'].iloc[-1]
 
+        ind_3_ma5 = recent['MA5'].iloc[3]
+        ind_3_ma20 = recent['MA20'].iloc[3]
+        ind_3_ma60 = recent['MA60'].iloc[3]
+        ind_3_ma120 = recent['MA120'].iloc[3]
+
+        ind_2_ma5 = recent['MA5'].iloc[2]
+        ind_2_ma20 = recent['MA20'].iloc[2]
+        ind_2_ma60 = recent['MA60'].iloc[2]
+        ind_2_ma120 = recent['MA120'].iloc[2]
+
+        ind_1_ma5 = recent['MA5'].iloc[1]
+        ind_1_ma20 = recent['MA20'].iloc[1]
+        ind_1_ma60 = recent['MA60'].iloc[1]
+        ind_1_ma120 = recent['MA120'].iloc[1]
+
+        ind_0_ma5 = recent['MA5'].iloc[0]
+        ind_0_ma20 = recent['MA20'].iloc[0]
+        ind_0_ma60 = recent['MA60'].iloc[0]
+        ind_0_ma120 = recent['MA120'].iloc[0]
+
         logger.info(f"[trading.py] last_ma5: {last_ma5}, last_ma20: {last_ma20}, last_ma60: {last_ma60}, last_ma120: {last_ma120}")
 
         long_ma_candidates = [last_ma20, last_ma60, last_ma120]
@@ -432,8 +551,19 @@ class Trading:
         # 가장 최근 5일선이 가장 가까운 장기이평선 미돌파 시 5영업일 전 5일선은 5영업일 전 가장 가까운 이평선 아래여야 함.      가장 최근 5일선이 가장 가까운 장기이평선 돌파 시 5영업일 전 5일선은 5영업일 전 가장 가까운 이평선과 같거나 아래여야 함.
         cond5 = ( (last_ma5 - closest_ma) <= 0 and recent['MA5'].iloc[0] < recent[closest_ma_nm].iloc[0] ) or ( (last_ma5 - closest_ma) > 0 and (recent['MA5'].iloc[0] <= recent[closest_ma_nm].iloc[0]) )
 
-        all_conditions = all([cond1, cond2, cond3, cond4, cond5])   # 골든크로스(기대) 상태 1
-        conditions = all([cond1, cond3, cond4, cond5])   # 골든크로스(기대) 상태 2
+        # cond6 = ( ind_0_ma5 == min(ind_0_ma5, ind_0_ma20, ind_0_ma60, ind_0_ma120) ) or ( ind_1_ma5 == min(ind_1_ma5, ind_1_ma20, ind_1_ma60, ind_1_ma120) ) or ( ind_2_ma5 == min(ind_2_ma5, ind_2_ma20, ind_2_ma60, ind_2_ma120) ) or ( ind_3_ma5 == min(ind_3_ma5, ind_3_ma20, ind_3_ma60, ind_3_ma120) )
+
+        values = [ind_0_ma5, ind_0_ma20, ind_0_ma60, ind_0_ma120]
+        unique_sorted = sorted(set(values))  # 중복 제거 후 정렬
+        values2 = [ind_1_ma5, ind_1_ma20, ind_1_ma60, ind_1_ma120]
+        unique_sorted2 = sorted(set(values2))  # 중복 제거 후 정렬
+        
+        cond6 = (len(unique_sorted) >= 2 and ind_0_ma5 in unique_sorted[:2]) or (len(unique_sorted2) >= 2 and ind_1_ma5 in unique_sorted2[:2])
+
+        # all_conditions = all([cond1, cond2, cond3, cond4, cond5, cond6])   # 골든크로스(기대) 상태 1
+        # conditions = all([cond1, cond3, cond4, cond5, cond6])   # 골든크로스(기대) 상태 2
+        all_conditions = all([cond1, cond2, cond3, cond4, cond6])   # 골든크로스(기대) 상태 1
+        conditions = all([cond1, cond3, cond4, cond6])   # 골든크로스(기대) 상태 2
 
         comment = ''
         comment2 = ''
@@ -476,7 +606,8 @@ class Trading:
         price = data.get("현재가", 0)
         price = int(price.replace(",", "")) if price else 0
 
-        return {'code': code, 'name':name, 'price':price, 'golden_cross': 'Y' if all_conditions else 'N', 'comment':comment, 'comment2':comment2}
+        # return {'code': code, 'name':name, 'price':price, 'golden_cross': 'Y' if all_conditions else 'N', 'comment':comment, 'comment2':comment2}
+        return {'code': code, 'name':name, 'price':price, 'golden_cross': 'Y' if conditions else 'N', 'comment':comment, 'comment2':comment2}
 
     def detect_dead_cross(self, code):
         from datetime import datetime
@@ -672,53 +803,6 @@ class Trading:
                     break
 
             return {"answer": answer, "direction": direction}
-
-        except Exception as e:
-            from logger import logger
-            logger.error(f"GPT API 호출 오류: {e}")
-            return {"answer": "❌ GPT 응답 중 오류가 발생했습니다.", "direction": "negative"}
-
-    def ask_gpt_for_get_invest_micro(self):
-
-        try:
-            nasdaq = get_google_nasdaq_snippets("나스닥", count=10)
-            return nasdaq
-        except Exception as e:
-            from logger import logger
-            logger.error(f"[Google nasdaq 테스트 오류] {e}")
-            return {"error": str(e)}
-
-    def ask_gpt_for_get_invest_micro_TMP(self):
-        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-
-        system_msg = "주식 투자자의 입장으로써 질문하는 거야. 항상 답변 해주면서, 만약 답변 내용과 관련되어 추천해줄 수 있는 종목이 있다면 구체적으로 같이 알려주면 좋겠어. 결국 목적은 돈을 벌기 위한(또는 돈을 최대한 잃지 않는) 것이기 때문이야."
-
-        user_prompt = f"""
-            현재 시간 기준,
-            미국 증시 및 한국 증시의 거시적 시장 상황 점검을 부탁할게.
-            (아래의 항목을 기준으로 답변 부탁해. 각 항목은 번호를 붙여 놓았고, "=>" 다음에 오는 내용은 해당 질문을 통해 확인하고자 하는 목적이야. 참고하여 답변해주기를 바래.)
-
-            1. 전날 미국 증시 (나스닥, S&P500, 다우) 흐름 => 장기 지수 추세, 변곡점 여부
-            2. 주요 선물지수 (나스닥, S&P500 선물) => 장 시작 전 분위기 파악
-            3. VIX (공포지수) 변화 => 시장 불안 심리 점검
-            4. 주요 경제지표 발표 일정 (오늘 발표 예정 지표) 또는 큰 악재 및 호재가 있는지 여부 => 금리, 실업률, CPI 등 서프라이즈 이슈 대비
-            5. 달러 인덱스, 금리, 유가, 원/달러 환율 => 자금 흐름 및 수출주 영향 판단
-            """
-
-        try:
-            response = client.chat.completions.create(
-                model="gpt-4o",
-                messages=[
-                    {"role": "system", "content": system_msg},
-                    {"role": "user", "content": user_prompt}
-                ],
-                temperature=0.7,
-                max_tokens=600
-            )
-
-            answer = response.choices[0].message.content.strip()
-
-            return {"answer": answer}
 
         except Exception as e:
             from logger import logger

@@ -48,8 +48,8 @@ class KiwoomAppWrapper:
                     cmd.get("qty", 0),
                     cmd.get("order_type", ""),
                 )
-            elif cmd == "get_rsi_data":
-                result = self.trading.analyze_rsi()
+            elif isinstance(cmd, dict) and cmd.get("type") == "get_rsi_data":
+                result = self.trading.analyze_rsi(cmd["rsiCode"])
             elif isinstance(cmd, dict) and cmd.get("type") == "get_moving_average":
                 result = self.trading.get_moving_average(cmd["code"], cmd["history_date"], cmd["history_code"], cmd["history_price"], cmd["history_qty"], cmd["history_flag"])
             elif isinstance(cmd, dict) and cmd.get("type") == "detect_golden_cross":
@@ -60,8 +60,6 @@ class KiwoomAppWrapper:
                 result = self.trading.search_stock_by_name(cmd["keyword"])    
             elif cmd == "get_invest_weather":
                 result = self.trading.ask_gpt_for_invest_weather()  
-            elif cmd == "get_invest_micro":
-                result = self.trading.ask_gpt_for_get_invest_micro()  
             elif cmd == "get_google_news_test":
                 result = self.trading.get_google_news_test()
 

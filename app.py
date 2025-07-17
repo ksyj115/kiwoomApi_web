@@ -196,7 +196,13 @@ def do_something():
     while not response_queue.empty():
         response_queue.get()  # 남아있는 응답 버림
 
-    request_queue.put("get_rsi_data")
+    data = request.json
+    rsiCode = data.get("rsiCode")
+
+    request_queue.put({
+        "type": "get_rsi_data",
+        "rsiCode": rsiCode
+    })
     waited = 0
     while waited < 30:
         if not response_queue.empty():
@@ -316,24 +322,6 @@ def api_search_stock():
 @app.route('/get_invest_weather')
 def get_weather():
     request_queue.put("get_invest_weather")
-    waited = 0
-    timeout = 60  # ✅ 최대 60초까지 기다리도록 설정
-
-    while waited < timeout:
-        if not response_queue.empty():
-            return jsonify(response_queue.get())
-        time.sleep(0.1)
-        waited += 0.1
-
-    return jsonify({"error": "timeout"})
-
-# 임시 보류
-@app.route('/get_invest_micro')
-def get_micro():
-    while not response_queue.empty():
-        response_queue.get()  # 남아있는 응답 버림
-
-    request_queue.put("get_invest_micro")
     waited = 0
     timeout = 60  # ✅ 최대 60초까지 기다리도록 설정
 
