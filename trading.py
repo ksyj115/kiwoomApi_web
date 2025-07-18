@@ -15,6 +15,7 @@ import os
 import csv
 from openai import OpenAI
 from google_news_scraper import get_google_news_snippets
+import sqlite3
 
 load_dotenv(dotenv_path="env_template.env")  # 파일 경로 직접 지정
 
@@ -29,6 +30,28 @@ rc('font', family=font_name)
 
 # 마이너스 기호 깨짐 방지
 plt.rcParams['axes.unicode_minus'] = False
+
+# sqlite3
+# 1. RSI 테이블 생성 (앱 시작 시 1회만)
+def initialize_db():
+    conn = sqlite3.connect("stock_indicators.db")
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS rsi_data (
+            code TEXT,
+            date TEXT,
+            rsi REAL,
+            avg_gain REAL,
+            avg_loss REAL,
+            PRIMARY KEY (code, date)  -- ✅ 중복 판단 기준
+        )
+    ''')
+    conn.commit()
+    conn.close()
+
+# 앱이 시작되자마자 호출되게
+initialize_db()
+
 
 class ChartDialog(QDialog):
     def __init__(self, df):
@@ -275,10 +298,15 @@ class Trading:
         logger.info(f"RSI 정보: {rsi_dict}")
 
         if rsi_dict:
+            """
             # [rsi, avg_gain, avg_loss] csv 파일에 저장
             today_rsi_data = str(rsi_dict['rsi']) + '_' + str(rsi_dict['avg_gain']) + '_' + str(rsi_dict['avg_loss'])
             logger.info(f"today_rsi_data : {today_rsi_data}")
             self.save_single_rsi_to_csv(rsiCode, today_rsi_data)
+            """
+
+            today = datetime.today().strftime('%Y-%m-%d')
+            self.insert_rsi(rsiCode, today, str(rsi_dict['rsi']), str(rsi_dict['avg_gain']), str(rsi_dict['avg_loss']))
 
             return rsi_dict
         else:
@@ -347,6 +375,20 @@ class Trading:
         with open(file_path, 'w', newline='', encoding='utf-8-sig') as f:
             writer = csv.writer(f)
             writer.writerows(new_rows)
+
+    def insert_rsi(self, code, date, rsi, avg_gain, avg_loss):
+        conn = sqlite3.connect("stock_indicators.db")
+        cursor = conn.cursor()
+        cursor.execute('''
+            INSERT INTO rsi_data (code, date, rsi, avg_gain, avg_loss)
+            VALUES (?, ?, ?, ?, ?)
+            ON CONFLICT(code, date) DO UPDATE SET
+                rsi = excluded.rsi,
+                avg_gain = excluded.avg_gain,
+                avg_loss = excluded.avg_loss
+        ''', (code, date, rsi, avg_gain, avg_loss))
+        conn.commit()
+        conn.close()
 
     def get_moving_average(self, code, history_date, history_code, history_price, history_qty, history_flag):
 
@@ -818,6 +860,119 @@ class Trading:
             logger.error(f"[Google 뉴스 테스트 오류] {e}")
             return {"error": str(e)}
 
+    def calculate_macd(self, prices, short_period=12, long_period=26, signal_period=9):
+        short_ema = pd.Series(prices).ewm(span=short_period, adjust=False).mean()
+        long_ema = pd.Series(prices).ewm(span=long_period, adjust=False).mean()
+        macd_line = short_ema - long_ema
+        signal_line = macd_line.ewm(span=signal_period, adjust=False).mean()
+        macd_histogram = macd_line - signal_line
+        return {
+            "macd": round(macd_line.iloc[-1], 2),
+            "signal": round(signal_line.iloc[-1], 2),
+            "histogram": round(macd_histogram.iloc[-1], 2)
+        }
+
+    def analyze_macd(self, code):
+        logger.info(f"analyze_macd > code : {code}")
+        
+        prices = self.get_close_prices(code, 0)
+        close_values = [item['현재가'] for item in prices]
+        close_values = close_values[::-1]  # 최신 데이터가 먼저이므로 반전
+
+        if len(close_values) < 35:
+            return {"error": "MACD 계산에 필요한 데이터 부족"}
+
+        macd_result = self.calculate_macd(close_values)
+        logger.info(f"MACD 정보: {macd_result}")
+        return macd_result
+
+    def get_price_data(self, code, count=120):
+        """
+        키움 API를 통해 일봉 데이터에서 고가, 저가, 현재가(종가)를 가져오는 함수
+        """
+        from datetime import datetime
+        import pandas as pd
+
+        logger.info(f"get_price_data > code : {code}")
+
+        end_date = datetime.today().strftime('%Y%m%d')
+
+        # 기존 데이터 초기화
+        self.tr_data.pop("opt10081", None)
+
+        # 요청 세팅
+        self.api.ocx.SetInputValue("종목코드", code)
+        self.api.ocx.SetInputValue("기준일자", end_date)
+        self.api.ocx.SetInputValue("수정주가구분", "1")
+        self.api.ocx.CommRqData("opt10081_req", "opt10081", 0, "5002")
+
+        # 이벤트 루프 대기
+        self.tr_event_loop.exec_()
+
+        data = self.tr_data.get("opt10081", [])
+        if not data or len(data) < 5:
+            return []
+
+        df = pd.DataFrame(data)
+        df = df[['현재가', '고가', '저가']].copy()
+        df = df.astype(int)
+        df = df[::-1].reset_index(drop=True)  # 과거 → 최신 순으로 정렬
+
+        result = df.to_dict(orient='records')  # 리스트[dict] 형식으로 변환
+
+        if count == 0:
+            return result
+        else:
+            return result[:count]  # 최신 기준 N개만 리턴
+
+    def calculate_slow_stochastic(self, highs, lows, closes, n=14, m=3, t=3):
+        import pandas as pd
+
+        df = pd.DataFrame({
+            "High": highs,
+            "Low": lows,
+            "Close": closes
+        })
+
+        # Raw %K
+        df['lowest_low'] = df['Low'].rolling(window=n).min()
+        df['highest_high'] = df['High'].rolling(window=n).max()
+        df['%K_raw'] = (df['Close'] - df['lowest_low']) / (df['highest_high'] - df['lowest_low']) * 100
+
+        # Slow %K (SMA of %K)
+        df['%K'] = df['%K_raw'].rolling(window=m).mean()
+
+        # Slow %D (SMA of Slow %K)
+        df['%D'] = df['%K'].rolling(window=t).mean()
+
+        last_k = round(df['%K'].iloc[-1], 2)
+        last_d = round(df['%D'].iloc[-1], 2)
+
+        return {
+            "K": last_k,
+            "D": last_d
+        }
+
+    def analyze_stochastic(self, code):
+        logger.info(f"analyze_stochastic > code : {code}")
+
+        prices = self.get_price_data(code, 0)  # TR 요청해서 가격 가져옴
+
+        if len(prices) < 20:
+            return {"error": "데이터 부족"}
+
+        closes = [p['현재가'] for p in prices]
+        highs = [p['고가'] for p in prices]
+        lows = [p['저가'] for p in prices]
+
+        closes = closes[::-1]
+        highs = highs[::-1]
+        lows = lows[::-1]
+
+        result = self.calculate_slow_stochastic(highs, lows, closes)
+        logger.info(f"Slow Stochastic: {result}")
+        return result
+
     def _on_receive_tr_data(self, screen_no, rqname, trcode, recordname, prev_next, data_len, error_code, message, splm_msg):
         try:
             if rqname == "opw00018_req":
@@ -950,11 +1105,13 @@ class Trading:
                 for i in range(count):
                     date = self.api.ocx.GetCommData(trcode, rqname, i, "일자").strip()
                     close = self.api.ocx.GetCommData(trcode, rqname, i, "현재가").strip()
+                    high = self.api.ocx.GetCommData(trcode, rqname, i, "고가").strip()
+                    low = self.api.ocx.GetCommData(trcode, rqname, i, "저가").strip()
                     try:
                         close = int(close)
                     except:
                         continue
-                    rows.append({"일자": date, "현재가": close})
+                    rows.append({"일자": date, "현재가": close, "고가": high, "저가": low})
                 self.tr_data["opt10081"] = rows
 
             elif rqname == "market_news_req":

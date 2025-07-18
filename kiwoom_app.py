@@ -62,5 +62,9 @@ class KiwoomAppWrapper:
                 result = self.trading.ask_gpt_for_invest_weather()  
             elif cmd == "get_google_news_test":
                 result = self.trading.get_google_news_test()
+            elif isinstance(cmd, dict) and cmd.get("type") == "get_macd_data":
+                result = self.trading.analyze_macd(cmd["macdCode"])
+            elif isinstance(cmd, dict) and cmd.get("type") == "get_stochastic_data":
+                result = self.trading.analyze_stochastic(cmd["stochasticCode"])
 
             response_queue.put(result)

@@ -23,6 +23,10 @@ def index3():
 def index4():
     return render_template("index4.html")
 
+@app.route("/index5")
+def index5():
+    return render_template("index5.html")
+
 @app.route("/api/account")
 def get_account():
     while not response_queue.empty():
@@ -345,6 +349,52 @@ def get_google_news_test():
             return jsonify(response_queue.get())
         time.sleep(0.1)
         waited += 0.1
+    return jsonify({"error": "timeout"})
+
+@app.route("/api/macd", methods=["POST"])
+def get_macd():
+    while not response_queue.empty():
+        response_queue.get()
+
+    data = request.json
+    code = data.get("code")
+
+    request_queue.put({
+        "type": "get_macd_data",
+        "macdCode": code
+    })
+
+    timeout = 10
+    waited = 0
+    while waited < timeout:
+        if not response_queue.empty():
+            return jsonify(response_queue.get())
+        time.sleep(0.1)
+        waited += 0.1
+
+    return jsonify({"error": "timeout"})
+
+@app.route("/api/stochastic", methods=["POST"])
+def get_stochastic():
+    while not response_queue.empty():
+        response_queue.get()
+
+    data = request.json
+    code = data.get("code")
+
+    request_queue.put({
+        "type": "get_stochastic_data",
+        "stochasticCode": code
+    })
+
+    timeout = 10
+    waited = 0
+    while waited < timeout:
+        if not response_queue.empty():
+            return jsonify(response_queue.get())
+        time.sleep(0.1)
+        waited += 0.1
+
     return jsonify({"error": "timeout"})
 
 def run_flask():
