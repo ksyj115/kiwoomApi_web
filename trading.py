@@ -31,11 +31,12 @@ rc('font', family=font_name)
 # 마이너스 기호 깨짐 방지
 plt.rcParams['axes.unicode_minus'] = False
 
-# sqlite3
-# 1. RSI 테이블 생성 (앱 시작 시 1회만)
+# 앱 시작 시 1회만 DB 초기화
 def initialize_db():
     conn = sqlite3.connect("stock_indicators.db")
     cursor = conn.cursor()
+
+    # 1. RSI 테이블
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS rsi_data (
             code TEXT,
@@ -43,13 +44,37 @@ def initialize_db():
             rsi REAL,
             avg_gain REAL,
             avg_loss REAL,
-            PRIMARY KEY (code, date)  -- ✅ 중복 판단 기준
+            PRIMARY KEY (code, date)
         )
     ''')
+
+    # 2. MACD 테이블
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS macd_data (
+            code TEXT,
+            date TEXT,
+            macd REAL,
+            signal REAL,
+            histogram REAL,
+            PRIMARY KEY (code, date)
+        )
+    ''')
+
+    # 3. STC (Slow Stochastic) 테이블
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS stc_data (
+            code TEXT,
+            date TEXT,
+            percent_k REAL,
+            percent_d REAL,
+            PRIMARY KEY (code, date)
+        )
+    ''')
+
     conn.commit()
     conn.close()
 
-# 앱이 시작되자마자 호출되게
+# 앱 시작 시 호출
 initialize_db()
 
 
@@ -425,6 +450,7 @@ class Trading:
 
         # 그래프 그리기 (이동평균선만)
         plt.figure(figsize=(12, 6))
+        plt.plot(df.index, df['현재가'], label='현재가', color='black', linestyle='--')  # ✅ 현재가 선 추가
         plt.plot(df.index, df['MA5'], label='5일선', color='blue')
         plt.plot(df.index, df['MA20'], label='20일선', color='orange')
         plt.plot(df.index, df['MA60'], label='60일선', color='green')
@@ -482,9 +508,7 @@ class Trading:
         plt.title('이동평균선 (5/20/60/120일)')
         plt.legend()
         plt.grid(True)
-        #------------------
         plt.tight_layout()
-        #------------------
         plt.show()
 
         return {"status": "success"}
@@ -541,26 +565,6 @@ class Trading:
         last_ma60 = recent['MA60'].iloc[-1]
         last_ma120 = recent['MA120'].iloc[-1]
 
-        ind_3_ma5 = recent['MA5'].iloc[3]
-        ind_3_ma20 = recent['MA20'].iloc[3]
-        ind_3_ma60 = recent['MA60'].iloc[3]
-        ind_3_ma120 = recent['MA120'].iloc[3]
-
-        ind_2_ma5 = recent['MA5'].iloc[2]
-        ind_2_ma20 = recent['MA20'].iloc[2]
-        ind_2_ma60 = recent['MA60'].iloc[2]
-        ind_2_ma120 = recent['MA120'].iloc[2]
-
-        ind_1_ma5 = recent['MA5'].iloc[1]
-        ind_1_ma20 = recent['MA20'].iloc[1]
-        ind_1_ma60 = recent['MA60'].iloc[1]
-        ind_1_ma120 = recent['MA120'].iloc[1]
-
-        ind_0_ma5 = recent['MA5'].iloc[0]
-        ind_0_ma20 = recent['MA20'].iloc[0]
-        ind_0_ma60 = recent['MA60'].iloc[0]
-        ind_0_ma120 = recent['MA120'].iloc[0]
-
         logger.info(f"[trading.py] last_ma5: {last_ma5}, last_ma20: {last_ma20}, last_ma60: {last_ma60}, last_ma120: {last_ma120}")
 
         long_ma_candidates = [last_ma20, last_ma60, last_ma120]
@@ -593,19 +597,8 @@ class Trading:
         # 가장 최근 5일선이 가장 가까운 장기이평선 미돌파 시 5영업일 전 5일선은 5영업일 전 가장 가까운 이평선 아래여야 함.      가장 최근 5일선이 가장 가까운 장기이평선 돌파 시 5영업일 전 5일선은 5영업일 전 가장 가까운 이평선과 같거나 아래여야 함.
         cond5 = ( (last_ma5 - closest_ma) <= 0 and recent['MA5'].iloc[0] < recent[closest_ma_nm].iloc[0] ) or ( (last_ma5 - closest_ma) > 0 and (recent['MA5'].iloc[0] <= recent[closest_ma_nm].iloc[0]) )
 
-        # cond6 = ( ind_0_ma5 == min(ind_0_ma5, ind_0_ma20, ind_0_ma60, ind_0_ma120) ) or ( ind_1_ma5 == min(ind_1_ma5, ind_1_ma20, ind_1_ma60, ind_1_ma120) ) or ( ind_2_ma5 == min(ind_2_ma5, ind_2_ma20, ind_2_ma60, ind_2_ma120) ) or ( ind_3_ma5 == min(ind_3_ma5, ind_3_ma20, ind_3_ma60, ind_3_ma120) )
-
-        values = [ind_0_ma5, ind_0_ma20, ind_0_ma60, ind_0_ma120]
-        unique_sorted = sorted(set(values))  # 중복 제거 후 정렬
-        values2 = [ind_1_ma5, ind_1_ma20, ind_1_ma60, ind_1_ma120]
-        unique_sorted2 = sorted(set(values2))  # 중복 제거 후 정렬
-        
-        cond6 = (len(unique_sorted) >= 2 and ind_0_ma5 in unique_sorted[:2]) or (len(unique_sorted2) >= 2 and ind_1_ma5 in unique_sorted2[:2])
-
-        # all_conditions = all([cond1, cond2, cond3, cond4, cond5, cond6])   # 골든크로스(기대) 상태 1
-        # conditions = all([cond1, cond3, cond4, cond5, cond6])   # 골든크로스(기대) 상태 2
-        all_conditions = all([cond1, cond2, cond3, cond4, cond6])   # 골든크로스(기대) 상태 1
-        conditions = all([cond1, cond3, cond4, cond6])   # 골든크로스(기대) 상태 2
+        all_conditions = all([cond1, cond2, cond3, cond4, cond5])   # 골든크로스(기대) 상태 1
+        conditions = all([cond1, cond3, cond4, cond5])   # 골든크로스(기대) 상태 2
 
         comment = ''
         comment2 = ''
@@ -648,8 +641,7 @@ class Trading:
         price = data.get("현재가", 0)
         price = int(price.replace(",", "")) if price else 0
 
-        # return {'code': code, 'name':name, 'price':price, 'golden_cross': 'Y' if all_conditions else 'N', 'comment':comment, 'comment2':comment2}
-        return {'code': code, 'name':name, 'price':price, 'golden_cross': 'Y' if conditions else 'N', 'comment':comment, 'comment2':comment2}
+        return {'code': code, 'name':name, 'price':price, 'golden_cross': 'Y' if all_conditions else 'N', 'comment':comment, 'comment2':comment2}
 
     def detect_dead_cross(self, code):
         from datetime import datetime
@@ -860,12 +852,30 @@ class Trading:
             logger.error(f"[Google 뉴스 테스트 오류] {e}")
             return {"error": str(e)}
 
-    def calculate_macd(self, prices, short_period=12, long_period=26, signal_period=9):
+    def insert_macd(self, code, date, macd, signal, histogram):
+        conn = sqlite3.connect("stock_indicators.db")
+        cursor = conn.cursor()
+        cursor.execute('''
+            INSERT INTO macd_data (code, date, macd, signal, histogram)
+            VALUES (?, ?, ?, ?, ?)
+            ON CONFLICT(code, date) DO UPDATE SET
+                macd = excluded.macd,
+                signal = excluded.signal,
+                histogram = excluded.histogram
+        ''', (code, date, macd, signal, histogram))
+        conn.commit()
+        conn.close()
+
+    def calculate_macd(self, prices, code, short_period=12, long_period=26, signal_period=9):
         short_ema = pd.Series(prices).ewm(span=short_period, adjust=False).mean()
         long_ema = pd.Series(prices).ewm(span=long_period, adjust=False).mean()
         macd_line = short_ema - long_ema
         signal_line = macd_line.ewm(span=signal_period, adjust=False).mean()
         macd_histogram = macd_line - signal_line
+
+        today = datetime.today().strftime('%Y-%m-%d')
+        self.insert_macd(code, today, round(macd_line.iloc[-1], 2), round(signal_line.iloc[-1], 2), round(macd_histogram.iloc[-1], 2))
+
         return {
             "macd": round(macd_line.iloc[-1], 2),
             "signal": round(signal_line.iloc[-1], 2),
@@ -882,11 +892,11 @@ class Trading:
         if len(close_values) < 35:
             return {"error": "MACD 계산에 필요한 데이터 부족"}
 
-        macd_result = self.calculate_macd(close_values)
+        macd_result = self.calculate_macd(close_values, code)
         logger.info(f"MACD 정보: {macd_result}")
         return macd_result
 
-    def get_price_data(self, code, count=120):
+    def get_price_data(self, code, count=30):
         """
         키움 API를 통해 일봉 데이터에서 고가, 저가, 현재가(종가)를 가져오는 함수
         """
@@ -925,18 +935,32 @@ class Trading:
         else:
             return result[:count]  # 최신 기준 N개만 리턴
 
-    def calculate_slow_stochastic(self, highs, lows, closes, n=14, m=3, t=3):
+    def insert_stc(self, code, date, percent_k, percent_d):
+        conn = sqlite3.connect("stock_indicators.db")
+        cursor = conn.cursor()
+        cursor.execute('''
+            INSERT INTO stc_data (code, date, percent_k, percent_d)
+            VALUES (?, ?, ?, ?)
+            ON CONFLICT(code, date) DO UPDATE SET
+                percent_k = excluded.percent_k,
+                percent_d = excluded.percent_d
+        ''', (code, date, percent_k, percent_d))
+        conn.commit()
+        conn.close()
+
+    def calculate_slow_stochastic(self, highs, lows, closes, code, n=12, m=5, t=3):
         import pandas as pd
 
         df = pd.DataFrame({
-            "High": highs,
-            "Low": lows,
-            "Close": closes
+            "High": highs[::-1],
+            "Low": lows[::-1],
+            "Close": closes[::-1]
         })
 
         # Raw %K
         df['lowest_low'] = df['Low'].rolling(window=n).min()
         df['highest_high'] = df['High'].rolling(window=n).max()
+
         df['%K_raw'] = (df['Close'] - df['lowest_low']) / (df['highest_high'] - df['lowest_low']) * 100
 
         # Slow %K (SMA of %K)
@@ -947,6 +971,9 @@ class Trading:
 
         last_k = round(df['%K'].iloc[-1], 2)
         last_d = round(df['%D'].iloc[-1], 2)
+
+        today = datetime.today().strftime('%Y-%m-%d')
+        self.insert_stc(code, today, last_k, last_d)
 
         return {
             "K": last_k,
@@ -969,7 +996,7 @@ class Trading:
         highs = highs[::-1]
         lows = lows[::-1]
 
-        result = self.calculate_slow_stochastic(highs, lows, closes)
+        result = self.calculate_slow_stochastic(highs, lows, closes, code)
         logger.info(f"Slow Stochastic: {result}")
         return result
 

@@ -143,7 +143,7 @@
   <br/><br/>
   <div class="container mt-5">
       <h2 class="mb-4">MACD 조회</h2>
-      <input type="hidden" id="rsiCode" value="" />
+      <input type="hidden" id="macdCode" value="" />
       <input type="text" id="stockMacdSearch" value="" placeholder="예: 삼성전자" onkeyup="searchMacdStock()" />&nbsp;&nbsp;&nbsp;<span>※ 입력 후 엔터</span>
       <div id="searchMacdResults" style="border: 1px solid #ccc; max-height: 200px; overflow-y: auto; display: none;"></div>
       <div id="pickMacdResult" style="border: 1px solid #ccc; max-height: 200px; overflow-y: auto; display: none;"></div>
@@ -154,7 +154,7 @@
   <br/><br/>
   <div class="container mt-5">
       <h2 class="mb-4">Slow STC 조회</h2>
-      <input type="hidden" id="rsiCode" value="" />
+      <input type="hidden" id="stcCode" value="" />
       <input type="text" id="stockStochasticSearch" value="" placeholder="예: 삼성전자" onkeyup="searchStochasticStock()" />&nbsp;&nbsp;&nbsp;<span>※ 입력 후 엔터</span>
       <div id="searchStochasticResults" style="border: 1px solid #ccc; max-height: 200px; overflow-y: auto; display: none;"></div>
       <div id="pickStochasticResult" style="border: 1px solid #ccc; max-height: 200px; overflow-y: auto; display: none;"></div>
@@ -1455,8 +1455,8 @@
     async function searchStochasticStock() {
       const keyword = document.getElementById("stockStochasticSearch").value;
       if (!keyword.trim()) {
-        document.getElementById("stockStochasticSearch").style.display = "none";
-        document.getElementById("stockStochasticSearch").innerHTML = "";
+        document.getElementById("searchStochasticResults").style.display = "none";
+        document.getElementById("searchStochasticResults").innerHTML = "";
         return;
       }
 
@@ -1470,7 +1470,7 @@
           })
           .then(response => response.json())
           .then(data => {
-            const resultDiv = document.getElementById("stockStochasticSearch");
+            const resultDiv = document.getElementById("searchStochasticResults");
             resultDiv.innerHTML = "";
 
             if (data.length === 0) {
