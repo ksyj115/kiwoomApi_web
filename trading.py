@@ -976,8 +976,8 @@ class Trading:
         self.insert_stc(code, today, last_k, last_d)
 
         return {
-            "K": last_k,
-            "D": last_d
+            "K": last_k
+            ,"D": last_d
         }
 
     def analyze_stochastic(self, code):
@@ -997,6 +997,108 @@ class Trading:
         lows = lows[::-1]
 
         result = self.calculate_slow_stochastic(highs, lows, closes, code)
+        logger.info(f"Slow Stochastic: {result}")
+        return result
+
+    def calculate_slow_stochastic2(self, highs, lows, closes, code, n=12, m=5, t=3):
+        import pandas as pd
+
+        df = pd.DataFrame({
+            "High": highs[::-1],
+            "Low": lows[::-1],
+            "Close": closes[::-1]
+        })
+
+        # Raw %K
+        df['lowest_low'] = df['Low'].rolling(window=n).min()
+        df['highest_high'] = df['High'].rolling(window=n).max()
+
+        df['%K_raw'] = (df['Close'] - df['lowest_low']) / (df['highest_high'] - df['lowest_low']) * 100
+
+        # Slow %K (SMA of %K)
+        df['%K'] = df['%K_raw'].rolling(window=m).mean()
+
+        # Slow %D (SMA of Slow %K)
+        df['%D'] = df['%K'].rolling(window=t).mean()
+
+        last_k = round(df['%K'].iloc[-1], 2)
+        last_d = round(df['%D'].iloc[-1], 2)
+
+        today = datetime.today().strftime('%Y-%m-%d')
+        self.insert_stc(code, today, last_k, last_d)
+
+        #---------------------- db 해당 code 로 (오늘을 포함)2일치 stc_data 테이블의 rows 를 조회 후 통합 조건 적용 ---------------------
+        conn = sqlite3.connect("stock_indicators.db")
+        cursor = conn.cursor()
+
+        # 최근 2일치 데이터 조회
+        cursor.execute("SELECT date, percent_k, percent_d FROM stc_data WHERE code=? ORDER BY date DESC LIMIT 2", (code,))
+        stc_rows = cursor.fetchall()
+
+        cursor.execute("SELECT date, macd, signal FROM macd_data WHERE code=? ORDER BY date DESC LIMIT 2", (code,))
+        macd_rows = cursor.fetchall()
+
+        cursor.execute("SELECT date, rsi FROM rsi_data WHERE code=? ORDER BY date DESC LIMIT 2", (code,))
+        rsi_rows = cursor.fetchall()
+
+        conn.close()
+
+        # 정렬 (과거 → 최근)
+        stc_rows = sorted(stc_rows)
+        macd_rows = sorted(macd_rows)
+        rsi_rows = sorted(rsi_rows)
+
+        # 조건 1. STC 최소 2일 이상 연속 상승
+        # stc_up = 'N'
+        # if len(stc_rows) >= 2:
+        #     k_vals = [r[1] for r in stc_rows[-2:]]
+        #     if k_vals[0] < k_vals[1]:
+        #         stc_up = 'Y'
+
+        # 조건 2. MACD 최소 2일 이상 연속 상승
+        # macd_up = 'N'
+        # if len(macd_rows) >= 2:
+        #     m_vals = [m[1] for m in macd_rows[-2:]]
+        #     if m_vals[0] < m_vals[1]:
+        #         macd_up = 'Y'
+
+        # 조건 3. 오늘 MACD > Signal
+        macd_break = 'N'
+        if len(macd_rows) >= 1 and macd_rows[-1][1] > macd_rows[-1][2]:
+            macd_break = 'Y'
+
+        # 조건 4. 오늘 RSI > 50
+        rsi_up = 'N'
+        if len(rsi_rows) >= 1 and rsi_rows[-1][1] >= 50:
+            rsi_up = 'Y'
+
+        return {
+            "K": last_k
+            ,"D": last_d
+            # ,"stc_up":stc_up
+            # ,"macd_up":macd_up
+            ,"macd_break":macd_break
+            ,"rsi_up":rsi_up
+        }
+        #---------------------- db 해당 code 로 (오늘을 포함)2일치 stc_data 테이블의 rows 를 조회 후 통합 조건 적용 ---------------------
+
+    def analyze_stochastic2(self, code):
+        logger.info(f"analyze_stochastic2 > code : {code}")
+
+        prices = self.get_price_data(code, 0)  # TR 요청해서 가격 가져옴
+
+        if len(prices) < 20:
+            return {"error": "데이터 부족"}
+
+        closes = [p['현재가'] for p in prices]
+        highs = [p['고가'] for p in prices]
+        lows = [p['저가'] for p in prices]
+
+        closes = closes[::-1]
+        highs = highs[::-1]
+        lows = lows[::-1]
+
+        result = self.calculate_slow_stochastic2(highs, lows, closes, code)
         logger.info(f"Slow Stochastic: {result}")
         return result
 

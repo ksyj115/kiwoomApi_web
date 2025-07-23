@@ -66,5 +66,7 @@ class KiwoomAppWrapper:
                 result = self.trading.analyze_macd(cmd["macdCode"])
             elif isinstance(cmd, dict) and cmd.get("type") == "get_stochastic_data":
                 result = self.trading.analyze_stochastic(cmd["stochasticCode"])
+            elif isinstance(cmd, dict) and cmd.get("type") == "get_stochastic_data2":
+                result = self.trading.analyze_stochastic2(cmd["stochasticCode"])
 
             response_queue.put(result)

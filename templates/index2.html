@@ -153,13 +153,21 @@
 
   <br/><br/>
   <div class="container mt-5">
-      <h2 class="mb-4">Slow STC 조회</h2>
+      <h2 class="mb-4">Slow STC 조회 (단순 Slow STC 조회)</h2>
       <input type="hidden" id="stcCode" value="" />
       <input type="text" id="stockStochasticSearch" value="" placeholder="예: 삼성전자" onkeyup="searchStochasticStock()" />&nbsp;&nbsp;&nbsp;<span>※ 입력 후 엔터</span>
       <div id="searchStochasticResults" style="border: 1px solid #ccc; max-height: 200px; overflow-y: auto; display: none;"></div>
       <div id="pickStochasticResult" style="border: 1px solid #ccc; max-height: 200px; overflow-y: auto; display: none;"></div>
       <br><br>
       <button class="btn btn-success" onclick="getStochasticData()">실시간 Slow STC 조회하기 (BASKET 목록)</button>
+  </div>
+
+  <br/><br/>
+  <div class="container mt-5">
+      <h2 class="mb-4">Slow STC 통합 조회 (MACD, RSI, Slow STC 충족)</h2>&nbsp;&nbsp;&nbsp;<span style="font-size: 80%; color:red;">※ RSI, MACD (BASKET 목록) 완료 후 클릭</span>
+      <div id="searchRsiMacdStochasticResults" style="border: 1px solid #ccc; max-height: 200px; overflow-y: auto; display: none;"></div>
+      <br><br>
+      <button class="btn btn-success" onclick="getRsiMacdStochasticData()">실시간 통합 조건 (Slow STC, MACD, RSI) 조회하기 (BASKET 목록)</button>
   </div>
 
   <!-- 매매기록 모달 -->
@@ -462,8 +470,10 @@
         return;
       }
 
-      const csv = list.join(",");  // 예: A005930,A035420
-      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const csv = list.join(",");
+      const bom = new Uint8Array([0xEF, 0xBB, 0xBF]); // 🔑 UTF-8 BOM
+
+      const blob = new Blob([bom, csv], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
 
       const a = document.createElement("a");
@@ -648,8 +658,11 @@
             alert("BASKET 종목이 비어 있습니다.");
             return;
         }
-      const csv = list.join(",");  // 예: A005930,A035420
-      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+
+      const csv = list.join(",");
+      const bom = new Uint8Array([0xEF, 0xBB, 0xBF]); // 🔑 UTF-8 BOM
+
+      const blob = new Blob([bom, csv], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
 
       const a = document.createElement("a");
@@ -805,8 +818,6 @@
       const container = document.getElementById("output-myTradinghistory");
       container.innerHTML = "<p>매매기록 조회 중...</p>";
 
-      // const modal = new bootstrap.Modal(document.getElementById("myTradinghistoryModal"));
-      // modal.show();
       if (!myModalInstance) {
         myModalInstance = new bootstrap.Modal(document.getElementById("myTradinghistoryModal"));
       }
@@ -1255,7 +1266,7 @@
       resultDiv.innerHTML = "<p>📡 RSI 분석 중...</p>";
 
       // ✅ 먼저 holdings 로딩 완료까지 기다림
-      await fetchHoldings();
+      // await fetchHoldings();
         
       try {
         const res = await fetch("/get-rsi-data", {
@@ -1294,7 +1305,7 @@
       resultDiv.innerHTML = ""; // 결과 초기화
 
       // ✅ 먼저 holdings 로딩 완료까지 기다림
-      await fetchHoldings();
+      // await fetchHoldings();
 
       for (const item of basket) {
         const str = item;
@@ -1332,6 +1343,8 @@
           resultDiv.appendChild(errorBox);
         }
       }
+
+      alert("RSI 조회가 완료되었습니다.");
     }
 
     function searchMacdStock() {
@@ -1413,7 +1426,7 @@
       resultDiv.innerHTML = ""; // 결과 초기화
 
       // ✅ 먼저 holdings 로딩 완료까지 기다림
-      await fetchHoldings();
+      // await fetchHoldings();
 
       for (const item of basket) {
         const str = item;
@@ -1450,6 +1463,8 @@
           resultDiv.appendChild(errorBox);
         }
       }
+
+      alert("MACD 조회가 완료되었습니다.");
     }
 
     async function searchStochasticStock() {
@@ -1523,7 +1538,7 @@
     async function getStochasticData() {
       const basket = loadBasket();
       const resultDiv = document.getElementById("output-stc");
-      resultDiv.innerHTML = "<p>📡 MACD 분석 중...</p>";
+      resultDiv.innerHTML = "<p>📡 Slow STC 분석 중...</p>";
 
       const modal = new bootstrap.Modal(document.getElementById("stcModal"));
       modal.show();
@@ -1531,7 +1546,7 @@
       resultDiv.innerHTML = ""; // 결과 초기화
 
       // ✅ 먼저 holdings 로딩 완료까지 기다림
-      await fetchHoldings();
+      // await fetchHoldings();
 
       for (const item of basket) {
         const str = item;
@@ -1558,9 +1573,16 @@
           const result = document.createElement("div");
           result.innerHTML = `<span class="text-success">✔ %K : ${data.K} | %D : ${data.D}</span>`;
 
-          box.appendChild(title);
-          box.appendChild(result);
-          resultDiv.appendChild(box);
+          //------------------- 출력 조건 설정 ---------------------
+          let k = Number(data.K);
+          let d = Number(data.D);
+          
+          if(k > 15 && k < 30 && k >= d){
+            box.appendChild(title);
+            box.appendChild(result);
+            resultDiv.appendChild(box);
+          }          
+          //------------------- 출력 조건 설정 ---------------------
         } catch (err) {
           const errorBox = document.createElement("div");
           errorBox.className = "border p-2 mb-2 text-danger";
@@ -1568,6 +1590,73 @@
           resultDiv.appendChild(errorBox);
         }
       }
+
+      alert("Slow STC 조회가 완료되었습니다.");
+    }
+
+    async function getRsiMacdStochasticData() {
+      const basket = loadBasket();
+      const resultDiv = document.getElementById("output-stc");
+      resultDiv.innerHTML = "<p>📡 분석 중...</p>";
+
+      const modal = new bootstrap.Modal(document.getElementById("stcModal"));
+      modal.show();
+
+      resultDiv.innerHTML = ""; // 결과 초기화
+
+      // ✅ 먼저 holdings 로딩 완료까지 기다림
+      // await fetchHoldings();
+
+      for (const item of basket) {
+        const str = item;
+        const lastBracketIndex = str.lastIndexOf("[");
+        const code = str.substring(lastBracketIndex + 1, str.length - 1);
+        console.log("code : " + code);  
+
+        try {
+          const res = await fetch("/api/stochastic2", {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code: code })
+          });
+
+          const data = await res.json();
+          console.log("STC 결과:", data);
+
+          const box = document.createElement("div");
+          box.className = "border p-2 mb-2 rounded";
+
+          const title = document.createElement("strong");
+          title.textContent = item;
+          
+          const result = document.createElement("div");
+          result.innerHTML = `<span class="text-success">✔ %K : ${data.K}, %D : ${data.D} | MACD 시그널 돌파 : ${data.macd_break} | RSI 50 돌파 : ${data.rsi_up}</span>`;
+
+          //------------------- 출력 조건 설정 ---------------------
+          let k = Number(data.K);
+          let d = Number(data.D);
+          
+          // let stc_up = data.stc_up;
+          // let macd_up = data.macd_up;
+          let macd_break = data.macd_break;
+          let rsi_up = data.rsi_up;
+          
+          // if(k > 15 && k < 30 && k >= d && stc_up === 'Y' && macd_up === 'Y' && macd_break === 'Y' && rsi_up === 'Y'){
+          if(k > 15 && k < 30 && k >= d && macd_break === 'Y' && rsi_up === 'Y'){
+            box.appendChild(title);
+            box.appendChild(result);
+            resultDiv.appendChild(box);
+          }
+          //------------------- 출력 조건 설정 ---------------------
+        } catch (err) {
+          const errorBox = document.createElement("div");
+          errorBox.className = "border p-2 mb-2 text-danger";
+          errorBox.innerHTML = `<strong>${item}</strong> → 오류 발생: ${err}`;
+          resultDiv.appendChild(errorBox);
+        }
+      }
+
+      alert("[Slow STC, MACD, RSI] 통합 조회가 완료되었습니다.");
     }
 
     $(document).on("click", "#close_rsi", function(){

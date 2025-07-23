@@ -397,6 +397,29 @@ def get_stochastic():
 
     return jsonify({"error": "timeout"})
 
+@app.route("/api/stochastic2", methods=["POST"])
+def get_stochastic2():
+    while not response_queue.empty():
+        response_queue.get()
+
+    data = request.json
+    code = data.get("code")
+
+    request_queue.put({
+        "type": "get_stochastic_data2",
+        "stochasticCode": code
+    })
+
+    timeout = 10
+    waited = 0
+    while waited < timeout:
+        if not response_queue.empty():
+            return jsonify(response_queue.get())
+        time.sleep(0.1)
+        waited += 0.1
+
+    return jsonify({"error": "timeout"})
+
 def run_flask():
     app.run(debug=False, use_reloader=False)
 
