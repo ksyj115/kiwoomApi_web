@@ -170,6 +170,13 @@
       <button class="btn btn-success" onclick="getRsiMacdStochasticData()">실시간 통합 조건 (Slow STC, MACD, RSI) 조회하기 (BASKET 목록)</button>
   </div>
 
+  <br/><br/>
+  <div class="container mt-5">
+    <h2 class="mb-4">BASKET 종목 금일 거래량 저장</h2>
+    <div id="result_volume_insert" class="border p-2 mb-2 rounded"></div>
+    <button class="btn btn-success" onclick="saveVolumeData()">저장하기</button>
+  </div>
+
   <!-- 매매기록 모달 -->
   <div class="modal fade" id="myTradinghistoryModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
@@ -1123,9 +1130,7 @@
           });
           const data = await res.json();
 
-          //----------------------- 데드크로스 발생(대비) 종목만 출력 ------------------
           if (data.dead_cross === "Y") {
-          //----------------------- 데드크로스 발생(대비) 종목만 출력 ------------------
 
             console.log("✅ 데드크로스 결과:", data);
 
@@ -1177,9 +1182,7 @@
             box.appendChild(buttons);
             resultDiv.appendChild(box);
 
-          //----------------------- 데드크로스 발생(대비) 종목만 출력 ------------------
           }
-          //----------------------- 데드크로스 발생(대비) 종목만 출력 ------------------
 
         } catch (err) {
           const errorBox = document.createElement("div");
@@ -1577,7 +1580,7 @@
           let k = Number(data.K);
           let d = Number(data.D);
           
-          if(k > 15 && k < 30 && k >= d){
+          if(k > 19 && k < 30 && k >= d){
             box.appendChild(title);
             box.appendChild(result);
             resultDiv.appendChild(box);
@@ -1642,7 +1645,7 @@
           let rsi_up = data.rsi_up;
           
           // if(k > 15 && k < 30 && k >= d && stc_up === 'Y' && macd_up === 'Y' && macd_break === 'Y' && rsi_up === 'Y'){
-          if(k > 15 && k < 30 && k >= d && macd_break === 'Y' && rsi_up === 'Y'){
+          if(k > 19 && k < 30 && k >= d && macd_break === 'Y' && rsi_up === 'Y'){
             box.appendChild(title);
             box.appendChild(result);
             resultDiv.appendChild(box);
@@ -1657,6 +1660,37 @@
       }
 
       alert("[Slow STC, MACD, RSI] 통합 조회가 완료되었습니다.");
+    }
+
+    async function saveVolumeData() {
+      const basket = loadBasket();
+      const resultDiv = document.getElementById("result_volume_insert");
+      resultDiv.innerHTML = "<p>거래량 저장 중...</p>";
+
+      for (const item of basket) {
+        const str = item;
+        const lastBracketIndex = str.lastIndexOf("[");
+        const code = str.substring(lastBracketIndex + 1, str.length - 1);
+        console.log("code : " + code);  
+
+        try {
+          const res = await fetch('/api/save-volume', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code: code })
+          });
+          const data = await res.json();
+          console.log("save-volume 결과:", data);
+        } catch (err) {
+          const errorBox = document.createElement("div");
+          errorBox.className = "border p-2 mb-2 text-danger";
+          errorBox.innerHTML = `<strong>${item}</strong> → 오류 발생: ${err}`;
+          resultDiv.appendChild(errorBox);
+        }
+      }
+      
+      alert("거래량 등록이 완료되었습니다.");
+      resultDiv.innerHTML = "<p>거래량 저장 완료</p>";
     }
 
     $(document).on("click", "#close_rsi", function(){

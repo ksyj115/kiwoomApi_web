@@ -71,6 +71,17 @@ def initialize_db():
         )
     ''')
 
+    # 4. 거래량 테이블
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS volume_data (
+            code TEXT,
+            date TEXT,
+            volume INTEGER,
+            checkYn TEXT,
+            PRIMARY KEY (code, date)
+        )
+    ''')
+
     conn.commit()
     conn.close()
 
@@ -1102,6 +1113,34 @@ class Trading:
         logger.info(f"Slow Stochastic: {result}")
         return result
 
+    def insert_volume(self, code, date, volume):
+        conn = sqlite3.connect("stock_indicators.db")
+        cursor = conn.cursor()
+        cursor.execute('''
+            INSERT INTO volume_data (code, date, volume)
+            VALUES (?, ?, ?)
+            ON CONFLICT(code, date) DO UPDATE SET
+                volume = excluded.volume
+        ''', (code, date, volume))
+        conn.commit()
+        conn.close()
+
+    def insert_get_today_volume(self, code):
+        today = datetime.today().strftime('%Y%m%d')
+        prices = self.get_close_prices(code, 1)
+        if not prices:
+            return {"code": code, "error": "no data"}
+
+        row = prices[0]
+        volume = row.get('거래량', 0)
+        try:
+            volume = int(volume)
+        except Exception:
+            volume = 0
+
+        self.insert_volume(code, today, volume)
+        return {"code": code, "volume": volume}
+
     def _on_receive_tr_data(self, screen_no, rqname, trcode, recordname, prev_next, data_len, error_code, message, splm_msg):
         try:
             if rqname == "opw00018_req":
@@ -1236,11 +1275,18 @@ class Trading:
                     close = self.api.ocx.GetCommData(trcode, rqname, i, "현재가").strip()
                     high = self.api.ocx.GetCommData(trcode, rqname, i, "고가").strip()
                     low = self.api.ocx.GetCommData(trcode, rqname, i, "저가").strip()
+                    volume = self.api.ocx.GetCommData(trcode, rqname, i, "거래량").strip()
+
                     try:
                         close = int(close)
                     except:
                         continue
-                    rows.append({"일자": date, "현재가": close, "고가": high, "저가": low})
+                    try:
+                        volume = int(volume.replace(',', ''))
+                    except Exception:
+                        volume = 0
+
+                    rows.append({"일자": date, "현재가": close, "고가": high, "저가": low, "거래량": volume})
                 self.tr_data["opt10081"] = rows
 
             elif rqname == "market_news_req":

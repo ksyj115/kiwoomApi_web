@@ -68,5 +68,7 @@ class KiwoomAppWrapper:
                 result = self.trading.analyze_stochastic(cmd["stochasticCode"])
             elif isinstance(cmd, dict) and cmd.get("type") == "get_stochastic_data2":
                 result = self.trading.analyze_stochastic2(cmd["stochasticCode"])
+            elif isinstance(cmd, dict) and cmd.get("type") == "save_volume_data":
+                result = self.trading.insert_get_today_volume(cmd["code"])
 
             response_queue.put(result)
