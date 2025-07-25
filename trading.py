@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from matplotlib import font_manager, rc
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
-from PyQt5.QtWidgets import QDialog, QWidget, QVBoxLayout
+from PyQt5.QtWidgets import QDialog, QVBoxLayout
 from datetime import datetime
 from dotenv import load_dotenv
 import os
@@ -79,6 +79,24 @@ def initialize_db():
             volume INTEGER,
             checkYn TEXT,
             PRIMARY KEY (code, date)
+        )
+    ''')
+
+    # 5. BASKET 종목 테이블
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS basket_data (
+            code TEXT,
+            name TEXT,
+            etc TEXT,
+            PRIMARY KEY (code)
+        )
+    ''')
+
+    # 6. 스케줄러 작동 여부 확인용 테이블
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS sch_data (
+            schNm TEXT,
+            status TEXT
         )
     ''')
 
