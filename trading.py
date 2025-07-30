@@ -16,6 +16,10 @@ import csv
 from openai import OpenAI
 from google_news_scraper import get_google_news_snippets
 import sqlite3
+from threading import Thread, Event
+import schedule
+import requests
+import time
 
 load_dotenv(dotenv_path="env_template.env")  # 파일 경로 직접 지정
 
@@ -140,6 +144,67 @@ class Trading:
         self.tr_data = {}
 
         self.api.ocx.OnReceiveTrData.connect(self._on_receive_tr_data)
+
+    def send_slack_message(self, text):
+        webhook_url = "https://hooks.slack.com/services/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"
+        payload = { "text": text }
+
+        response = requests.post(webhook_url, json=payload, verify=False)   # (개발 환경에서만 임시로. 운영 배포 시 절대 사용 금지!)
+
+        if response.status_code != 200:
+            print("Slack 전송 실패:", response.status_code, response.text)
+
+    def volume_search(self, code, name):
+        logger.info(f"trading > volume_search, code,name : {code},{name}")
+
+        prices = self.get_close_prices(code, 2)
+
+        curr_row = prices[0]
+        curr_volume = curr_row.get('거래량', 0)
+        
+        prev_row = prices[1]
+        prev_volume = prev_row.get('거래량', 0)
+
+        logger.info(f"curr_volume : {curr_volume}")
+        logger.info(f"prev_volume : {prev_volume}")
+
+        try:
+            curr_volume = int(curr_volume)
+            logger.info(f"curr_volume : {curr_volume}")
+        except Exception:
+            curr_volume = 0
+
+        try:
+            prev_volume = int(prev_volume)
+            logger.info(f"prev_volume : {prev_volume}")
+        except Exception:
+            prev_volume = 0
+
+        result = ''
+        if curr_volume >= (prev_volume * 2):
+            logger.info("curr_volume >= (prev_volume * 2)")
+
+            #-----------------------------------------------------------------
+
+            stc_macd_result = self.analyze_stochastic(code)
+            stc = stc_macd_result['stc']
+            macd = stc_macd_result['macd']
+
+            if (stc['K'] >= 20 and stc['K'] < 40 and stc['K'] >= stc['D']) and (macd['macd'] > macd['signal']):
+                self.send_slack_message(f"⚠️ {name}[{code}] 거래량 급증 감지")
+                result = 'Y'
+            else:
+                result = 'N'
+
+            #-----------------------------------------------------------------
+
+        else:
+            logger.info("not curr_volume >= (prev_volume * 2)")
+            result = 'N'
+
+        return {
+            'result':result
+        }
 
     def get_balance_summary(self):
         try:
@@ -1027,7 +1092,14 @@ class Trading:
 
         result = self.calculate_slow_stochastic(highs, lows, closes, code)
         logger.info(f"Slow Stochastic: {result}")
-        return result
+
+        close_values = closes[::-1]  # 최신 데이터가 먼저이므로 반전
+        macd_result = self.calculate_macd(close_values, code)
+
+        return {
+            'stc':result
+            ,'macd':macd_result
+        }
 
     def calculate_slow_stochastic2(self, highs, lows, closes, code, n=12, m=5, t=3):
         import pandas as pd

@@ -443,6 +443,32 @@ def save_volume():
         waited += 0.1
     return jsonify({'error': 'timeout'})
 
+@app.route('/api/volume-search', methods=['POST'])
+def volume_search():
+    while not response_queue.empty():
+        response_queue.get()
+
+    data = request.json
+    code = data.get("code")
+    name = data.get("name")
+
+    request_queue.put({
+        "type": "volume_search",
+        "code": code,
+        "name": name
+    })
+
+    timeout = 30
+    waited = 0
+    while waited < timeout:
+        if not response_queue.empty():
+            result = response_queue.get()
+            return jsonify(result)
+        time.sleep(0.1)
+        waited += 0.1
+
+    return jsonify({"error": "timeout"})
+
 def run_flask():
     app.run(debug=False, use_reloader=False)
 

@@ -177,6 +177,15 @@
     <button class="btn btn-success" onclick="saveVolumeData()">저장하기</button>
   </div>
 
+  <br/><br/>
+  <div class="container mt-5">
+    <h2 class="mb-4">급등 거래량 탐지</h2>
+    <button id="checkVolume" class="btn btn-success" onclick="checkVolume()">시작</button>
+    <span id="volumeStatus" class="ms-3">급등 거래량 탐지 정지</span>
+
+    <div id="volumelist-display" class="mt-3"></div>
+  </div>
+
   <!-- 매매기록 모달 -->
   <div class="modal fade" id="myTradinghistoryModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
@@ -376,6 +385,7 @@
     const STORAGE_KEY = "watchlist";
     const STORAGE_KEY_2 = "basketlist";
     const STORAGE_KEY_3 = "tradinghistory";
+    const STORAGE_KEY_4 = "volumelist";
     
     let myTradinghistory_date = [];
     let myTradinghistory_code = [];
@@ -383,6 +393,12 @@
     let myTradinghistory_qty = [];
     let myTradinghistory_flag = [];
     setTradinghistory();
+
+    // 거래량 급등 종목 불러오기
+    function loadVolumelist() {
+      const saved = localStorage.getItem(STORAGE_KEY_4);
+      return saved ? JSON.parse(saved) : [];
+    }
 
     // 관심종목 불러오기
     function loadWatchlist() {
@@ -1565,7 +1581,9 @@
           });
 
           const data = await res.json();
-          console.log("STC 결과:", data);
+          // console.log("STC 결과:", data);
+          console.log("STC 결과:", data.stc);
+          console.log("MACD 결과:", data.macd);
 
           const box = document.createElement("div");
           box.className = "border p-2 mb-2 rounded";
@@ -1574,13 +1592,23 @@
           title.textContent = item;
           
           const result = document.createElement("div");
-          result.innerHTML = `<span class="text-success">✔ %K : ${data.K} | %D : ${data.D}</span>`;
+          result.innerHTML = `<span class="text-success">✔ %K : ${data.stc.K} | %D : ${data.stc.D}</span>`;
 
           //------------------- 출력 조건 설정 ---------------------
-          let k = Number(data.K);
-          let d = Number(data.D);
+          // let k = Number(data.K);
+          // let d = Number(data.D);
           
-          if(k > 19 && k < 30 && k >= d){
+          // if(k > 19 && k < 30 && k >= d){
+          //   box.appendChild(title);
+          //   box.appendChild(result);
+          //   resultDiv.appendChild(box);
+          // }          
+          let k = Number(data.stc.K);
+          let d = Number(data.stc.D);
+          let macd = Number(data.macd.macd);
+          let signal = Number(data.macd.signal);
+          
+          if(k > 19 && k < 35 && k >= d && macd >= signal){
             box.appendChild(title);
             box.appendChild(result);
             resultDiv.appendChild(box);
@@ -1691,6 +1719,44 @@
       
       alert("거래량 등록이 완료되었습니다.");
       resultDiv.innerHTML = "<p>거래량 저장 완료</p>";
+    }
+
+    async function checkVolume(){
+      const basket = loadBasket();
+      const resultDiv = document.getElementById("volumeStatus");
+      resultDiv.innerHTML = "<p>거래량 급등 종목 조회 중...</p>";
+
+      for (const item of basket) {
+        const str = item;
+        const lastBracketIndex = str.lastIndexOf("[");
+        const code = str.substring(lastBracketIndex + 1, str.length - 1);
+        const name = str.substring(0, lastBracketIndex);
+        console.log("code : " + code);
+        console.log("name : " + name);
+
+        try {
+
+          const res = await fetch('/api/volume-search', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+              code: code
+              ,name: name
+            })
+          });
+          const data = await res.json();
+          console.log(name + "["+code+"] volume-search 결과 : ", data.result);
+
+        } catch (err) {
+          const errorBox = document.createElement("div");
+          errorBox.className = "border p-2 mb-2 text-danger";
+          errorBox.innerHTML = `<strong>${item}</strong> → 오류 발생: ${err}`;
+          resultDiv.appendChild(errorBox);
+        }
+      }
+
+      resultDiv.innerHTML = "<p>거래량 급등 종목 조회 종료</p>";
+      alert("거래량 급등 종목 조회가 완료되었습니다.");
     }
 
     $(document).on("click", "#close_rsi", function(){
