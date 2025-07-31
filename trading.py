@@ -146,7 +146,7 @@ class Trading:
         self.api.ocx.OnReceiveTrData.connect(self._on_receive_tr_data)
 
     def send_slack_message(self, text):
-        webhook_url = "https://hooks.slack.com/services/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"
+        webhook_url = ""
         payload = { "text": text }
 
         response = requests.post(webhook_url, json=payload, verify=False)   # (개발 환경에서만 임시로. 운영 배포 시 절대 사용 금지!)
