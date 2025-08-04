@@ -469,6 +469,20 @@ def volume_search():
 
     return jsonify({"error": "timeout"})
 
+@app.route('/api/start_loss_gain_monitor', methods=['POST'])
+def start_loss_gain_monitor():
+    while not response_queue.empty():
+        response_queue.get()
+
+    request_queue.put("start_loss_gain_monitor")
+    waited = 0
+    while waited < 10:
+        if not response_queue.empty():
+            return jsonify(response_queue.get())
+        time.sleep(0.1)
+        waited += 0.1
+    return jsonify({"error": "timeout"})
+
 def run_flask():
     app.run(debug=False, use_reloader=False)
 

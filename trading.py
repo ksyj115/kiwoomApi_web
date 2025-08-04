@@ -2,7 +2,6 @@ from PyQt5.QtCore import QEventLoop, QTimer
 from config import Config
 import logging
 from logger import logger
-from multiprocessing import Process
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib import font_manager, rc
@@ -16,10 +15,7 @@ import csv
 from openai import OpenAI
 from google_news_scraper import get_google_news_snippets
 import sqlite3
-from threading import Thread, Event
-import schedule
 import requests
-import time
 
 load_dotenv(dotenv_path="env_template.env")  # 파일 경로 직접 지정
 
@@ -146,7 +142,7 @@ class Trading:
         self.api.ocx.OnReceiveTrData.connect(self._on_receive_tr_data)
 
     def send_slack_message(self, text):
-        webhook_url = ""
+        webhook_url = "https://hooks.slack.com/services/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"
         payload = { "text": text }
 
         response = requests.post(webhook_url, json=payload, verify=False)   # (개발 환경에서만 임시로. 운영 배포 시 절대 사용 금지!)
@@ -184,8 +180,6 @@ class Trading:
         if curr_volume >= (prev_volume * 2):
             logger.info("curr_volume >= (prev_volume * 2)")
 
-            #-----------------------------------------------------------------
-
             stc_macd_result = self.analyze_stochastic(code)
             stc = stc_macd_result['stc']
             macd = stc_macd_result['macd']
@@ -195,8 +189,6 @@ class Trading:
                 result = 'Y'
             else:
                 result = 'N'
-
-            #-----------------------------------------------------------------
 
         else:
             logger.info("not curr_volume >= (prev_volume * 2)")
@@ -1128,7 +1120,7 @@ class Trading:
         today = datetime.today().strftime('%Y-%m-%d')
         self.insert_stc(code, today, last_k, last_d)
 
-        #---------------------- db 해당 code 로 (오늘을 포함)2일치 stc_data 테이블의 rows 를 조회 후 통합 조건 적용 ---------------------
+        #---------------------- db 조회 : (오늘을 포함)2일치 stc_data 테이블의 rows 를 조회 후 통합 조건 적용 ---------------------
         conn = sqlite3.connect("stock_indicators.db")
         cursor = conn.cursor()
 
@@ -1150,18 +1142,18 @@ class Trading:
         rsi_rows = sorted(rsi_rows)
 
         # 조건 1. STC 최소 2일 이상 연속 상승
-        # stc_up = 'N'
-        # if len(stc_rows) >= 2:
-        #     k_vals = [r[1] for r in stc_rows[-2:]]
-        #     if k_vals[0] < k_vals[1]:
-        #         stc_up = 'Y'
+        stc_up = 'N'
+        if len(stc_rows) >= 2:
+            k_vals = [r[1] for r in stc_rows[-2:]]
+            if k_vals[0] < k_vals[1]:
+                stc_up = 'Y'
 
         # 조건 2. MACD 최소 2일 이상 연속 상승
-        # macd_up = 'N'
-        # if len(macd_rows) >= 2:
-        #     m_vals = [m[1] for m in macd_rows[-2:]]
-        #     if m_vals[0] < m_vals[1]:
-        #         macd_up = 'Y'
+        macd_up = 'N'
+        if len(macd_rows) >= 2:
+            m_vals = [m[1] for m in macd_rows[-2:]]
+            if m_vals[0] < m_vals[1]:
+                macd_up = 'Y'
 
         # 조건 3. 오늘 MACD > Signal
         macd_break = 'N'
@@ -1176,12 +1168,12 @@ class Trading:
         return {
             "K": last_k
             ,"D": last_d
-            # ,"stc_up":stc_up
-            # ,"macd_up":macd_up
+            ,"stc_up":stc_up
+            ,"macd_up":macd_up
             ,"macd_break":macd_break
             ,"rsi_up":rsi_up
         }
-        #---------------------- db 해당 code 로 (오늘을 포함)2일치 stc_data 테이블의 rows 를 조회 후 통합 조건 적용 ---------------------
+        #---------------------- db 조회 : (오늘을 포함)2일치 stc_data 테이블의 rows 를 조회 후 통합 조건 적용 ---------------------
 
     def analyze_stochastic2(self, code):
         logger.info(f"analyze_stochastic2 > code : {code}")
@@ -1230,6 +1222,55 @@ class Trading:
 
         self.insert_volume(code, today, volume)
         return {"code": code, "volume": volume}
+
+    def _sell_at_market(self, code, qty):
+
+        logger.info(f"code : {code}")
+        logger.info(f"qty : {qty}")
+
+        try:
+            self.api.ocx.SendOrder(
+                "손절매도",
+                "0110",
+                Config.ACCNO,
+                2,
+                code,
+                qty,
+                0,
+                "03",
+                ""
+            )
+            return True
+        except Exception as e:
+            logger.log_error("AUTO_SELL", str(e))
+            return False
+
+    def start_loss_gain_monitoring(self):
+        logger.info("trading.py > start_loss_gain_monitoring")
+
+        holdings = self.get_holdings()
+        for h in holdings:
+            buy = h.get("purchase_price", 0)
+            cur = h.get("current_price", 0)
+            qty = h.get("quantity", 0)
+
+            code = h.get("code")
+            code = code.replace("A", "")
+
+            logger.info(f"purchase_price : {buy}")
+            logger.info(f"current_price : {cur}")
+            logger.info(f"quantity : {qty}")
+
+            if buy <= 0 or qty <= 0:
+                continue
+            rate = (cur - buy) / buy * 100
+            if rate <= -3 or rate >= 5:
+                logger.info(f"[자동매도] {h.get('name')}({h.get('code')}) 손익률 {rate:.2f}% -> 전량 매도")
+                self._sell_at_market(code, qty)
+
+        return{
+            'message':'ok'
+        }
 
     def _on_receive_tr_data(self, screen_no, rqname, trcode, recordname, prev_next, data_len, error_code, message, splm_msg):
         try:

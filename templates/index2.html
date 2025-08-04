@@ -153,21 +153,20 @@
 
   <br/><br/>
   <div class="container mt-5">
-      <h2 class="mb-4">Slow STC 조회 (단순 Slow STC 조회)</h2>
-      <input type="hidden" id="stcCode" value="" />
+      <h2 class="mb-4">Slow STC 조회 (Slow STC : 20 ~ 30 사이, %D 돌파 && MACD 시그널 돌파)</h2>
       <input type="text" id="stockStochasticSearch" value="" placeholder="예: 삼성전자" onkeyup="searchStochasticStock()" />&nbsp;&nbsp;&nbsp;<span>※ 입력 후 엔터</span>
       <div id="searchStochasticResults" style="border: 1px solid #ccc; max-height: 200px; overflow-y: auto; display: none;"></div>
       <div id="pickStochasticResult" style="border: 1px solid #ccc; max-height: 200px; overflow-y: auto; display: none;"></div>
       <br><br>
-      <button class="btn btn-success" onclick="getStochasticData()">실시간 Slow STC 조회하기 (BASKET 목록)</button>
+      <button class="btn btn-success" onclick="getStochasticData()">조회하기 (BASKET 목록)</button>
   </div>
 
   <br/><br/>
   <div class="container mt-5">
-      <h2 class="mb-4">Slow STC 통합 조회 (MACD, RSI, Slow STC 충족)</h2>&nbsp;&nbsp;&nbsp;<span style="font-size: 80%; color:red;">※ RSI, MACD (BASKET 목록) 완료 후 클릭</span>
+      <h2 class="mb-4">Slow STC 통합 조회 (MACD, RSI, Slow STC 모두 충족 조건)</h2>&nbsp;&nbsp;&nbsp;<span style="font-size: 80%; color:red;">※ RSI, MACD 조회 완료 후 클릭할 것</span>
       <div id="searchRsiMacdStochasticResults" style="border: 1px solid #ccc; max-height: 200px; overflow-y: auto; display: none;"></div>
       <br><br>
-      <button class="btn btn-success" onclick="getRsiMacdStochasticData()">실시간 통합 조건 (Slow STC, MACD, RSI) 조회하기 (BASKET 목록)</button>
+      <button class="btn btn-success" onclick="getRsiMacdStochasticData()">조회하기 (BASKET 목록)</button>
   </div>
 
   <br/><br/>
@@ -1564,9 +1563,6 @@
 
       resultDiv.innerHTML = ""; // 결과 초기화
 
-      // ✅ 먼저 holdings 로딩 완료까지 기다림
-      // await fetchHoldings();
-
       for (const item of basket) {
         const str = item;
         const lastBracketIndex = str.lastIndexOf("[");
@@ -1581,7 +1577,6 @@
           });
 
           const data = await res.json();
-          // console.log("STC 결과:", data);
           console.log("STC 결과:", data.stc);
           console.log("MACD 결과:", data.macd);
 
@@ -1595,20 +1590,12 @@
           result.innerHTML = `<span class="text-success">✔ %K : ${data.stc.K} | %D : ${data.stc.D}</span>`;
 
           //------------------- 출력 조건 설정 ---------------------
-          // let k = Number(data.K);
-          // let d = Number(data.D);
-          
-          // if(k > 19 && k < 30 && k >= d){
-          //   box.appendChild(title);
-          //   box.appendChild(result);
-          //   resultDiv.appendChild(box);
-          // }          
           let k = Number(data.stc.K);
           let d = Number(data.stc.D);
           let macd = Number(data.macd.macd);
           let signal = Number(data.macd.signal);
           
-          if(k > 19 && k < 35 && k >= d && macd >= signal){
+          if(k > 19 && k < 30 && k >= d && macd >= signal){
             box.appendChild(title);
             box.appendChild(result);
             resultDiv.appendChild(box);
@@ -1622,7 +1609,7 @@
         }
       }
 
-      alert("Slow STC 조회가 완료되었습니다.");
+      alert("Slow STC && MACD 시그널 돌파 조회가 완료되었습니다.");
     }
 
     async function getRsiMacdStochasticData() {
@@ -1634,9 +1621,6 @@
       modal.show();
 
       resultDiv.innerHTML = ""; // 결과 초기화
-
-      // ✅ 먼저 holdings 로딩 완료까지 기다림
-      // await fetchHoldings();
 
       for (const item of basket) {
         const str = item;
@@ -1667,13 +1651,12 @@
           let k = Number(data.K);
           let d = Number(data.D);
           
-          // let stc_up = data.stc_up;
-          // let macd_up = data.macd_up;
+          let stc_up = data.stc_up;
+          let macd_up = data.macd_up;
           let macd_break = data.macd_break;
           let rsi_up = data.rsi_up;
           
-          // if(k > 15 && k < 30 && k >= d && stc_up === 'Y' && macd_up === 'Y' && macd_break === 'Y' && rsi_up === 'Y'){
-          if(k > 19 && k < 30 && k >= d && macd_break === 'Y' && rsi_up === 'Y'){
+          if(k > 19 && k < 30 && k >= d && stc_up === 'Y' && macd_up === 'Y' && macd_break === 'Y' && rsi_up === 'Y'){
             box.appendChild(title);
             box.appendChild(result);
             resultDiv.appendChild(box);
@@ -1687,7 +1670,7 @@
         }
       }
 
-      alert("[Slow STC, MACD, RSI] 통합 조회가 완료되었습니다.");
+      alert("[Slow STC, MACD, RSI] 통합 조건 조회가 완료되었습니다.");
     }
 
     async function saveVolumeData() {

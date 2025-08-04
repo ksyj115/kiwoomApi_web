@@ -41,6 +41,14 @@
         <div id="output-unfilledOrders" class="card p-3 mt-3 shadow-sm" style="display: none;"></div>
     </div>
 
+    <br/><br/>
+    <div class="container mt-5">
+        <h2 class="mb-4">자동 손절 설정</h2>
+        <button class="btn btn-danger" onclick="lossGainMonitor()">-3% 이하 or +5% 이상 전량 매도 시작</button>
+        <button class="btn btn-secondary ms-2" onclick="stopLossGainMonitor()">중지</button>
+        <div id="lossGainMonitorStatus"></div>
+    </div>
+
     <!-- 매수 모달 -->
     <div class="modal fade" id="buyModal" tabindex="-1">
         <div class="modal-dialog">
@@ -99,6 +107,7 @@
 
     <script>
         let myHoldings = [];
+        let lossGainMonitorVar = null;
 
         async function fetchAccount() {
             const el = document.getElementById("output");
@@ -285,6 +294,33 @@
             } catch (err) {
                 alert('취소 요청 오류: ' + err);
             }
+        }
+
+        function lossGainMonitor() {
+            const el = document.getElementById("lossGainMonitorStatus");
+            el.innerHTML = `<p class="text-muted" style="color: blue;">(-3%) 자동 손절, (+5%) 자동 매도 - 작동 중...</p>`;
+
+            startLossGainMonitor()
+            lossGainMonitorVar = setInterval(function() {
+                startLossGainMonitor()
+            }, 300000);
+        }
+
+        async function startLossGainMonitor() {
+            try {
+                const res = await fetch('/api/start_loss_gain_monitor', { method: 'POST' });
+                const data = await res.json();
+                console.log(data.message);
+            } catch (err) {
+                alert('요청 오류: ' + err);
+            }
+        }
+
+        async function stopLossGainMonitor() {
+            const el = document.getElementById("lossGainMonitorStatus");
+            el.innerHTML = `<p class="text-muted" style="color: red;">(-3%) 자동 손절, (+5%) 자동 매도 - 중지</p>`;
+
+            clearInterval(lossGainMonitorVar);
         }
     </script>
 </body>
