@@ -483,6 +483,22 @@ def start_loss_gain_monitor():
         waited += 0.1
     return jsonify({"error": "timeout"})
 
+@app.route("/api/institution-trend/<code>")
+def get_institution_trend(code):
+    while not response_queue.empty():
+        response_queue.get()
+
+    request_queue.put({"type": "institution_trend", "code": code})
+    timeout = 30
+    waited = 0
+    while waited < timeout:
+        if not response_queue.empty():
+            result = response_queue.get()
+            return jsonify(result)
+        time.sleep(0.1)
+        waited += 0.1
+    return jsonify({"error": "timeout"})
+
 def run_flask():
     app.run(debug=False, use_reloader=False)
 

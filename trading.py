@@ -142,7 +142,7 @@ class Trading:
         self.api.ocx.OnReceiveTrData.connect(self._on_receive_tr_data)
 
     def send_slack_message(self, text):
-        webhook_url = "https://hooks.slack.com/services/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"
+        webhook_url = ""    # (slack api) Webhook URL
         payload = { "text": text }
 
         response = requests.post(webhook_url, json=payload, verify=False)   # (개발 환경에서만 임시로. 운영 배포 시 절대 사용 금지!)
@@ -1272,6 +1272,24 @@ class Trading:
             'message':'ok'
         }
 
+    def get_institution_trend(self, code):
+        today = datetime.today().strftime('%Y%m%d')
+
+        logger.info(f"get_institution_trend > code : {code}, today : {today}")
+
+        try:
+            self.tr_data.pop("opt10059", None)
+            self.api.ocx.SetInputValue("일자", today)
+            self.api.ocx.SetInputValue("종목코드", code)
+            self.api.ocx.SetInputValue("금액수량구분", "2")
+            self.api.ocx.SetInputValue("매매구분", "0")
+            self.api.ocx.SetInputValue("단위구분", "1")
+            self.api.ocx.CommRqData("opt10059_req", "opt10059", 0, "4003")
+            self.tr_event_loop.exec_()
+            return self.tr_data.get("opt10059", {"stocks": []})
+        except Exception as e:
+            return {"error": str(e)}
+
     def _on_receive_tr_data(self, screen_no, rqname, trcode, recordname, prev_next, data_len, error_code, message, splm_msg):
         try:
             if rqname == "opw00018_req":
@@ -1434,6 +1452,57 @@ class Trading:
                 self.tr_data["opt10001"] = {
                     "현재가": price
                 }
+
+            elif rqname == "opt10059_req":
+                stocks = []
+                count = int(self.api.ocx.GetRepeatCnt(trcode, rqname))
+                for i in range(1):
+                    date = self.api.ocx.GetCommData(trcode, rqname, i, "일자").strip()
+                    cur_price = self.api.ocx.GetCommData(trcode, rqname, i, "현재가").strip()
+                    debi_sign = self.api.ocx.GetCommData(trcode, rqname, i, "대비기호").strip()
+                    debi_yesterday = self.api.ocx.GetCommData(trcode, rqname, i, "전일대비").strip()
+                    fluctuation = self.api.ocx.GetCommData(trcode, rqname, i, "등락율").strip()
+                    cumulative_amount = self.api.ocx.GetCommData(trcode, rqname, i, "누적거래량").strip()
+                    cumulative_paymt = self.api.ocx.GetCommData(trcode, rqname, i, "누적거래대금").strip()
+                    individual = self.api.ocx.GetCommData(trcode, rqname, i, "개인투자자").strip()
+                    fr = self.api.ocx.GetCommData(trcode, rqname, i, "외국인투자자").strip()
+                    inst = self.api.ocx.GetCommData(trcode, rqname, i, "기관계").strip()
+                    finance = self.api.ocx.GetCommData(trcode, rqname, i, "금융투자").strip()
+                    insr = self.api.ocx.GetCommData(trcode, rqname, i, "보험").strip()
+                    investmTrusts = self.api.ocx.GetCommData(trcode, rqname, i, "투신").strip()
+                    etc = self.api.ocx.GetCommData(trcode, rqname, i, "기타금융").strip()
+                    bank = self.api.ocx.GetCommData(trcode, rqname, i, "은행").strip()
+                    yun = self.api.ocx.GetCommData(trcode, rqname, i, "연기금등").strip()
+                    samo = self.api.ocx.GetCommData(trcode, rqname, i, "사모펀드").strip()
+                    nation = self.api.ocx.GetCommData(trcode, rqname, i, "국가").strip()
+                    etc_co = self.api.ocx.GetCommData(trcode, rqname, i, "기타법인").strip()
+                    inout = self.api.ocx.GetCommData(trcode, rqname, i, "내외국인").strip()
+
+                    logger.info(f"date : {date}, cur_price : {cur_price}, debi_sign : {debi_sign}, debi_yesterday : {debi_yesterday}, fluctuation : {fluctuation}, cumulative_amount : {cumulative_amount}, cumulative_paymt : {cumulative_paymt}, individual : {individual}, fr : {fr}, inst : {inst}, finance : {finance}, insr : {insr}, investmTrusts : {investmTrusts}, etc : {etc}, bank : {bank}, yun : {yun}, samo : {samo}, nation : {nation}, etc_co : {etc_co}, inout : {inout} ")
+
+                    stocks.append({
+                        "date": date,
+                        "cur_price": cur_price,
+                        "debi_sign": debi_sign,
+                        "debi_yesterday": debi_yesterday,
+                        "fluctuation": fluctuation,
+                        "cumulative_amount": cumulative_amount,
+                        "cumulative_paymt": cumulative_paymt,
+                        "individual": individual,
+                        "fr": fr,
+                        "inst": inst,
+                        "finance": finance,
+                        "insr": insr,
+                        "investmTrusts": investmTrusts,
+                        "etc": etc,
+                        "bank": bank,
+                        "yun": yun,
+                        "samo": samo,
+                        "nation": nation,
+                        "etc_co": etc_co,
+                        "inout": inout
+                    })
+                self.tr_data["opt10059"] = {"stocks": stocks}
 
         finally:
             QTimer.singleShot(0, self.tr_event_loop.quit)

@@ -74,5 +74,7 @@ class KiwoomAppWrapper:
                 result = self.trading.volume_search(cmd["code"], cmd["name"])
             elif cmd == "start_loss_gain_monitor":
                 result = self.trading.start_loss_gain_monitoring()
+            elif isinstance(cmd, dict) and cmd.get("type") == "institution_trend":
+                result = self.trading.get_institution_trend(cmd.get("code"))
 
             response_queue.put(result)

@@ -581,8 +581,43 @@
                 addStock2();
               };
 
+              const btn3 = document.createElement("button");
+              btn3.className = "btn btn-success";
+              btn3.textContent = "기관, 외국인 동향";
+              btn3.onclick = () => {
+                fetchInstitutionTrend(item.code);
+              };
+
+              const btn4 = document.createElement("button");
+              btn4.className = "btn btn-success";
+              btn4.textContent = "이동평균선 확인";
+
+              let history_date = [];
+              let history_code = [];
+              let history_price = [];
+              let history_qty = [];
+              let history_flag = [];
+
+              if(myTradinghistory_code.length > 0){
+                myTradinghistory_code.forEach( (historyCode, index) => {
+                  if(historyCode === item.code){
+                    history_date.push(myTradinghistory_date[index]);
+                    history_code.push(myTradinghistory_code[index]);
+                    history_price.push(myTradinghistory_price[index]);
+                    history_qty.push(myTradinghistory_qty[index]);
+                    history_flag.push(myTradinghistory_flag[index]);
+                  }
+                });
+              }
+
+              btn4.onclick = () => {
+                getMovingAverage(item.code, history_date, history_code, history_price, history_qty, history_flag);
+              };
+
               btnGroup.appendChild(btn);
               btnGroup.appendChild(btn2);
+              btnGroup.appendChild(btn3);
+              btnGroup.appendChild(btn4);
 
               div.appendChild(label);
               div.appendChild(btnGroup);
@@ -1054,7 +1089,6 @@
 
           //----------------------- 골든크로스 발생(대비) 종목만 출력 ------------------
           if (data.golden_cross === "Y") {
-          //----------------------- 골든크로스 발생(대비) 종목만 출력 ------------------
 
             console.log("✅ 골든크로스 결과:", data);
 
@@ -1106,7 +1140,6 @@
             box.appendChild(buttons);
             resultDiv.appendChild(box);
 
-          //----------------------- 골든크로스 발생(대비) 종목만 출력 ------------------
           }
           //----------------------- 골든크로스 발생(대비) 종목만 출력 ------------------
 
@@ -1208,6 +1241,23 @@
       }
 
       alert("데드크로스 조회가 완료되었습니다.");
+    }
+
+    async function fetchInstitutionTrend(code) {
+
+      try {
+          const res = await fetch(`/api/institution-trend/${code}`);
+          const data = await res.json();
+
+          if (data.error) {
+              alert("error : "+data.error);
+              return;
+          }
+
+          console.log(data);
+      } catch (err) {
+          console.log(`❌ 오류 발생: ${err}`);
+      }
     }
 
     function getMovingAverage(code, history_date, history_code, history_price, history_qty, history_flag) {
