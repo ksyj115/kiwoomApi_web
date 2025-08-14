@@ -266,17 +266,32 @@ class Trading:
     def place_order(self, code, price, qty):
         try:
             logger.info(f"[매수 요청] {code} | {price}원 | {qty}주")
-            self.api.ocx.SendOrder(
-                "매수주문",  # 주문종류
-                "0101",      # 화면번호
-                Config.ACCNO,  # 계좌번호
-                1,  # 주문타입 (1:신규매수)
-                code,
-                qty,
-                price,
-                "00",  # "00": 지정가, "03": 시장가
-                ""
-            )
+
+            if price > 0:
+                self.api.ocx.SendOrder(
+                    "매수주문",  # 주문종류
+                    "0101",      # 화면번호
+                    Config.ACCNO,  # 계좌번호
+                    1,  # 주문타입 (1:신규매수)
+                    code,
+                    qty,
+                    price,
+                    "00",  # "00": 지정가, "03": 시장가
+                    ""
+                )
+            else:
+                self.api.ocx.SendOrder(
+                    "매수주문",  # 주문종류
+                    "0101",      # 화면번호
+                    Config.ACCNO,  # 계좌번호
+                    1,  # 주문타입 (1:신규매수)
+                    code,
+                    qty,
+                    price,
+                    "03",  # "00": 지정가, "03": 시장가
+                    ""
+                )
+
             return {"message": "✅ 매수 주문 요청 완료"}
         except Exception as e:
             logger.log_error("BUY_ORDER", str(e))
@@ -284,17 +299,31 @@ class Trading:
 
     def place_sell_order(self, code, price, qty):
         try:
-            self.api.ocx.SendOrder(
-                "매도주문",  # 주문종류
-                "0102",      # 화면번호
-                Config.ACCNO,  # 계좌번호
-                2,  # 주문타입 (2:신규매도)
-                code,
-                qty,
-                price,
-                "00",  # "00": 지정가, "03": 시장가
-                ""
-            )
+            if price > 0:
+                self.api.ocx.SendOrder(
+                    "매도주문",  # 주문종류
+                    "0102",      # 화면번호
+                    Config.ACCNO,  # 계좌번호
+                    2,  # 주문타입 (2:신규매도)
+                    code,
+                    qty,
+                    price,
+                    "00",  # "00": 지정가, "03": 시장가
+                    ""
+                )
+            else:
+                self.api.ocx.SendOrder(
+                    "매도주문",  # 주문종류
+                    "0102",      # 화면번호
+                    Config.ACCNO,  # 계좌번호
+                    2,  # 주문타입 (2:신규매도)
+                    code,
+                    qty,
+                    price,
+                    "03",  # "00": 지정가, "03": 시장가
+                    ""
+                )
+
             return {"message": "✅ 매도 주문 요청 완료"}
         except Exception as e:
             logger.log_error("SELL_ORDER", str(e))
@@ -1066,8 +1095,9 @@ class Trading:
             ,"D": last_d
         }
 
-    def analyze_stochastic(self, code):
+    def analyze_stochastic(self, code, name):
         logger.info(f"analyze_stochastic > code : {code}")
+        logger.info(f"analyze_stochastic > name : {name}")
 
         prices = self.get_price_data(code, 0)  # TR 요청해서 가격 가져옴
 
@@ -1087,6 +1117,16 @@ class Trading:
 
         close_values = closes[::-1]  # 최신 데이터가 먼저이므로 반전
         macd_result = self.calculate_macd(close_values, code)
+
+        K = result['K']
+        D = result['D']
+
+        macd = macd_result['macd']
+        signal = macd_result['signal']
+
+        if K > 19 and K < 30 and K >= D and macd >= signal:
+            logger.info(f"✅ {name}[{code}] 스토캐스틱, MACD 반등!")
+            # self.send_slack_message(f"✅ {name}[{code}] 스토캐스틱, MACD 반등!")
 
         return {
             'stc':result
@@ -1290,6 +1330,24 @@ class Trading:
         except Exception as e:
             return {"error": str(e)}
 
+    def industry_volume_search(self):
+        """업종별 거래량을 조회하여 가장 거래량이 많은 업종을 반환"""
+        try:
+            self.tr_data.pop("OPT20001", None)
+            # 시장구분: 0:코스피, 1:코스닥, 2:코스피200
+            self.api.ocx.SetInputValue("시장구분", "1")
+            # 업종코드: 001:종합(KOSPI), 002:대형주, 003:중형주, 004:소형주 101:종합(KOSDAQ), 201:KOSPI200, 302:KOSTAR, 701: KRX100 나머지
+            self.api.ocx.SetInputValue("업종코드", "124")
+            self.api.ocx.CommRqData("sector_volume_req", "OPT20001", 0, "4010")
+            self.tr_event_loop.exec_()
+            sectors = self.tr_data.get("OPT20001", {"sectors": []}).get("sectors", [])
+            if not sectors:
+                return {"sectors": []}
+            logger.info(f"sectors : {sectors}")
+            return {"sectors": sectors}
+        except Exception as e:
+            return {"error": str(e)}
+
     def _on_receive_tr_data(self, screen_no, rqname, trcode, recordname, prev_next, data_len, error_code, message, splm_msg):
         try:
             if rqname == "opw00018_req":
@@ -1320,8 +1378,14 @@ class Trading:
                 available = int(available)
                 available = f"{available:,}"
 
+                deposit = self.api.ocx.GetCommData(trcode, rqname, 0, "주문가능금액")
+                deposit = deposit.lstrip("0") or "0"
+                deposit = int(deposit)
+                deposit = f"{deposit:,}"
+
                 self.tr_data["opw00001"] = {
                     "available_cash": available
+                    ,"deposit_cash": deposit
                 }
 
             elif rqname == "opw00018_holdings_req":
@@ -1503,6 +1567,26 @@ class Trading:
                         "inout": inout
                     })
                 self.tr_data["opt10059"] = {"stocks": stocks}
+
+            elif rqname == "sector_volume_req":
+                sectors = []
+                count = int(self.api.ocx.GetRepeatCnt(trcode, rqname))
+                for i in range(count):
+                    relative = self.api.ocx.GetCommData(trcode, rqname, i, "전일대비").strip()
+                    volume = self.api.ocx.GetCommData(trcode, rqname, i, "거래량").strip()
+                    paymt = self.api.ocx.GetCommData(trcode, rqname, i, "거래대금").strip()
+
+                    try:
+                        volume = int(volume.replace(',', ''))
+                    except (ValueError, AttributeError):
+                        volume = 0
+                    try:
+                        paymt = int(paymt.replace(',', ''))
+                    except (ValueError, AttributeError):
+                        paymt = 0
+
+                    sectors.append({"relative": relative, "volume": volume, "paymt": paymt})
+                self.tr_data["OPT20001"] = {"sectors": sectors}
 
         finally:
             QTimer.singleShot(0, self.tr_event_loop.quit)

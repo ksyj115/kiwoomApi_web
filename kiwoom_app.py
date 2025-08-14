@@ -65,7 +65,7 @@ class KiwoomAppWrapper:
             elif isinstance(cmd, dict) and cmd.get("type") == "get_macd_data":
                 result = self.trading.analyze_macd(cmd["macdCode"])
             elif isinstance(cmd, dict) and cmd.get("type") == "get_stochastic_data":
-                result = self.trading.analyze_stochastic(cmd["stochasticCode"])
+                result = self.trading.analyze_stochastic(cmd["stochasticCode"], cmd["stochasticName"])
             elif isinstance(cmd, dict) and cmd.get("type") == "get_stochastic_data2":
                 result = self.trading.analyze_stochastic2(cmd["stochasticCode"])
             elif isinstance(cmd, dict) and cmd.get("type") == "save_volume_data":
@@ -76,5 +76,7 @@ class KiwoomAppWrapper:
                 result = self.trading.start_loss_gain_monitoring()
             elif isinstance(cmd, dict) and cmd.get("type") == "institution_trend":
                 result = self.trading.get_institution_trend(cmd.get("code"))
+            elif cmd == "industry_volume_search":
+                result = self.trading.industry_volume_search()
 
             response_queue.put(result)

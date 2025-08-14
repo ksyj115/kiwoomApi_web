@@ -161,13 +161,13 @@
       <button class="btn btn-success" onclick="getStochasticData()">조회하기 (BASKET 목록)</button>
   </div>
 
-  <br/><br/>
+  <!-- <br/><br/>
   <div class="container mt-5">
       <h2 class="mb-4">Slow STC 통합 조회 (MACD, RSI, Slow STC 모두 충족 조건)</h2>&nbsp;&nbsp;&nbsp;<span style="font-size: 80%; color:red;">※ RSI, MACD 조회 완료 후 클릭할 것</span>
       <div id="searchRsiMacdStochasticResults" style="border: 1px solid #ccc; max-height: 200px; overflow-y: auto; display: none;"></div>
       <br><br>
       <button class="btn btn-success" onclick="getRsiMacdStochasticData()">조회하기 (BASKET 목록)</button>
-  </div>
+  </div> -->
 
   <br/><br/>
   <div class="container mt-5">
@@ -183,6 +183,14 @@
     <span id="volumeStatus" class="ms-3">급등 거래량 탐지 정지</span>
 
     <div id="volumelist-display" class="mt-3"></div>
+  </div>
+
+  <br/><br/>
+  <div class="container mt-5">
+    <h2 class="mb-4">업종별 거래량 조회</h2>
+    <button id="industryVolume" class="btn btn-success" onclick="industryVolume()">조회</button>
+
+    <div id="industry-volumelist-display" class="mt-3"></div>
   </div>
 
   <!-- 매매기록 모달 -->
@@ -614,10 +622,27 @@
                 getMovingAverage(item.code, history_date, history_code, history_price, history_qty, history_flag);
               };
 
+              const btn5 = document.createElement("button");
+              btn5.innerHTML = `
+                <button class="btn btn-sm btn-outline-primary buy-btn"
+                    data-code="${item.code}"
+                    data-name="${item.name}"
+                    data-price="0">
+                  구매
+                </button>
+                <button class="btn btn-sm btn-outline-danger ms-2 sell-btn"
+                    data-code="${item.code}"
+                    data-name="${item.name}"
+                    data-price="0">
+                  매도
+                </button>
+              `;
+
               btnGroup.appendChild(btn);
               btnGroup.appendChild(btn2);
               btnGroup.appendChild(btn3);
               btnGroup.appendChild(btn4);
+              btnGroup.appendChild(btn5);
 
               div.appendChild(label);
               div.appendChild(btnGroup);
@@ -1617,13 +1642,18 @@
         const str = item;
         const lastBracketIndex = str.lastIndexOf("[");
         const code = str.substring(lastBracketIndex + 1, str.length - 1);
+        const name = str.substring(0, lastBracketIndex);
         console.log("code : " + code);  
+        console.log("name : " + name);
 
         try {
           const res = await fetch("/api/stochastic", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ code: code })
+            body: JSON.stringify({ 
+              code: code
+              ,name: name
+            })
           });
 
           const data = await res.json();
@@ -1790,6 +1820,26 @@
 
       resultDiv.innerHTML = "<p>거래량 급등 종목 조회 종료</p>";
       alert("거래량 급등 종목 조회가 완료되었습니다.");
+    }
+
+    async function industryVolume(){
+      const resultDiv = document.getElementById("industry-volumelist-display");
+
+      try {
+
+        const res = await fetch('/api/industry-volume-search', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+          });
+          const data = await res.json();
+          console.log("data : \n" + data);
+
+      } catch (err) {
+        const errorBox = document.createElement("div");
+          errorBox.className = "border p-2 mb-2 text-danger";
+          errorBox.innerHTML = `<strong>${item}</strong> → 오류 발생: ${err}`;
+          resultDiv.appendChild(errorBox);
+      }
     }
 
     $(document).on("click", "#close_rsi", function(){

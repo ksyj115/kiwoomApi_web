@@ -151,10 +151,12 @@
                 if (data2.error) {
                     el2.innerHTML = `<p class="text-danger">❌ ${data2.error}</p>`;
                 } else {
-                    const cash = Number(data2.available_cash.replace(/,/g, ""));
+                    const available_cash = Number(data2.available_cash.replace(/,/g, ""));
+                    const deposit_cash = Number(data2.deposit_cash.replace(/,/g, ""));
                     el2.innerHTML = `
                         <ul class="list-group">
-                            <li class="list-group-item"><strong>💰 주문가능금액:</strong> ${cash.toLocaleString()} 원</li>
+                            <li class="list-group-item"><strong>💰 예수금:</strong> ${deposit_cash.toLocaleString()} 원</li>
+                            <li class="list-group-item"><strong>💰 주문가능금액:</strong> ${available_cash.toLocaleString()} 원</li>
                         </ul>`;
                 }
 
@@ -303,7 +305,7 @@
             startLossGainMonitor()
             lossGainMonitorVar = setInterval(function() {
                 startLossGainMonitor()
-            }, 300000);
+            }, 60000);
         }
 
         async function startLossGainMonitor() {

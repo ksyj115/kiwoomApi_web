@@ -8,13 +8,17 @@ class Config:
     """키움증권 API 설정 클래스"""
     
     # 키움증권 API 설정
-    USER_ID = os.getenv('KIWOOM_USER_ID', 'ksyj115')
-    USER_PASSWORD = os.getenv('KIWOOM_USER_PASSWORD', '531011ks')
-    CERT_PASSWORD = os.getenv('KIWOOM_CERT_PASSWORD', '')
+    # USER_ID = os.getenv('KIWOOM_USER_ID', 'ksyj115')
+    # USER_PASSWORD = os.getenv('KIWOOM_USER_PASSWORD', '531011ks')
+    USER_ID = os.getenv('KIWOOM_USER_ID', 'gugu4410')
+    USER_PASSWORD = os.getenv('KIWOOM_USER_PASSWORD', '994410')
+    CERT_PASSWORD = os.getenv('KIWOOM_CERT_PASSWORD', 'rntjdrms12#')
     
     # 계좌 정보
-    ACCNO = os.getenv('ACCNO', '8107737111')
-    ACCNO_PASSWORD = os.getenv('ACCNO_PASSWORD', '0000')
+    # ACCNO = os.getenv('ACCNO', '8107737111')
+    # ACCNO_PASSWORD = os.getenv('ACCNO_PASSWORD', '0000')
+    ACCNO = os.getenv('ACCNO', '5539058610')
+    ACCNO_PASSWORD = os.getenv('ACCNO_PASSWORD', '9944')
 
     # 거래 설정
     TRADE_MODE = os.getenv('TRADE_MODE', 'SIMULATION')  # REAL 또는 SIMULATION

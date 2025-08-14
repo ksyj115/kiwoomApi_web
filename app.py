@@ -381,10 +381,12 @@ def get_stochastic():
 
     data = request.json
     code = data.get("code")
+    name = data.get("name")
 
     request_queue.put({
         "type": "get_stochastic_data",
-        "stochasticCode": code
+        "stochasticCode": code,
+        "stochasticName": name
     })
 
     timeout = 10
@@ -495,6 +497,20 @@ def get_institution_trend(code):
         if not response_queue.empty():
             result = response_queue.get()
             return jsonify(result)
+        time.sleep(0.1)
+        waited += 0.1
+    return jsonify({"error": "timeout"})
+
+@app.route('/api/industry-volume-search', methods=['POST'])
+def industry_volume_search():
+    while not response_queue.empty():
+        response_queue.get()
+
+    request_queue.put("industry_volume_search")
+    waited = 0
+    while waited < 30:
+        if not response_queue.empty():
+            return jsonify(response_queue.get())
         time.sleep(0.1)
         waited += 0.1
     return jsonify({"error": "timeout"})
